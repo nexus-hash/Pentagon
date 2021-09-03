@@ -1,41 +1,206 @@
 @layer components{
-.app-bg-color{
-  background: #FFFEFC;
-}
-.btn-bg-color{
-  background:#EB5757;
-}
-.font-bg-color{
-  color:#111111;
-}
-.sub-pg-title{
-  @apply lg:text-5xl text-xl font-bg-color text-center font-black lg:mb-14 mb-4;
-}
-.sub-card-title{
-  @apply font-bg-color font-bold lg:text-3xl text-lg mb-2;
-}
-.nav-welcome-btn-no-bg{
-  @apply lg:w-32 w-20 lg:px-7 px-5 lg:py-1 flex justify-center items-center lg:mr-6 mr-2 border-b-2 border-white border-opacity-0 lg:hover:border-opacity-95;
-}
-.nav-login-btn-w-bg{
-  @apply lg:w-32 w-20 lg:px-7 px-5 lg:py-1 py-1 tracking-wide rounded-full btn-bg-color flex justify-center items-center ;
-}
-.feature-grid{
-  @apply max-w-7xl w-screen app-bg-color flex-col justify-center items-center lg:mt-20 mt-10;
-}
-.getting-strd-cont{
-  @apply lg:font-semibold lg:text-2xl text-sm font-bg-color;
-}
-.getting-strd-grid{
-  @apply lg:w-1/2 w-full list-disc h-auto flex-col justify-start items-start text-left lg:text-left lg:px-8 lg:pb-8 px-14
-}
-.getting-strd-grid-parent{
-  @apply w-full lg:flex flex-col lg:flex-row justify-center items-center;
-}
-.getting-strd{
-  @apply flex flex-col justify-center items-center lg:mt-20;
-}
-.data-bg-grid{
-  @apply flex flex-col justify-center items-center lg:mt-20 mt-10;
-}
+
+/*
+
+  Custom Colors Section
+
+*/
+  .app-bg-color{
+    background: #FFFEFC;
+  }
+  .btn-bg-color{
+    background:#EB5757;
+  }
+  .font-bg-color{
+    color:#111111;
+  }
+
+/*
+
+  Header Starts
+
+*/
+
+  .header-img{
+    @apply w-screen lg:pb-24 pb-5 bg-cover;
+  }
+
+  .header-div{
+    @apply w-full lg:p-0 px-4 py-2;
+  }
+
+/*        
+          
+  Navbar CSS starts
+
+*/
+
+  .navbar-bg{
+    @apply lg:h-12 w-full flex items-center justify-center;
+  }
+
+  .navbar-fg{
+    @apply lg:h-12 w-full max-w-7xl flex justify-end items-center pt-2;
+  }
+
+  .navbar-btn-no-bg-text{
+    @apply text-white lg:text-xl text-center text-sm w-full;
+  }
+
+  .navbar-btn-w-bg-text{
+    @apply text-white lg:text-lg text-xs text-center lg:w-32 w-20 ;
+  }
+
+  .navbar-btn-no-bg{
+    @apply lg:w-32 w-20 lg:px-7 px-5 lg:py-1 flex justify-center items-center lg:mr-6 mr-2 border-b-2 border-white border-opacity-0 lg:hover:border-opacity-95;
+  }
+
+  .navbar-btn-w-bg{
+    @apply lg:w-32 w-20 lg:px-7 px-5 lg:py-1 py-1 tracking-wide rounded-full btn-bg-color flex justify-center items-center ;
+  }
+
+/*
+
+  Navbar CSS Ends
+
+  Welcome Section CSS Starts
+
+*/
+
+  .wel-sec{
+    @apply flex justify-center items-center;
+  }
+
+  .wel-sec-div{
+    @apply h-auto w-full max-w-7xl flex flex-col justify-between items-center lg:px-10 lg:py-4;
+  }
+
+  .app-title{
+    @apply  lg:text-8xl font-serif text-3xl tracking-widest text-white mt-10 lg:mt-40;
+  }
+
+  .app-description{
+    @apply lg:text-3xl text-sm text-white lg:mt-12 mt-2 text-center max-w-6xl;
+  }
+
+  .header-util-sec{
+    @apply flex justify-center items-center lg:mt-64 mt-20 w-full;
+  }
+
+  .bfr-you-strt-btn{
+    @apply lg:w-52 w-28 text-white border-2 py-1 lg:py-2 lg:text-lg text-xs lg:mr-40 mr-10 border-white rounded-full lg:border-2;
+  }
+
+  .strt-here-btn{
+    @apply lg:w-52 w-28 text-white btn-bg-color lg:py-3 py-2 rounded-full lg:text-lg text-xs;
+  }
+
+/*
+
+  Welcome Section Ends
+
+  App Details Section Starts
+
+*/
+
+/* General CSS */
+  .sub-pg-title{
+    @apply lg:text-5xl text-xl font-bg-color text-center font-black lg:mb-14 mb-4;
+  }
+
+  .sub-card-title{
+    @apply font-bg-color font-bold lg:text-3xl text-lg mb-2;
+  }
+
+  .details-section{
+    @apply w-full flex justify-center items-center;
+  }
+
+/*
+
+  Feature Section Starts
+
+*/
+
+  .feature-grid{
+    @apply max-w-7xl w-screen app-bg-color flex-col justify-center items-center lg:mt-20 mt-10;
+  }
+
+  .features-listing-section{
+    @apply lg:flex max-w-7xl lg:justify-start lg:items-center;
+  }
+
+  .feature-card{
+    @apply lg:w-1/3 flex flex-col justify-start items-center p-5;
+  }
+
+  .feature-sq-icons{
+    @apply lg:w-1/4 w-1/6 mb-6;
+  }
+
+  .feature-db-icon{
+    @apply lg:w-1/4 w-1/6 mb-7;
+  }
+
+  .feature-description-text{
+    @apply w-full font-bg-color lg:text-lg text-sm text-center px-8;
+  }
+
+/*
+
+  Features Section Ends
+
+  Getting Started Section starts
+
+*/
+
+  .getting-strd-cont{
+    @apply lg:font-semibold lg:text-2xl text-sm font-bg-color;
+  }
+
+  .getting-strd-grid{
+    @apply lg:w-1/2 w-full list-disc h-auto flex-col justify-start items-start text-left lg:text-left lg:px-8 lg:pb-8 px-14;
+  }
+
+  .getting-strd-grid-parent{
+    @apply w-full lg:flex flex-col lg:flex-row justify-center items-center;
+  }
+
+  .getting-strd{
+    @apply flex flex-col justify-center items-center lg:mt-20;
+  }
+
+/*
+
+  Getting Started Section Ends
+
+  Data Section Starts
+
+*/
+
+  .data-bg-grid{
+    @apply flex flex-col justify-center items-center lg:mt-20 mt-10;
+  }
+
+  .data-sub-grid{
+    @apply flex justify-start items-start lg:px-0 px-8;
+  }
+
+  .data-grid-icon{
+    @apply lg:w-auto w-16;
+  }
+
+  .data-description-text{
+    @apply lg:text-2xl text-sm pl-8;
+  }
+/*
+
+          App Details Section ends
+
+          Footer Starts
+
+*/
+  .footer-line{
+    @apply w-screen app-bg-color border-2 mt-10 border-red-400;
+  }
 }
