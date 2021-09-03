@@ -1,0 +1,15 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components{
+.app-bg-color{
+  background: #FFFEFC;
+}
+.btn-bg-color{
+  background:#EB5757;
+}
+.font-bg-color{
+  color:#111111;
+}
+}
