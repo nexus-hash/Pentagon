@@ -1,13 +1,13 @@
 import { Component } from 'react';
 import {Link} from 'react-router-dom';
 
-import './css/welcome.css';
+import '../../css/welcome.css';
 
-import WelcomePageImage from "./assets/welcomePageImage.png";
-import Database from "./assets/Database.svg";
-import trackProgress from "./assets/trackProgress.svg";
-import Collaboration from "./assets/collaboration.svg";
-import secureData from './assets/secure.svg';
+import WelcomePageImage from "../../assets/welcomePageImage.png";
+import Database from "../../assets/Database.svg";
+import trackProgress from "../../assets/trackProgress.svg";
+import Collaboration from "../../assets/collaboration.svg";
+import secureData from '../../assets/secure.svg';
 
 
 class WelcomePage extends Component{

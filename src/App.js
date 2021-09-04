@@ -1,7 +1,7 @@
 import {BrowserRouter,Route,Switch} from 'react-router-dom';
-import WelcomePage from './welcome';
-import signup from './signup';
-import login from './login';
+import WelcomePage from './pages/WelcomePage/welcome';
+import signup from './pages/Authentication/signupPage/signup';
+import login from './pages/Authentication/LoginPage/login';
 
 function App() {
   return (

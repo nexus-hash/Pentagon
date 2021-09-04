@@ -1,7 +1,7 @@
 import { Component } from "react";
 import { Link } from "react-router-dom";
 
-import "./css/signup.css";
+import "../../../css/signup.css";
 import VisibilityIcon from '@material-ui/icons/Visibility';
 import VisibilityOffIcon from "@material-ui/icons/VisibilityOff";
 import CheckCircleIcon from "@material-ui/icons/CheckCircle";
