@@ -1,5 +1,8 @@
 import { Component } from 'react';
+import {Link} from 'react-router-dom';
+
 import './css/welcome.css';
+
 import WelcomePageImage from "./assets/welcomePageImage.png";
 import Database from "./assets/Database.svg";
 import trackProgress from "./assets/trackProgress.svg";
@@ -11,10 +14,25 @@ class WelcomePage extends Component{
 
   constructor(props){
     super(props);
-    this.handleFeatureOnclick = this.handleFeatureOnclick.bind();
+
+    this.handleFeatureOnclick = this.handleFeatureOnclick.bind(this);
+    this.handleBeforeYouStartOnClick = this.handleBeforeYouStartOnClick.bind(this);
+    this.handleDataOnClick = this.handleDataOnClick.bind(this);
   }
 
-  handleFeatureOnclick(){
+  handleFeatureOnclick(id){
+    var elementToView = document.getElementById('Features');
+    elementToView.scrollIntoView({ behavior: "smooth" });
+  }
+
+  handleBeforeYouStartOnClick(){
+    var elementToView = document.getElementById('startguide');
+    elementToView.scrollIntoView({behavior:"smooth"})
+  }
+
+  handleDataOnClick(){
+    var elementToView = document.getElementById("data");
+    elementToView.scrollIntoView({ behavior: "smooth" });
   }
 
   render(){
@@ -26,25 +44,27 @@ class WelcomePage extends Component{
             style={{ backgroundImage: `url(${WelcomePageImage})` }}
           >
             <div className="header-div">
-              <div className="navbar-bg">
-                <div className="navbar-fg">
-                  <div className="navbar-btn-no-bg">
-                    <button
-                      className="navbar-btn-no-bg-text"
-                      id="feature"
-                      onClick={this.handleFeatureOnclick}
-                    >
+              <navbar-bg>
+                <navbar-fg>
+                  <button
+                    className="navbar-btn-no-bg"
+                    onClick={this.handleFeatureOnclick}
+                  >
+                    <div className="navbar-btn-no-bg-text" id="feature">
                       Features
-                    </button>
-                  </div>
-                  <div className="navbar-btn-no-bg">
-                    <button className="navbar-btn-no-bg-text">Data</button>
-                  </div>
-                  <button className="navbar-btn-w-bg">
-                    <div className="navbar-btn-w-bg-text">LOGIN</div>
+                    </div>
                   </button>
-                </div>
-              </div>
+                  <button
+                    className="navbar-btn-no-bg"
+                    onClick={this.handleDataOnClick}
+                  >
+                    <div className="navbar-btn-no-bg-text">Data</div>
+                  </button>
+                  <Link to="/login" className="navbar-btn-w-bg">
+                    <div className="navbar-btn-w-bg-text">LOGIN</div>
+                  </Link>
+                </navbar-fg>
+              </navbar-bg>
               <div className="wel-sec">
                 <div className="wel-sec-div">
                   <div className="app-title">PENTAGON</div>
@@ -55,10 +75,15 @@ class WelcomePage extends Component{
                     </p>
                   </div>
                   <div className="header-util-sec">
-                    <button className="bfr-you-strt-btn">
+                    <button
+                      className="bfr-you-strt-btn"
+                      onClick={this.handleBeforeYouStartOnClick}
+                    >
                       Before you Start
                     </button>
-                    <button className="strt-here-btn">Start Here</button>
+                    <Link to="/signup" className="strt-here-btn">
+                      Start Here
+                    </Link>
                   </div>
                 </div>
               </div>
@@ -66,7 +91,7 @@ class WelcomePage extends Component{
           </div>
         </header>
         <div className="details-section">
-          <div className="feature-grid">
+          <div className="feature-grid" id="Features">
             <div className="sub-pg-title">Features</div>
             <div className="features-listing-section">
               <div className="feature-card">
@@ -106,7 +131,9 @@ class WelcomePage extends Component{
               </div>
             </div>
             <div className="getting-strd">
-              <div className="sub-pg-title">Getting Started</div>
+              <div className="sub-pg-title" id="startguide">
+                Getting Started
+              </div>
               <div className="getting-strd-grid-parent">
                 <ul className="getting-strd-grid">
                   <li className="getting-strd-cont">
@@ -137,12 +164,14 @@ class WelcomePage extends Component{
               </div>
             </div>
             <div className="data-bg-grid">
-              <div className="sub-pg-title">How safe is your data?</div>
+              <div className="sub-pg-title" id="data">
+                How safe is your data?
+              </div>
               <div className="data-sub-grid">
                 <img
                   alt="Secure Database"
                   src={secureData}
-                  className=""
+                  className="data-grid-icon"
                 ></img>
                 <div className="data-description-text">
                   <p>

@@ -1,0 +1,21 @@
+@layer components{
+
+/*
+
+  Custom Colors Section
+
+*/
+  .app-bg-color{
+    background: #F9f5f1;
+  }
+  .btn-bg-color{
+    background:#EB5757;
+  }
+  .btn-bg-color-not-allowed{
+    background:rgba(235, 87, 87, .6);
+  }
+  .font-bg-color{
+    color:#111111;
+  }
+
+}
