@@ -19,6 +19,7 @@ class signup extends Component{
       email: "",
       password: "",
       confirmPassword: "",
+      passwordFieldType: "password",
       oneNum: false,
       oneCap: false,
       oneSpecial: false,
@@ -30,6 +31,8 @@ class signup extends Component{
       lengthEightColor: "#DC2626",
       btnBg:0.6,
       buttonState: true,
+      visibleButtonClass:"",
+      visibleOffButtonClass:"hidden"
     };
     this.handleVisibilityClick = this.handleVisibilityClick.bind(this);
     this.handleUsernameChange  = this.handleUsernameChange.bind(this);
@@ -73,18 +76,19 @@ class signup extends Component{
   }
 
   handleVisibilityClick(){
-    var visibleButton = document.getElementById('visible');
-    var visibleOffButton = document.getElementById('notVisible');
-    var passwordInputField = document.getElementById('password');
-    if(passwordInputField.type === "password"){
-      visibleButton.className +=" hidden";
-      visibleOffButton.className-="hidden";
-      passwordInputField.type = "text";
+    if(this.state.passwordFieldType === "password"){
+      this.setState({
+        visibleButtonClass:"hidden",
+        visibleOffButtonClass:"",
+        passwordFieldType : "text"
+      })
     }
     else{
-      visibleButton.className -= "hidden";
-      visibleOffButton.className += " hidden";
-      passwordInputField.type = "password";
+      this.setState({
+        visibleButtonClass: "",
+        visibleOffButtonClass: "hidden",
+        passwordFieldType: "password",
+      });
     }
   }
 
@@ -103,7 +107,6 @@ class signup extends Component{
   }
 
   handlePasswordChange(event){
-    var submitButton = document.getElementById('submitButton');
     var capitalAlphabet =new RegExp( "^(?=.*[A-Z])");
     var oneNumeric = new RegExp("^(?=.*\\d)");
     var specialChar = new RegExp( "^(?=.*[-+_!@#$%^&*., ?])+");
@@ -197,7 +200,6 @@ class signup extends Component{
       this.setState({
         passwordMatch: "",
       });
-      submitButton.removeAttribute('disabled')
     } else {
       this.setState({
         passwordMatch: "Confirm Password and Password does not match.",
@@ -293,23 +295,23 @@ class signup extends Component{
           <div className="w-full bg-white flex justify-center pr-2 items-center border-2 rounded-lg border-gray-100 mb-1 ">
             <input
               id="password"
-              type="password"
+              type={this.state.passwordFieldType}
               placeholder="Password"
               className="px-4 py-2 w-full focus:shadow-xl focus:outline-none focus:border-transparent rounded-lg"
               onChange={this.handlePasswordChange}
               value={this.state.password}
               required
             ></input>
-            <div id="visible" className="">
+            <div id="visible" className={this.state.visibleButtonClass}>
               <VisibilityIcon
-                className="cursor-pointer hover:"
+                className="cursor-pointer"
                 id="eyeIcon"
                 onClick={this.handleVisibilityClick}
               ></VisibilityIcon>
             </div>
-            <div id="notVisible" className="hidden">
+            <div id="notVisible" className={this.state.visibleOffButtonClass}>
               <VisibilityOffIcon
-                className="cursor-pointer hover:shadow-md"
+                className="cursor-pointer "
                 id="eyeIcon"
                 onClick={this.handleVisibilityClick}
               ></VisibilityOffIcon>
@@ -378,7 +380,7 @@ class signup extends Component{
             onClick={this.handleUserRegistrationOnClick}
             id="submitButton"
             className="w-full py-2 rounded-lg text-center btn-bg-color text-white hover:shadow-lg cursor-pointer"
-            style = {{opacity:this.state.btnBg}}
+            style={{ opacity: this.state.btnBg }}
             disabled={this.state.buttonState}
           >
             Sign Up
