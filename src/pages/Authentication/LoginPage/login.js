@@ -2,10 +2,39 @@ import { Component } from "react";
 import { Link } from "react-router-dom";
 
 import '../../../css/login.css';
+import VisibilityIcon from "@material-ui/icons/Visibility";
+import VisibilityOffIcon from "@material-ui/icons/VisibilityOff";
 
-class login extends Component{
+class login extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      loginMessage: "",
+      visibleButtonClass:"",
+      visibleOffButtonClass:"hidden",
+      passwordFieldType:"password"
+    };
 
-  render(){
+    this.handleVisibilityClick = this.handleVisibilityClick.bind(this);
+  }
+
+  handleVisibilityClick() {
+    if (this.state.passwordFieldType === "password") {
+      this.setState({
+        visibleButtonClass: "hidden",
+        visibleOffButtonClass: "",
+        passwordFieldType: "text",
+      });
+    } else {
+      this.setState({
+        visibleButtonClass: "",
+        visibleOffButtonClass: "hidden",
+        passwordFieldType: "password",
+      });
+    }
+  }
+
+  render() {
     return (
       <div className="app-bg-color w-full h-screen overflow-hidden flex flex-col justify-between items-center">
         <div className="w-full lg:h-16 flex justify-center items-center">
@@ -18,7 +47,7 @@ class login extends Component{
             Provide Your Credential
           </div>
           <div className="text-red-700 font-medium lg:text-lg text-sm">
-            {this.loginMessage}
+            {this.state.loginMessage}
           </div>
           <input
             type="email"
@@ -26,25 +55,50 @@ class login extends Component{
             className="w-full bg-white px-4 py-2 rounded-lg border-2 border-gray-100 focus:shadow-xl focus:outline-none focus:border-red-200 focus:border-opacity-30"
             required
           ></input>
-          <input
-            type="password"
-            placeholder="Password"
-            className="w-full bg-white px-4 py-2 rounded-lg border-2 border-gray-100 focus:shadow-xl focus:outline-none focus:border-red-200 focus:border-opacity-30"
-            required
-          ></input>
-          <div className="w-full px-2 flex justify-start items-center space-x-4 text-xs"></div>
-          <div className="text-green-600 w-full px-2 lg:text-xs text-xs text-left">
-            {this.passwordMatch}
+          <div className="w-full bg-white flex justify-center pr-2 items-center border-2 rounded-lg border-gray-100 mb-1 ">
+            <input
+              id="password"
+              type={this.state.passwordFieldType}
+              placeholder="Password"
+              className="px-4 py-2 w-full focus:shadow-xl focus:outline-none focus:border-transparent rounded-lg"
+              onChange={this.handlePasswordChange}
+              value={this.state.password}
+              required
+            ></input>
+            <div id="visible" className={this.state.visibleButtonClass}>
+              <VisibilityIcon
+                className="cursor-pointer"
+                id="eyeIcon"
+                onClick={this.handleVisibilityClick}
+              ></VisibilityIcon>
+            </div>
+            <div id="notVisible" className={this.state.visibleOffButtonClass}>
+              <VisibilityOffIcon
+                className="cursor-pointer "
+                id="eyeIcon"
+                onClick={this.handleVisibilityClick}
+              ></VisibilityOffIcon>
+            </div>
           </div>
+          <div className="w-full px-2 flex justify-start items-center space-x-4 text-xs"></div>
           <div></div>
-          <button className="w-full py-2 rounded-lg text-center btn-bg-color text-white hover:shadow-lg">
+          <button
+            type="submit"
+            className="w-full py-2 rounded-lg text-center btn-bg-color text-white hover:shadow-lg"
+          >
             Authenticate
           </button>
           <div className="w-full py-2 flex justify-between items-center">
-            <Link to='/forgotpassword' className="w-1/2 py-2 text-center border-2 border-gray-400 font-bg-color rounded-lg text-sm mr-1">
+            <Link
+              to="/forgotpassword"
+              className="w-1/2 py-2 text-center border-2 border-gray-400 font-bg-color rounded-lg text-sm mr-1"
+            >
               Forgot Password?
             </Link>
-            <Link to='/signup' className="w-1/2 py-2 text-center border-2 border-gray-400 font-bg-color rounded-lg text-sm">
+            <Link
+              to="/signup"
+              className="w-1/2 py-2 text-center border-2 border-gray-400 font-bg-color rounded-lg text-sm"
+            >
               Sign Up?
             </Link>
           </div>

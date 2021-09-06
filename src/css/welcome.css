@@ -28,7 +28,7 @@
 */
 
   .header-img{
-    @apply w-screen lg:pb-24 pb-5 bg-cover;
+    @apply w-screen lg:pb-24 pb-5 bg-cover overflow-x-hidden;
   }
 
   .header-div{

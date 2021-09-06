@@ -5,6 +5,7 @@ import "../../../css/signup.css";
 import VisibilityIcon from '@material-ui/icons/Visibility';
 import VisibilityOffIcon from "@material-ui/icons/VisibilityOff";
 import CheckCircleIcon from "@material-ui/icons/CheckCircle";
+import Loader from "../../Loader";
 
 class signup extends Component{
 
@@ -13,6 +14,7 @@ class signup extends Component{
     this.state = {
       loginMessage: "",
       usernameMessage: "",
+      emailMessage:"",
       passwordMatch: "",
       name: "",
       username: "",
@@ -25,6 +27,7 @@ class signup extends Component{
       oneSpecial: false,
       lengthEight: false,
       emailCheck:false,
+      isLoading:false,
       oneNumColor: "#DC2626",
       oneCapColor: "#DC2626",
       oneSpecialColor: "#DC2626",
@@ -236,20 +239,29 @@ class signup extends Component{
     if (re.test(event.target.value)){
       this.setState({
         emailCheck:true,
+        emailMessage:""
       })
     }else{
       this.setState({
         emailCheck: false,
+        emailMessage:"Enter a valid Email Id"
       });
     }
       this.checkSubmissionForm();
   }
 
   handleUserRegistrationOnClick(){
+    this.setState({
+      isLoading:true,
+    })
     console.log("Allowed");
   }
 
   render(){
+    if(this.state.isLoading){
+      return(
+      <Loader message="Introducing you to Pentagon" />);
+    }else{
     return (
       <div className="app-bg-color w-full sm:h-screen overflow-y-scroll h-auto sm:overflow-hidden flex flex-col justify-between items-center lg:space-y-0 space-y-10">
         <div className="w-full lg:h-16 flex justify-center items-center ">
@@ -274,7 +286,7 @@ class signup extends Component{
             required
           ></input>
           <font className="text-green-600 w-full lg:text-sm text-xs text-left">
-            {this.usernameMessage}
+            {this.state.usernameMessage}
           </font>
           <input
             type="text"
@@ -292,6 +304,9 @@ class signup extends Component{
             value={this.state.email}
             required
           ></input>
+          <font className="text-red-600 w-full lg:text-sm text-xs text-left px-2">
+            {this.state.emailMessage}
+          </font>
           <div className="w-full bg-white flex justify-center pr-2 items-center border-2 rounded-lg border-gray-100 mb-1 ">
             <input
               id="password"
@@ -397,6 +412,7 @@ class signup extends Component{
         <div className="h-20 w-full "></div>
       </div>
     );
+  }
   }
 }
 
