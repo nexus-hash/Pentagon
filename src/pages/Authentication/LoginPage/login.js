@@ -12,10 +12,16 @@ class login extends Component {
       loginMessage: "",
       visibleButtonClass:"",
       visibleOffButtonClass:"hidden",
-      passwordFieldType:"password"
+      passwordFieldType:"password",
+      btnState: true,
+      btnbg:.6,
     };
 
     this.handleVisibilityClick = this.handleVisibilityClick.bind(this);
+  }
+
+  checkFormValidation() {
+    
   }
 
   handleVisibilityClick() {
@@ -85,6 +91,8 @@ class login extends Component {
           <button
             type="submit"
             className="w-full py-2 rounded-lg text-center btn-bg-color text-white hover:shadow-lg"
+            disabled = {this.state.btnState}
+            style={{opacity: this.state.btnbg}}
           >
             Authenticate
           </button>
