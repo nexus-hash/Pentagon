@@ -1,0 +1,20 @@
+@layer components{
+  .app-bg-color{
+    background: #F9f5f1;
+  }
+  .btn-bg-color{
+    background:#EB5757;
+  }
+  .btn-bg-color-not-allowed{
+    background:rgba(235, 87, 87, .6);
+  }
+  .font-bg-color{
+    color:#111111;
+  }
+  .navbar-start{
+    @apply w-full lg:h-16 flex justify-center items-center;
+  }
+  .navbar-end{
+    @apply w-full max-w-7xl py-3 2xl:px-0 px-4 flex justify-start items-center font-serif tracking-wider font-bg-color lg:text-4xl text-3xl;
+  }
+}

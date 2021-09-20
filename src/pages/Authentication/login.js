@@ -1,28 +1,28 @@
 import { Component } from "react";
 import { Link } from "react-router-dom";
 
-import '../../css/login.css';
+import "../../css/login.css";
 import VisibilityIcon from "@material-ui/icons/Visibility";
 import VisibilityOffIcon from "@material-ui/icons/VisibilityOff";
+import Navbar from "./components/Navbar";
+import SubmitButton from "./components/Submit";
 
 class login extends Component {
   constructor(props) {
     super(props);
     this.state = {
       loginMessage: "",
-      visibleButtonClass:"",
-      visibleOffButtonClass:"hidden",
-      passwordFieldType:"password",
+      visibleButtonClass: "",
+      visibleOffButtonClass: "hidden",
+      passwordFieldType: "password",
       btnState: true,
-      btnbg:.6,
+      btnbg: 0.6,
     };
 
     this.handleVisibilityClick = this.handleVisibilityClick.bind(this);
   }
 
-  checkFormValidation() {
-    
-  }
+  checkFormValidation() {}
 
   handleVisibilityClick() {
     if (this.state.passwordFieldType === "password") {
@@ -43,11 +43,7 @@ class login extends Component {
   render() {
     return (
       <div className="app-bg-color w-full h-screen overflow-hidden flex flex-col justify-between items-center">
-        <div className="w-full lg:h-16 flex justify-center items-center">
-          <div className="w-full max-w-7xl py-3 2xl:px-0 px-4 flex justify-start items-center font-serrif tracking-wider font-bg-color lg:text-4xl text-3xl">
-            PENTAGON
-          </div>
-        </div>
+        <Navbar></Navbar>
         <div className="lg:w-1/3 sm:w-3/4 w-full lg:p-0 px-12 h-auto flex flex-col justify-between space-y-2 items-center">
           <div className="lg:text-3xl text-2xl font-mono font-bg-color font-semibold tracking-wide lg:mb-2">
             Provide Your Credential
@@ -88,14 +84,11 @@ class login extends Component {
           </div>
           <div className="w-full px-2 flex justify-start items-center space-x-4 text-xs"></div>
           <div></div>
-          <button
-            type="submit"
-            className="w-full py-2 rounded-lg text-center btn-bg-color text-white hover:shadow-lg"
-            disabled = {this.state.btnState}
-            style={{opacity: this.state.btnbg}}
-          >
-            Authenticate
-          </button>
+          <SubmitButton
+            title="Authenticate"
+            btnState={this.state.btnState}
+            btnbg={this.state.btnbg}
+          ></SubmitButton>
           <div className="w-full py-2 flex justify-between items-center">
             <Link
               to="/forgotpassword"

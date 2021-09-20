@@ -6,6 +6,8 @@ import VisibilityIcon from "@material-ui/icons/Visibility";
 import VisibilityOffIcon from "@material-ui/icons/VisibilityOff";
 import CheckCircleIcon from "@material-ui/icons/CheckCircle";
 import Loader from "../utils/Loader";
+import Navbar from "./components/Navbar";
+import SubmitButton from "./components/Submit";
 
 class signup extends Component {
   constructor(props) {
@@ -337,11 +339,7 @@ class signup extends Component {
     } else {
       return (
         <div className="app-bg-color w-full sm:h-screen overflow-y-scroll h-auto sm:overflow-hidden flex flex-col justify-between items-center lg:space-y-0 space-y-10">
-          <div className="w-full lg:h-16 flex justify-center items-center ">
-            <div className="w-full max-w-7xl py-3 2xl:px-0 px-4 flex justify-start items-center font-serrif tracking-wider font-bg-color lg:text-4xl text-3xl">
-              PENTAGON
-            </div>
-          </div>
+          <Navbar></Navbar>
           <form className="xl:w-1/3 lg:w-1/2 sm:w-3/4 max-w-7xl w-full lg:p-0 px-6 h-auto flex flex-col justify-between space-y-2 items-center">
             <div className="lg:text-3xl text-2xl sm:font-mono font-serif font-bg-color font-semibold tracking-wide lg:mb-2">
               Introduce Yourself
@@ -485,16 +483,7 @@ class signup extends Component {
             <div className="w-full sm:space-y-0 space-y-1">
               {this.state.codeMessage}
               </div>
-            <button
-              onClick={this.handleUserRegistrationOnClick}
-              id="submitButton"
-              type="submit"
-              className="w-full py-2 rounded-lg text-center btn-bg-color text-white hover:shadow-lg cursor-pointer"
-              style={{ opacity: this.state.btnBg }}
-              disabled={this.state.buttonState}
-            >
-              Sign Up
-            </button>
+            <SubmitButton title="Sign Up" btnState = {this.state.buttonState} btnbg={this.state.btnBg}></SubmitButton>
             <div className="w-full py-2 flex justify-between items-center">
               <Link
                 to="/login"
