@@ -335,152 +335,157 @@ class signup extends Component {
   }
 
   render() {
+
+    let body;
+
     if (this.state.isLoading) {
-      return <Loader message="Introducing you to Pentagon" />;
+      body =  <Loader message="Introducing you to Pentagon" />;
     } else {
+      body = (
+        <form className="xl:w-1/3 lg:w-1/2 sm:w-3/4 max-w-7xl w-full lg:p-0 px-6 h-auto flex flex-col justify-between space-y-2 items-center">
+          <div className="lg:text-3xl text-2xl sm:font-mono font-serif font-bg-color font-semibold tracking-wide lg:mb-2">
+            Introduce Yourself
+          </div>
+          <div className="text-red-700 font-medium lg:text-lg text-sm">
+            {this.loginMessage}
+          </div>
+          <InputField
+            onChange={this.handleUsernameChange}
+            value={this.state.username}
+            placeholder="Username"
+          ></InputField>
+          <font className="text-green-600 w-full lg:text-sm text-xs text-left">
+            {this.state.usernameMessage}
+          </font>
+          <InputField
+            onChange={this.handleNameChange}
+            value={this.state.name}
+            placeholder="Name"
+          ></InputField>
+          <InputField
+            onChange={this.handleEmailChange}
+            value={this.state.email}
+            placeholder="Email"
+          ></InputField>
+          <font className="text-red-600 w-full lg:text-sm text-xs text-left px-2">
+            {this.state.emailMessage}
+          </font>
+          <div className="w-full flex flex-row h-auto">
+            <div className="w-1/2 bg-white flex justify-center pr-2 items-center border-2 rounded-lg border-gray-100 mb-1 mr-1">
+              <input
+                id="password"
+                type={this.state.passwordFieldType}
+                placeholder="Password"
+                className="px-4 py-2 w-full focus:shadow-xl focus:outline-none focus:border-transparent rounded-lg"
+                onChange={this.handlePasswordChange}
+                value={this.state.password}
+              ></input>
+              <div id="visible" className={this.state.visibleButtonClass}>
+                <VisibilityIcon
+                  className="cursor-pointer"
+                  id="eyeIcon"
+                  onClick={this.handleVisibilityClick}
+                ></VisibilityIcon>
+              </div>
+              <div id="notVisible" className={this.state.visibleOffButtonClass}>
+                <VisibilityOffIcon
+                  className="cursor-pointer "
+                  id="eyeIcon"
+                  onClick={this.handleVisibilityClick}
+                ></VisibilityOffIcon>
+              </div>
+            </div>
+            <input
+              type="password"
+              placeholder="Confirm Password"
+              className="w-1/2 bg-white h-11 px-4 py-2 rounded-lg border-2 border-gray-100 focus:shadow-xl focus:outline-none focus:border-transparent"
+              onChange={this.handleConfirmPasswordChange}
+              value={this.state.confirmPassword}
+            ></input>
+          </div>
+          <div className="text-red-600 w-full px-2 lg:text-xs text-sm text-left">
+            {this.state.passwordMatch}
+          </div>
+
+          <div className="w-full sm:spcae-y-0 space-y-1">
+            <div className="w-full px-2 sm:flex justify-start items-center sm:tracking-tight sm:space-x-1 space-y-1 lg:space-y-0 text-sm">
+              <div className="text-green-600 sm:w-1/2 w-full flex items-center">
+                <CircularIndicator
+                  color={this.state.oneSpecialColor}
+                ></CircularIndicator>
+                {"   "}
+                At least one special character
+              </div>
+              <div className="text-green-600 sm:w-1/2 flex items-center">
+                <CircularIndicator
+                  color={this.state.oneCapColor}
+                ></CircularIndicator>
+                {"   "}
+                Minimum one capital alphabet
+              </div>
+            </div>
+            <div className="w-full px-2 sm:flex justify-start items-center sm:tracking-tight sm:space-x-1 space-y-1 lg:space-y-0 text-sm">
+              <div className="text-green-600 w-1/2 flex items-center">
+                <CircularIndicator
+                  color={this.state.oneNumColor}
+                ></CircularIndicator>
+                {"   "}
+                At least one number
+              </div>
+              <div className="text-green-600 w-1/2 flex items-center">
+                <CircularIndicator
+                  color={this.state.lengthEightColor}
+                ></CircularIndicator>
+                {"   "}
+                Minimum 8 characters
+              </div>
+            </div>
+          </div>
+          <div className="w-full flex flex-row justify-center items-center">
+            <input
+              type="number"
+              placeholder="Verification Code"
+              className=" w-9/12 bg-white px-4 py-2 rounded-lg border-2 border-gray-100 focus:shadow-xl focus:outline-none focus:border-transparent"
+              onChange={this.handleVerificationCodeChange}
+              value={this.state.verificationCode}
+            ></input>
+            <div
+              onClick={this.sendCode}
+              className="cursor-pointer w-3/12 items-center py-2 text-center border-2 border-gray-100 rounded-lg text-sm"
+              disabled={this.state.codeButtonState}
+              style={{ opacity: this.state.codeButtonColor }}
+            >
+              {this.state.code}
+            </div>
+          </div>
+          <div className="w-full sm:space-y-0 space-y-1">
+            {this.state.codeMessage}
+          </div>
+          <SubmitButton
+            title="Sign Up"
+            btnState={this.state.buttonState}
+            btnbg={this.state.btnBg}
+            onClick={this.handleUserRegistrationOnClick}
+          ></SubmitButton>
+          <div className="w-full py-2 flex justify-between items-center">
+            <SecondaryButton
+              Width="100%"
+              path="/login"
+              title="Login"
+            ></SecondaryButton>
+          </div>
+        </form>
+      );
+    }
       return (
         <div className="app-bg-color w-full sm:h-screen overflow-y-scroll h-auto sm:overflow-hidden flex flex-col justify-between items-center lg:space-y-0 space-y-10">
           <Navbar></Navbar>
-          <form className="xl:w-1/3 lg:w-1/2 sm:w-3/4 max-w-7xl w-full lg:p-0 px-6 h-auto flex flex-col justify-between space-y-2 items-center">
-            <div className="lg:text-3xl text-2xl sm:font-mono font-serif font-bg-color font-semibold tracking-wide lg:mb-2">
-              Introduce Yourself
-            </div>
-            <div className="text-red-700 font-medium lg:text-lg text-sm">
-              {this.loginMessage}
-            </div>
-            <InputField
-              onChange={this.handleUsernameChange}
-              value={this.state.username}
-              placeholder="Username"
-            ></InputField>
-            <font className="text-green-600 w-full lg:text-sm text-xs text-left">
-              {this.state.usernameMessage}
-            </font>
-            <InputField
-              onChange={this.handleNameChange}
-              value={this.state.name}
-              placeholder="Name"
-            ></InputField>
-            <InputField
-              onChange={this.handleEmailChange}
-              value={this.state.email}
-              placeholder="Email"
-            ></InputField>
-            <font className="text-red-600 w-full lg:text-sm text-xs text-left px-2">
-              {this.state.emailMessage}
-            </font>
-            <div className="w-full flex flex-row h-auto">
-              <div className="w-1/2 bg-white flex justify-center pr-2 items-center border-2 rounded-lg border-gray-100 mb-1 mr-1">
-                <input
-                  id="password"
-                  type={this.state.passwordFieldType}
-                  placeholder="Password"
-                  className="px-4 py-2 w-full focus:shadow-xl focus:outline-none focus:border-transparent rounded-lg"
-                  onChange={this.handlePasswordChange}
-                  value={this.state.password}
-                ></input>
-                <div id="visible" className={this.state.visibleButtonClass}>
-                  <VisibilityIcon
-                    className="cursor-pointer"
-                    id="eyeIcon"
-                    onClick={this.handleVisibilityClick}
-                  ></VisibilityIcon>
-                </div>
-                <div
-                  id="notVisible"
-                  className={this.state.visibleOffButtonClass}
-                >
-                  <VisibilityOffIcon
-                    className="cursor-pointer "
-                    id="eyeIcon"
-                    onClick={this.handleVisibilityClick}
-                  ></VisibilityOffIcon>
-                </div>
-              </div>
-              <input
-                type="password"
-                placeholder="Confirm Password"
-                className="w-1/2 bg-white h-11 px-4 py-2 rounded-lg border-2 border-gray-100 focus:shadow-xl focus:outline-none focus:border-transparent"
-                onChange={this.handleConfirmPasswordChange}
-                value={this.state.confirmPassword}
-              ></input>
-            </div>
-            <div className="text-red-600 w-full px-2 lg:text-xs text-sm text-left">
-              {this.state.passwordMatch}
-            </div>
-
-            <div className="w-full sm:spcae-y-0 space-y-1">
-              <div className="w-full px-2 sm:flex justify-start items-center sm:tracking-tight sm:space-x-1 space-y-1 lg:space-y-0 text-sm">
-                <div className="text-green-600 sm:w-1/2 w-full flex items-center">
-                  <CircularIndicator
-                    color={this.state.oneSpecialColor}
-                  ></CircularIndicator>
-                  {"   "}
-                  At least one special character
-                </div>
-                <div className="text-green-600 sm:w-1/2 flex items-center">
-                  <CircularIndicator
-                    color={this.state.oneCapColor}
-                  ></CircularIndicator>
-                  {"   "}
-                  Minimum one capital alphabet
-                </div>
-              </div>
-              <div className="w-full px-2 sm:flex justify-start items-center sm:tracking-tight sm:space-x-1 space-y-1 lg:space-y-0 text-sm">
-                <div className="text-green-600 w-1/2 flex items-center">
-                  <CircularIndicator
-                    color={this.state.oneNumColor}
-                  ></CircularIndicator>
-                  {"   "}
-                  At least one number
-                </div>
-                <div className="text-green-600 w-1/2 flex items-center">
-                  <CircularIndicator
-                    color={this.state.lengthEightColor}
-                  ></CircularIndicator>
-                  {"   "}
-                  Minimum 8 characters
-                </div>
-              </div>
-            </div>
-            <div className="w-full flex flex-row justify-center items-center">
-              <input
-                type="number"
-                placeholder="Verification Code"
-                className=" w-9/12 bg-white px-4 py-2 rounded-lg border-2 border-gray-100 focus:shadow-xl focus:outline-none focus:border-transparent"
-                onChange={this.handleVerificationCodeChange}
-                value={this.state.verificationCode}
-              ></input>
-              <div
-                onClick={this.sendCode}
-                className="cursor-pointer w-3/12 items-center py-2 text-center border-2 border-gray-100 rounded-lg text-sm"
-                disabled={this.state.codeButtonState}
-                style={{ opacity: this.state.codeButtonColor }}
-              >
-                {this.state.code}
-              </div>
-            </div>
-            <div className="w-full sm:space-y-0 space-y-1">
-              {this.state.codeMessage}
-            </div>
-            <SubmitButton
-              title="Sign Up"
-              btnState={this.state.buttonState}
-              btnbg={this.state.btnBg}
-            ></SubmitButton>
-            <div className="w-full py-2 flex justify-between items-center">
-              <SecondaryButton
-                Width="100%"
-                path="/login"
-                title="Login"
-              ></SecondaryButton>
-            </div>
-          </form>
+          {body}
           <div className="h-20 w-full "></div>
         </div>
       );
     }
   }
-}
+
 
 export default signup;
