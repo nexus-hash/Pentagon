@@ -1,5 +1,4 @@
 import { Component } from "react";
-import { Link } from "react-router-dom";
 
 import "../../css/signup.css";
 import VisibilityIcon from "@material-ui/icons/Visibility";
@@ -8,6 +7,7 @@ import CheckCircleIcon from "@material-ui/icons/CheckCircle";
 import Loader from "../utils/Loader";
 import Navbar from "./components/Navbar";
 import SubmitButton from "./components/Submit";
+import SecondaryButton from "./components/SecondaryButton";
 
 class signup extends Component {
   constructor(props) {
@@ -485,12 +485,7 @@ class signup extends Component {
               </div>
             <SubmitButton title="Sign Up" btnState = {this.state.buttonState} btnbg={this.state.btnBg}></SubmitButton>
             <div className="w-full py-2 flex justify-between items-center">
-              <Link
-                to="/login"
-                className="w-full py-2 border-2 text-center border-gray-400 font-bg-color rounded-lg text-sm"
-              >
-                Login?
-              </Link>
+              <SecondaryButton Width = "100%" path="/login" title = "Login"></SecondaryButton>
             </div>
           </form>
           <div className="h-20 w-full "></div>

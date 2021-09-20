@@ -1,11 +1,11 @@
 import { Component } from "react";
-import { Link } from "react-router-dom";
 
 import "../../css/login.css";
 import VisibilityIcon from "@material-ui/icons/Visibility";
 import VisibilityOffIcon from "@material-ui/icons/VisibilityOff";
 import Navbar from "./components/Navbar";
 import SubmitButton from "./components/Submit";
+import SecondaryButton from "./components/SecondaryButton";
 
 class login extends Component {
   constructor(props) {
@@ -90,18 +90,12 @@ class login extends Component {
             btnbg={this.state.btnbg}
           ></SubmitButton>
           <div className="w-full py-2 flex justify-between items-center">
-            <Link
-              to="/forgotpassword"
-              className="w-1/2 py-2 text-center border-2 border-gray-400 font-bg-color rounded-lg text-sm mr-1"
-            >
-              Forgot Password?
-            </Link>
-            <Link
-              to="/signup"
-              className="w-1/2 py-2 text-center border-2 border-gray-400 font-bg-color rounded-lg text-sm"
-            >
-              Sign Up?
-            </Link>
+            <SecondaryButton
+              path="/forgotpassword"
+              title="Forgot Password?"
+              Width="50%"
+            ></SecondaryButton>
+            <SecondaryButton path="/signup" title="Sign Up?" Width = "50%"></SecondaryButton>
           </div>
         </div>
         <div className="h-20 w-full "></div>
