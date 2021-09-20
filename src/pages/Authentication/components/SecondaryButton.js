@@ -1,10 +1,11 @@
 import {Link} from "react-router-dom";
+import "./component.css";
 
 function SecondaryButton(props) {
   return (
     <Link
       to={props.path}
-      className="py-2 text-center border-2 border-gray-400 font-bg-color rounded-lg text-sm"
+      className="secondaryButton"
       style={{width: props.Width}}
     >
       {props.title}

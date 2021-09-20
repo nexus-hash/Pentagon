@@ -17,4 +17,13 @@
   .navbar-end{
     @apply w-full max-w-7xl py-3 2xl:px-0 px-4 flex justify-start items-center font-serif tracking-wider font-bg-color lg:text-4xl text-3xl;
   }
+  .inputField{
+    @apply w-full bg-white px-4 py-2 rounded-lg border-2 border-gray-100 focus:shadow-xl focus:outline-none focus:border-transparent
+  }
+  .secondaryButton{
+    @apply py-2 text-center border-2 border-gray-400 font-bg-color rounded-lg text-sm;
+  }
+  .submitButton{
+    @apply w-full py-2 rounded-lg text-center btn-bg-color text-white hover:shadow-lg;
+  }
 }

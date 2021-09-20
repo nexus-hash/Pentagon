@@ -3,11 +3,12 @@ import { Component } from "react";
 import "../../css/signup.css";
 import VisibilityIcon from "@material-ui/icons/Visibility";
 import VisibilityOffIcon from "@material-ui/icons/VisibilityOff";
-import CheckCircleIcon from "@material-ui/icons/CheckCircle";
 import Loader from "../utils/Loader";
 import Navbar from "./components/Navbar";
 import SubmitButton from "./components/Submit";
 import SecondaryButton from "./components/SecondaryButton";
+import InputField from "./components/inputField";
+import CircularIndicator from "./components/circularIndicator";
 
 class signup extends Component {
   constructor(props) {
@@ -347,33 +348,24 @@ class signup extends Component {
             <div className="text-red-700 font-medium lg:text-lg text-sm">
               {this.loginMessage}
             </div>
-
-            <input
-              type="text"
-              placeholder="Username"
-              className="w-full bg-white px-4 py-2 rounded-lg border-2 border-gray-100 focus:shadow-xl focus:outline-none focus:border-transparent"
+            <InputField
               onChange={this.handleUsernameChange}
               value={this.state.username}
-            ></input>
+              placeholder="Username"
+            ></InputField>
             <font className="text-green-600 w-full lg:text-sm text-xs text-left">
               {this.state.usernameMessage}
             </font>
-            <input
-              type="text"
-              placeholder="Name"
-              className="w-full bg-white px-4 py-2 rounded-lg border-2 border-gray-100 mb-1 focus:shadow-xl focus:outline-none focus:border-transparent"
+            <InputField
               onChange={this.handleNameChange}
               value={this.state.name}
-            ></input>
-            <div className="w-full">
-              <input
-                type="email"
-                placeholder="Email"
-                className="w-full bg-white px-4 py-2 rounded-lg border-2 border-gray-100 mb-1 focus:shadow-xl focus:outline-none focus:border-transparent"
-                onChange={this.handleEmailChange}
-                value={this.state.email}
-              ></input>
-            </div>
+              placeholder="Name"
+            ></InputField>
+            <InputField
+              onChange={this.handleEmailChange}
+              value={this.state.email}
+              placeholder="Email"
+            ></InputField>
             <font className="text-red-600 w-full lg:text-sm text-xs text-left px-2">
               {this.state.emailMessage}
             </font>
@@ -420,44 +412,32 @@ class signup extends Component {
             <div className="w-full sm:spcae-y-0 space-y-1">
               <div className="w-full px-2 sm:flex justify-start items-center sm:tracking-tight sm:space-x-1 space-y-1 lg:space-y-0 text-sm">
                 <div className="text-green-600 sm:w-1/2 w-full flex items-center">
-                  <CheckCircleIcon
-                    id="schar"
-                    fontSize="small"
-                    className="mr-1"
-                    style={{ color: this.state.oneSpecialColor }}
-                  ></CheckCircleIcon>
+                  <CircularIndicator
+                    color={this.state.oneSpecialColor}
+                  ></CircularIndicator>
                   {"   "}
                   At least one special character
                 </div>
                 <div className="text-green-600 sm:w-1/2 flex items-center">
-                  <CheckCircleIcon
-                    id="calphabet"
-                    fontSize="small"
-                    className=" mr-1"
-                    style={{ color: this.state.oneCapColor }}
-                  ></CheckCircleIcon>
+                  <CircularIndicator
+                    color={this.state.oneCapColor}
+                  ></CircularIndicator>
                   {"   "}
                   Minimum one capital alphabet
                 </div>
               </div>
               <div className="w-full px-2 sm:flex justify-start items-center sm:tracking-tight sm:space-x-1 space-y-1 lg:space-y-0 text-sm">
                 <div className="text-green-600 w-1/2 flex items-center">
-                  <CheckCircleIcon
-                    id="num"
-                    fontSize="small"
-                    className="mr-1"
-                    style={{ color: this.state.oneNumColor }}
-                  ></CheckCircleIcon>
+                  <CircularIndicator
+                    color={this.state.oneNumColor}
+                  ></CircularIndicator>
                   {"   "}
                   At least one number
                 </div>
                 <div className="text-green-600 w-1/2 flex items-center">
-                  <CheckCircleIcon
-                    id="minchar"
-                    fontSize="small"
-                    className=" mr-1"
-                    style={{ color: this.state.lengthEightColor }}
-                  ></CheckCircleIcon>
+                  <CircularIndicator
+                    color={this.state.lengthEightColor}
+                  ></CircularIndicator>
                   {"   "}
                   Minimum 8 characters
                 </div>
@@ -475,17 +455,25 @@ class signup extends Component {
                 onClick={this.sendCode}
                 className="cursor-pointer w-3/12 items-center py-2 text-center border-2 border-gray-100 rounded-lg text-sm"
                 disabled={this.state.codeButtonState}
-                style={{opacity: this.state.codeButtonColor}}
+                style={{ opacity: this.state.codeButtonColor }}
               >
                 {this.state.code}
               </div>
             </div>
             <div className="w-full sm:space-y-0 space-y-1">
               {this.state.codeMessage}
-              </div>
-            <SubmitButton title="Sign Up" btnState = {this.state.buttonState} btnbg={this.state.btnBg}></SubmitButton>
+            </div>
+            <SubmitButton
+              title="Sign Up"
+              btnState={this.state.buttonState}
+              btnbg={this.state.btnBg}
+            ></SubmitButton>
             <div className="w-full py-2 flex justify-between items-center">
-              <SecondaryButton Width = "100%" path="/login" title = "Login"></SecondaryButton>
+              <SecondaryButton
+                Width="100%"
+                path="/login"
+                title="Login"
+              ></SecondaryButton>
             </div>
           </form>
           <div className="h-20 w-full "></div>
