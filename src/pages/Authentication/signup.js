@@ -8,7 +8,7 @@ import Navbar from "./components/Navbar";
 import SubmitButton from "./components/Submit";
 import SecondaryButton from "./components/SecondaryButton";
 import InputField from "./components/inputField";
-import CircularIndicator from "./components/circularIndicator";
+import PasswordValidationIdentifier from "./components/Password_Indicator";
 
 class signup extends Component {
   constructor(props) {
@@ -52,12 +52,12 @@ class signup extends Component {
     this.handleEmailChange = this.handleEmailChange.bind(this);
     this.handlePasswordChange = this.handlePasswordChange.bind(this);
     this.handleConfirmPasswordChange =
-      this.handleConfirmPasswordChange.bind(this);
+    this.handleConfirmPasswordChange.bind(this);
     this.handleUserRegistrationOnClick =
-      this.handleUserRegistrationOnClick.bind(this);
+    this.handleUserRegistrationOnClick.bind(this);
     this.checkSubmissionForm = this.checkSubmissionForm.bind(this);
     this.handleVerificationCodeChange =
-      this.handleVerificationCodeChange.bind(this);
+    this.handleVerificationCodeChange.bind(this);
     this.startTimer = this.startTimer.bind(this);
     this.countDown = this.countDown.bind(this);
     this.sendCode = this.sendCode.bind(this);
@@ -130,6 +130,8 @@ class signup extends Component {
     this.setState({
       username: event.target.value,
     });
+    // Call the API to check username availability
+
     this.checkSubmissionForm();
   }
 
@@ -277,7 +279,8 @@ class signup extends Component {
     this.setState({
       isLoading: true,
     });
-    console.log("Allowed");
+    // Call the API to register the user and redirect to login page
+
   }
 
   countDown() {
@@ -293,7 +296,7 @@ class signup extends Component {
     // Check if we're at zero.
     if (seconds === 0) {
       this.setState({
-        code: "Send Again",
+        code: "Resend",
         codeButtonColor:1,
         codeButtonState: false,
       });
@@ -308,7 +311,7 @@ class signup extends Component {
   }
 
   async sendCode() {
-    if (this.state.emailCheck && (this.state.code === "Send Code" || this.state.code === "Send Again")) {
+    if (this.state.emailCheck && (this.state.code === "Send Code" || this.state.code === "Resend")) {
       await this.setState({
         seconds: 60,
         code: "Resend (60)",
@@ -316,7 +319,9 @@ class signup extends Component {
         codeButtonState: true,
       });
       this.startTimer();
-      
+
+      // Call api to send code
+
       this.setState({
         codeMessage: "Code has been sent to your mail ID",
       });
@@ -330,7 +335,7 @@ class signup extends Component {
         this.setState({
           code: "Send Code",
         });
-      }, 4000);
+      }, 2000);
     }
   }
 
@@ -406,41 +411,9 @@ class signup extends Component {
           <div className="text-red-600 w-full px-2 lg:text-xs text-sm text-left">
             {this.state.passwordMatch}
           </div>
-
-          <div className="w-full sm:spcae-y-0 space-y-1">
-            <div className="w-full px-2 sm:flex justify-start items-center sm:tracking-tight sm:space-x-1 space-y-1 lg:space-y-0 text-sm">
-              <div className="text-green-600 sm:w-1/2 w-full flex items-center">
-                <CircularIndicator
-                  color={this.state.oneSpecialColor}
-                ></CircularIndicator>
-                {"   "}
-                At least one special character
-              </div>
-              <div className="text-green-600 sm:w-1/2 flex items-center">
-                <CircularIndicator
-                  color={this.state.oneCapColor}
-                ></CircularIndicator>
-                {"   "}
-                Minimum one capital alphabet
-              </div>
-            </div>
-            <div className="w-full px-2 sm:flex justify-start items-center sm:tracking-tight sm:space-x-1 space-y-1 lg:space-y-0 text-sm">
-              <div className="text-green-600 w-1/2 flex items-center">
-                <CircularIndicator
-                  color={this.state.oneNumColor}
-                ></CircularIndicator>
-                {"   "}
-                At least one number
-              </div>
-              <div className="text-green-600 w-1/2 flex items-center">
-                <CircularIndicator
-                  color={this.state.lengthEightColor}
-                ></CircularIndicator>
-                {"   "}
-                Minimum 8 characters
-              </div>
-            </div>
-          </div>
+          <PasswordValidationIdentifier oneCapColor={this.state.oneCapColor} lengthEightColor={this.state.lengthEightColor}
+          oneNumColor = {this.state.oneNumColor} oneSpecialColor = {this.state.oneSpecialColor}
+          ></PasswordValidationIdentifier>
           <div className="w-full flex flex-row justify-center items-center">
             <input
               type="number"
