@@ -1,5 +1,5 @@
 import {Link} from "react-router-dom";
-import "./component.css";
+import "../../../css/component.css";
 
 function SecondaryButton(props) {
   return (

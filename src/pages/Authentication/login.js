@@ -22,7 +22,9 @@ class login extends Component {
     this.handleVisibilityClick = this.handleVisibilityClick.bind(this);
   }
 
-  checkFormValidation() {}
+  checkFormValidation() {
+    
+  }
 
   handleVisibilityClick() {
     if (this.state.passwordFieldType === "password") {

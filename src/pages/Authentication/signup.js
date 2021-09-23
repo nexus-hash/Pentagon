@@ -38,6 +38,7 @@ class signup extends Component {
       oneCapColor: "#DC2626",
       oneSpecialColor: "#DC2626",
       lengthEightColor: "#DC2626",
+      cursor:"not-allowed",
       btnBg: 0.6,
       buttonState: true,
       codeButtonColor:.3,
@@ -84,10 +85,12 @@ class signup extends Component {
         });
         this.setState({
           buttonState: false,
+          cursor:"pointer"
         });
       } else {
         this.setState({
           btnBg: 0.6,
+          cursor: "not-allowed",
         });
         this.setState({
           buttonState: true,
@@ -438,6 +441,7 @@ class signup extends Component {
             title="Sign Up"
             btnState={this.state.buttonState}
             btnbg={this.state.btnBg}
+            cursor = {this.state.cursor}
             onClick={this.handleUserRegistrationOnClick}
           ></SubmitButton>
           <div className="w-full py-2 flex justify-between items-center">

@@ -10,7 +10,7 @@ import SecondaryButton from "./components/SecondaryButton";
 import InputField from "./components/inputField";
 import PasswordValidationIdentifier from "./components/Password_Indicator";
 
-class signup extends Component {
+class ForgotPassword extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -35,6 +35,7 @@ class signup extends Component {
       oneCapColor: "#DC2626",
       oneSpecialColor: "#DC2626",
       lengthEightColor: "#DC2626",
+      cursor:"not-allowed",
       btnBg: 0.6,
       buttonState: true,
       codeButtonColor: 0.3,
@@ -47,12 +48,12 @@ class signup extends Component {
     this.handleEmailChange = this.handleEmailChange.bind(this);
     this.handlePasswordChange = this.handlePasswordChange.bind(this);
     this.handleConfirmPasswordChange =
-      this.handleConfirmPasswordChange.bind(this);
+    this.handleConfirmPasswordChange.bind(this);
     this.handleUserRegistrationOnClick =
-      this.handleUserRegistrationOnClick.bind(this);
+    this.handleUserRegistrationOnClick.bind(this);
     this.checkSubmissionForm = this.checkSubmissionForm.bind(this);
     this.handleVerificationCodeChange =
-      this.handleVerificationCodeChange.bind(this);
+    this.handleVerificationCodeChange.bind(this);
     this.startTimer = this.startTimer.bind(this);
     this.countDown = this.countDown.bind(this);
     this.sendCode = this.sendCode.bind(this);
@@ -73,6 +74,7 @@ class signup extends Component {
       ) {
         this.setState({
           btnBg: 1,
+          cursor: "pointer",
         });
         this.setState({
           buttonState: false,
@@ -80,6 +82,7 @@ class signup extends Component {
       } else {
         this.setState({
           btnBg: 0.6,
+          cursor: "not-allowed",
         });
         this.setState({
           buttonState: true,
@@ -325,7 +328,7 @@ class signup extends Component {
     } else {
       body = (
         <form className="xl:w-1/3 lg:w-1/2 sm:w-3/4 max-w-7xl w-full lg:p-0 px-6 h-auto flex flex-col justify-between space-y-2 items-center">
-          <div className="lg:text-3xl text-2xl sm:font-mono font-serif font-bg-color font-semibold tracking-wide lg:mb-2">
+          <div className="lg:text-3xl text-lg tracking-normal sm:font-mono font-serif font-bg-color font-semibold lg:tracking-wide lg:mb-2">
             Forgot Password
           </div>
           <div className="text-red-700 font-medium lg:text-lg text-sm">
@@ -405,6 +408,7 @@ class signup extends Component {
             title="Change Password"
             btnState={this.state.buttonState}
             btnbg={this.state.btnBg}
+            cursor = {this.state.cursor}
             onClick={this.handleUserRegistrationOnClick}
           ></SubmitButton>
           <div className="w-full py-2 flex justify-between items-center">
@@ -427,4 +431,4 @@ class signup extends Component {
   }
 }
 
-export default signup;
+export default ForgotPassword;

@@ -12,10 +12,10 @@
     color:#111111;
   }
   .navbar-start{
-    @apply w-full lg:h-16 flex justify-center items-center;
+    @apply w-full lg:h-16 flex justify-center items-center pt-6;
   }
   .navbar-end{
-    @apply w-full max-w-7xl py-3 2xl:px-0 px-4 flex justify-start items-center font-serif tracking-wider font-bg-color lg:text-4xl text-3xl;
+    @apply w-full max-w-7xl py-3 2xl:px-0 px-4 flex justify-start items-center font-serif tracking-wider font-bg-color lg:text-2xl text-xl;
   }
   .inputField{
     @apply w-full bg-white px-4 py-2 rounded-lg border-2 border-gray-100 focus:shadow-xl focus:outline-none focus:border-transparent

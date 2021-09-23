@@ -1,4 +1,4 @@
-import "./component.css";
+import "../../../css/component.css";
 
 function Navbar(params) {
   return (

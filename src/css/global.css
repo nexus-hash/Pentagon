@@ -1,0 +1,17 @@
+@layer components{
+
+/*
+
+  Custom Colors Section
+
+*/
+  .app-bg-color{
+    background: #F9f5f1;
+  }
+  .nav-bg-color{
+    background:#EB5757;
+  }
+  .font-bg-color{
+    color:#111111;
+  }
+}

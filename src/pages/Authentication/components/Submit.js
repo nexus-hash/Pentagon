@@ -1,4 +1,4 @@
-import "./component.css";
+import "../../../css/component.css";
 
 function SubmitButton(props) {
   return (
@@ -6,7 +6,7 @@ function SubmitButton(props) {
       type="submit"
       className="submitButton"
       disabled={props.btnState}
-      style={{ opacity: props.btnbg }}
+      style={{ opacity: props.btnbg,cursor: props.cursor} }
       onClick={props.onClick}
     >
       {props.title}
