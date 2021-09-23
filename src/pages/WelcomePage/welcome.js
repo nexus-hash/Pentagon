@@ -8,6 +8,7 @@ import Database from "../../assets/Database.svg";
 import trackProgress from "../../assets/trackProgress.svg";
 import Collaboration from "../../assets/collaboration.svg";
 import secureData from '../../assets/secure.svg';
+import Logo from "../../assets/pentagonwhite.svg";
 
 
 class WelcomePage extends Component{
@@ -46,6 +47,15 @@ class WelcomePage extends Component{
             <div className="header-div">
               <navbar-bg>
                 <navbar-fg>
+                  <img
+                    src={Logo}
+                    alt="Pentagon Logo"
+                    className="lg:w-14 w-9 mr-2"
+                  />
+                  <div className="lg:text-2xl tracking-wide text-white font-sans">
+                    PENTAGON
+                  </div>
+                  <div className="w-full"></div>
                   <button
                     className="navbar-btn-no-bg"
                     onClick={this.handleFeatureOnclick}

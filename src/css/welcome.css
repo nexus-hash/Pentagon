@@ -46,7 +46,7 @@
   }
 
   navbar-fg{
-    @apply lg:h-12 w-full max-w-7xl flex justify-end items-center pt-2;
+    @apply lg:h-12 w-full max-w-7xl flex justify-end items-center lg:pt-6 pt-2 lg:px-4;
   }
 
   .navbar-btn-no-bg-text{

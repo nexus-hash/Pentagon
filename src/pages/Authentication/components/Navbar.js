@@ -1,10 +1,11 @@
 import "../../../css/component.css";
+import Title from "../../utils/title";
 
 function Navbar(params) {
   return (
     <div className="navbar-start">
       <div className="navbar-end">
-        PENTAGON
+        <Title width="2.25rem"></Title>
       </div>
     </div>
   );

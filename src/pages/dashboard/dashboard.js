@@ -1,7 +1,7 @@
 import { Component } from "react";
 
 import "../../css/global.css";
-import Logo from "../../assets/pentagon.png";
+import Title from "../utils/title";
 
 class Dashboard extends Component {
   constructor(props){
@@ -14,10 +14,9 @@ class Dashboard extends Component {
   render() {
     return (
       <div className="flex flex-col justify-start items-center">
-        <div className="w-full flex justify-between nav-bg-color items-center py-3 px-12">
-          <div className="flex justify-between items-center w-32">
-          <img alt="Pentagon Logo" src={Logo} className="h-8 text-white" />
-          <h1>PENTAGON</h1></div>
+        <div className="w-full flex justify-between nav-bg-color items-center py-3 px-12 ">
+          
+          <Title width="2.25rem" color="#FFFFFF"></Title>
           <button className="">Projects</button>
           <button>Create Project</button>
           <button>Join Project</button>
