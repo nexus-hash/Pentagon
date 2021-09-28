@@ -316,8 +316,8 @@ class signup extends Component {
   async sendCode() {
     if (this.state.emailCheck && (this.state.code === "Send Code" || this.state.code === "Resend")) {
       await this.setState({
-        seconds: 60,
-        code: "Resend (60)",
+        seconds: 10,
+        code: "Resend (10)",
         codeButtonColor: .7,
         codeButtonState: true,
       });

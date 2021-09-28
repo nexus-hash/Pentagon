@@ -2,20 +2,33 @@ import { Component } from 'react';
 import {Link} from 'react-router-dom';
 
 import '../../css/welcome.css';
+import Theme from "../../data/theme.json"
 
 import WelcomePageImage from "../../assets/welcomePageImage.png";
 import Database from "../../assets/Database.svg";
 import trackProgress from "../../assets/trackProgress.svg";
 import Collaboration from "../../assets/collaboration.svg";
 import secureData from '../../assets/secure.svg';
-import Logo from "../../assets/pentagonwhite.svg";
+import Logo from "../../assets/pentlogolight.svg";
+import LogoDark from "../../assets/pentlogodark.svg";
+import Loader from "../utils/Loader";
+import Switch from "@mui/material/Switch";
 
+var pagetheme = window.localStorage.getItem("theme");
 
 class WelcomePage extends Component{
 
   constructor(props){
     super(props);
-
+    this.state = {
+      backgroundColor: pagetheme
+        ? Theme.LightTheme.backgroundColor
+        : Theme.DarkTheme.backgroundColor,
+      textColor: pagetheme?Theme.LightTheme.textColor:Theme.DarkTheme.textColor,
+      secondaryColor: pagetheme?Theme.LightTheme.secondaryColor:Theme.DarkTheme.secondaryColor,
+      isLoading: false,
+      checked: pagetheme?true:false,
+    };
     this.handleFeatureOnclick = this.handleFeatureOnclick.bind(this);
     this.handleBeforeYouStartOnClick = this.handleBeforeYouStartOnClick.bind(this);
     this.handleDataOnClick = this.handleDataOnClick.bind(this);
@@ -36,9 +49,33 @@ class WelcomePage extends Component{
     elementToView.scrollIntoView({ behavior: "smooth" });
   }
 
+  handleThemeChange = () => {
+    window.localStorage.setItem("theme", !this.state.checked);
+    pagetheme = !pagetheme;
+    this.setState({
+      checked: !this.state.checked,
+      backgroundColor: pagetheme
+        ? Theme.LightTheme.backgroundColor
+        : Theme.DarkTheme.backgroundColor,
+      textColor: pagetheme
+        ? Theme.LightTheme.textColor
+        : Theme.DarkTheme.textColor,
+      secondaryColor: pagetheme
+        ? Theme.LightTheme.secondaryColor
+        : Theme.DarkTheme.secondaryColor,
+    });
+  }
+
   render(){
+    if (this.state.isLoading){
+      return(
+        <div className="loader">
+        <Loader></Loader>
+        </div>
+      );
+    }else{
     return (
-      <body className="app-bg-color">
+      <body style={{ background: this.state.backgroundColor }}>
         <header className="h-auto">
           <div
             className="header-img"
@@ -48,14 +85,17 @@ class WelcomePage extends Component{
               <navbar-bg>
                 <navbar-fg>
                   <img
-                    src={Logo}
+                    src={pagetheme?Logo:LogoDark}
                     alt="Pentagon Logo"
-                    className="lg:w-14 w-9 mr-2"
+                    className="lg:w-12 w-9 mr-2"
                   />
                   <div className="lg:text-2xl tracking-wide text-white font-sans">
                     PENTAGON
                   </div>
                   <div className="w-full"></div>
+                  <Switch className="" onClick={this.handleThemeChange}>
+
+                  </Switch>
                   <button
                     className="navbar-btn-no-bg"
                     onClick={this.handleFeatureOnclick}
@@ -70,7 +110,7 @@ class WelcomePage extends Component{
                   >
                     <div className="navbar-btn-no-bg-text">Data</div>
                   </button>
-                  <Link to="/login" className="navbar-btn-w-bg">
+                  <Link to="/login" className="navbar-btn-w-bg" style={{background:this.state.secondaryColor}}>
                     <div className="navbar-btn-w-bg-text">LOGIN</div>
                   </Link>
                 </navbar-fg>
@@ -91,7 +131,7 @@ class WelcomePage extends Component{
                     >
                       Before you Start
                     </button>
-                    <Link to="/signup" className="strt-here-btn">
+                    <Link to="/signup" className="strt-here-btn" style={{background:this.state.secondaryColor}}>
                       Start Here
                     </Link>
                   </div>
@@ -100,9 +140,17 @@ class WelcomePage extends Component{
             </div>
           </div>
         </header>
-        <div className="details-section">
+        <div
+          className="details-section"
+          style={{ background: this.state.backgroundColor }}
+        >
           <div className="feature-grid" id="Features">
-            <div className="sub-pg-title">Features</div>
+            <div
+              className="sub-pg-title"
+              style={{ color: this.state.textColor }}
+            >
+              Features
+            </div>
             <div className="features-listing-section">
               <div className="feature-card">
                 <img
@@ -199,7 +247,7 @@ class WelcomePage extends Component{
           <div className="">Contact the Developers</div>
         </footer>
       </body>
-    );
+    );}
   }
 
 }

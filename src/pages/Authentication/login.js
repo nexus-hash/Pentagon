@@ -91,7 +91,7 @@ class login extends Component {
             btnState={this.state.btnState}
             btnbg={this.state.btnbg}
           ></SubmitButton>
-          <div className="w-full py-2 flex justify-between items-center">
+          <div className="w-full py-2 flex justify-between items-center space-x-2">
             <SecondaryButton
               path="/forgotpassword"
               title="Forgot Password?"
