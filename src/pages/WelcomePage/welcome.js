@@ -5,14 +5,14 @@ import '../../css/welcome.css';
 import Theme from "../../data/theme.json"
 
 import WelcomePageImage from "../../assets/welcomePageImage.png";
-import Database from "../../assets/Database.svg";
-import trackProgress from "../../assets/trackProgress.svg";
-import Collaboration from "../../assets/collaboration.svg";
+import Database from "../Icons/Database.jsx";
+import Collaboration from "../Icons/Collaboration.jsx";
 import secureData from '../../assets/secure.svg';
 import Logo from "../../assets/pentlogolight.svg";
 import LogoDark from "../../assets/pentlogodark.svg";
 import Loader from "../utils/Loader";
 import Switch from "@mui/material/Switch";
+import TrackLogo from '../Icons/trackLogo.jsx';
 
 var pagetheme = window.localStorage.getItem("theme");
 
@@ -27,7 +27,7 @@ class WelcomePage extends Component{
       textColor: pagetheme?Theme.LightTheme.textColor:Theme.DarkTheme.textColor,
       secondaryColor: pagetheme?Theme.LightTheme.secondaryColor:Theme.DarkTheme.secondaryColor,
       isLoading: false,
-      checked: pagetheme?true:false,
+      checked: pagetheme?false:true,
     };
     this.handleFeatureOnclick = this.handleFeatureOnclick.bind(this);
     this.handleBeforeYouStartOnClick = this.handleBeforeYouStartOnClick.bind(this);
@@ -85,7 +85,7 @@ class WelcomePage extends Component{
               <navbar-bg>
                 <navbar-fg>
                   <img
-                    src={pagetheme?Logo:LogoDark}
+                    src={pagetheme ? Logo : LogoDark}
                     alt="Pentagon Logo"
                     className="lg:w-12 w-9 mr-2"
                   />
@@ -93,9 +93,11 @@ class WelcomePage extends Component{
                     PENTAGON
                   </div>
                   <div className="w-full"></div>
-                  <Switch className="" onClick={this.handleThemeChange}>
-
-                  </Switch>
+                  <Switch
+                    className=""
+                    onClick={this.handleThemeChange}
+                    checked = {this.state.checked}
+                  ></Switch>
                   <button
                     className="navbar-btn-no-bg"
                     onClick={this.handleFeatureOnclick}
@@ -110,7 +112,11 @@ class WelcomePage extends Component{
                   >
                     <div className="navbar-btn-no-bg-text">Data</div>
                   </button>
-                  <Link to="/login" className="navbar-btn-w-bg" style={{background:this.state.secondaryColor}}>
+                  <Link
+                    to="/login"
+                    className="navbar-btn-w-bg"
+                    style={{ background: this.state.secondaryColor }}
+                  >
                     <div className="navbar-btn-w-bg-text">LOGIN</div>
                   </Link>
                 </navbar-fg>
@@ -131,7 +137,11 @@ class WelcomePage extends Component{
                     >
                       Before you Start
                     </button>
-                    <Link to="/signup" className="strt-here-btn" style={{background:this.state.secondaryColor}}>
+                    <Link
+                      to="/signup"
+                      className="strt-here-btn"
+                      style={{ background: this.state.secondaryColor }}
+                    >
                       Start Here
                     </Link>
                   </div>
@@ -153,11 +163,9 @@ class WelcomePage extends Component{
             </div>
             <div className="features-listing-section">
               <div className="feature-card">
-                <img
-                  alt="Collaboration"
-                  src={Collaboration}
-                  className="feature-sq-icons"
-                ></img>
+                <Collaboration
+                  fill={this.state.secondaryColor}
+                ></Collaboration>
                 <font className="sub-card-title">Collaborate</font>
                 <p className="feature-description-text">
                   Collaborate with teammates to manage and complete projects in
@@ -165,11 +173,7 @@ class WelcomePage extends Component{
                 </p>
               </div>
               <div className="feature-card">
-                <img
-                  alt="Collaboration"
-                  src={Database}
-                  className=" feature-db-icon"
-                ></img>
+                <Database fill={this.state.secondaryColor}></Database>
                 <font className="sub-card-title">File Storage</font>
                 <p className="feature-description-text">
                   Easy to store and share files related to the project and also
@@ -177,11 +181,7 @@ class WelcomePage extends Component{
                 </p>
               </div>
               <div className="feature-card">
-                <img
-                  alt="Collaboration"
-                  src={trackProgress}
-                  className="feature-sq-icons"
-                ></img>
+                <TrackLogo fill={this.state.secondaryColor}></TrackLogo>
                 <font className="sub-card-title">Track Progress</font>
                 <p className="feature-description-text">
                   Track your and the team’s progress status in one go.

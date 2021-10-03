@@ -9,6 +9,8 @@ import SubmitButton from "./components/Submit";
 import SecondaryButton from "./components/SecondaryButton";
 import InputField from "./components/inputField";
 import PasswordValidationIdentifier from "./components/Password_Indicator";
+import { BeatLoader } from "react-spinners";
+import { Alert, Snackbar } from "@mui/material";
 
 class signup extends Component {
   constructor(props) {
@@ -33,15 +35,18 @@ class signup extends Component {
       lengthEight: false,
       emailCheck: false,
       isLoading: false,
+      isSendLoading: false,
+      snackbarOpen: false,
+      errorsnackbarOpen: false,
       seconds: 0,
       oneNumColor: "#DC2626",
       oneCapColor: "#DC2626",
       oneSpecialColor: "#DC2626",
       lengthEightColor: "#DC2626",
-      cursor:"not-allowed",
+      cursor: "not-allowed",
       btnBg: 0.6,
       buttonState: true,
-      codeButtonColor:.3,
+      codeButtonColor: 0.3,
       visibleButtonClass: "",
       visibleOffButtonClass: "hidden",
       codeButtonState: false,
@@ -53,15 +58,18 @@ class signup extends Component {
     this.handleEmailChange = this.handleEmailChange.bind(this);
     this.handlePasswordChange = this.handlePasswordChange.bind(this);
     this.handleConfirmPasswordChange =
-    this.handleConfirmPasswordChange.bind(this);
+      this.handleConfirmPasswordChange.bind(this);
     this.handleUserRegistrationOnClick =
-    this.handleUserRegistrationOnClick.bind(this);
+      this.handleUserRegistrationOnClick.bind(this);
     this.checkSubmissionForm = this.checkSubmissionForm.bind(this);
     this.handleVerificationCodeChange =
-    this.handleVerificationCodeChange.bind(this);
+      this.handleVerificationCodeChange.bind(this);
     this.startTimer = this.startTimer.bind(this);
     this.countDown = this.countDown.bind(this);
     this.sendCode = this.sendCode.bind(this);
+    this.handleSnacbarOpen = this.handleSnacbarOpen.bind(this);
+    this.handleSnacbarClose = this.handleSnacbarClose.bind(this);
+    this.handleErrorSnacbarOpen = this.handleErrorSnacbarOpen.bind(this);
   }
 
   checkSubmissionForm() {
@@ -85,7 +93,7 @@ class signup extends Component {
         });
         this.setState({
           buttonState: false,
-          cursor:"pointer"
+          cursor: "pointer",
         });
       } else {
         this.setState({
@@ -278,19 +286,56 @@ class signup extends Component {
     this.checkSubmissionForm();
   }
 
-  handleUserRegistrationOnClick() {
+  async handleUserRegistrationOnClick() {
     this.setState({
       isLoading: true,
     });
+    var data = {
+      name: this.state.name,
+      username: this.state.username,
+      password: this.state.password,
+      email: this.state.email,
+    };
+    try{
+    await fetch(process.env.REACT_APP_API+"auth/signup",{
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    }).catch((error) => {
+      this.setState({
+        isLoading: false,
+        codeMessage: "Something went wrong. Please try again later.",
+      })
+      this.handleErrorSnacbarOpen();
+    })
+    .then((res) => res.json())
+    .then((data) => {
+      if(data.message === "Sucessful Signup"){
+        this.setState({
+          isLoading: false,
+          codeMessage: "Sucessful Signup",
+        });
+        this.handleSnacbarOpen();
+        this.props.history.push("/React");
+      }
+    })
+  }catch(error){
+    this.setState({
+      isLoading: false,
+      codeMessage: "Error Signing up",
+    })
+    this.handleErrorSnacbarOpen();
+  }
     // Call the API to register the user and redirect to login page
-
   }
 
   countDown() {
     // Remove one second, set state so a re-render happens.
-    
+
     let seconds = this.state.seconds - 1;
-    let message = "Resend ("+seconds+ ")";
+    let message = "Resend (" + seconds + ")";
     this.setState({
       seconds: seconds,
       code: message,
@@ -300,11 +345,11 @@ class signup extends Component {
     if (seconds === 0) {
       this.setState({
         code: "Resend",
-        codeButtonColor:1,
+        codeButtonColor: 1,
         codeButtonState: false,
       });
       clearInterval(this.timer);
-      this.timer=0;
+      this.timer = 0;
     }
   }
   startTimer() {
@@ -314,23 +359,72 @@ class signup extends Component {
   }
 
   async sendCode() {
-    if (this.state.emailCheck && (this.state.code === "Send Code" || this.state.code === "Resend")) {
+    this.setState({
+      isSendLoading: true,
+    });
+    if (
+      this.state.emailCheck &&
+      (this.state.code === "Send Code" || this.state.code === "Resend")
+    ) {
       await this.setState({
-        seconds: 10,
-        code: "Resend (10)",
-        codeButtonColor: .7,
+        seconds: 60,
+        code: "Resend (60)",
+        codeButtonColor: 0.7,
         codeButtonState: true,
       });
       this.startTimer();
 
-      // Call api to send code
-
-      this.setState({
-        codeMessage: "Code has been sent to your mail ID",
-      });
-    } else if(this.state.seconds>0){
+      try{
+      await fetch(process.env.REACT_APP_API + "auth/sendCode", {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: this.state.email,
+          type: "signup",
+        }),
+      })
+        .catch((error) => {
+          console.log(error);
+          this.setState({
+            codeMessage: "Error Sending Code try again",
+            isSendLoading: false,
+          });
+          this.handleErrorSnacbarOpen();
+          return;
+        })
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.message === "Error in sending code") {
+            this.setState({
+              codeMessage: "Error Sending Code try again",
+            });
+            this.handleErrorSnacbarOpen();
+          } else if (data.message === "Code sent successfully") {
+            this.setState({
+              codeMessage: "Code sent successfully",
+            })
+            this.handleSnacbarOpen();
+          } else if (data.message === "User with the email already exists") {
+            console.log("User with the email already exists");
+            this.setState({
+              loginMessage:
+                "User with the email already exists. Try Login option ..",
+            });
+          }
+        });
+      }catch(error){
+        this.setState({
+          codeMessage: "Error Sending Code try again",
+          isSendLoading: false,
+        });
+        this.handleErrorSnacbarOpen();
+      }
+    } else if (this.state.seconds > 0) {
       return;
-    }else{
+    } else {
       this.setState({
         code: "Mail Please",
       });
@@ -340,23 +434,57 @@ class signup extends Component {
         });
       }, 2000);
     }
+    setTimeout(() => {
+      this.setState({
+        isSendLoading: false,
+      });
+    }, 2000);
+  }
+
+  handleSnacbarOpen() {
+    this.setState({
+      snackbarOpen: true,
+    });
+  }
+
+  handleErrorSnacbarOpen() {
+    this.setState({
+      errorSnackbarOpen: true,
+    });
+  }
+
+  handleSnacbarClose(){
+    this.setState({
+      snackbarOpen: false,
+      errorSnackbarOpen: false,
+    });
   }
 
   render() {
-
     let body;
-
+    let sendCodeLoader;
+    if (this.state.isSendLoading) {
+      sendCodeLoader = (
+        <div className="h-10">
+          <BeatLoader color={"#EB5757"} size={20} margin={3} />
+        </div>
+      );
+    } else {
+      sendCodeLoader = (
+        <div className="text-red-700 font-medium lg:text-base text-sm">
+          {this.state.loginMessage}
+        </div>
+      );
+    }
     if (this.state.isLoading) {
-      body =  <Loader message="Introducing you to Pentagon" />;
+      body = <Loader message="Introducing you to Pentagon" />;
     } else {
       body = (
-        <form className="xl:w-1/3 lg:w-1/2 sm:w-3/4 max-w-7xl w-full lg:p-0 px-6 h-auto flex flex-col justify-between space-y-2 items-center">
+        <div className="xl:w-1/3 lg:w-1/2 sm:w-3/4 max-w-7xl w-full lg:p-0 px-6 h-auto flex flex-col justify-between space-y-2 items-center">
           <div className="lg:text-3xl text-2xl sm:font-mono font-serif font-bg-color font-semibold tracking-wide lg:mb-2">
             Introduce Yourself
           </div>
-          <div className="text-red-700 font-medium lg:text-lg text-sm">
-            {this.loginMessage}
-          </div>
+          {sendCodeLoader}
           <InputField
             onChange={this.handleUsernameChange}
             value={this.state.username}
@@ -414,8 +542,11 @@ class signup extends Component {
           <div className="text-red-600 w-full px-2 lg:text-xs text-sm text-left">
             {this.state.passwordMatch}
           </div>
-          <PasswordValidationIdentifier oneCapColor={this.state.oneCapColor} lengthEightColor={this.state.lengthEightColor}
-          oneNumColor = {this.state.oneNumColor} oneSpecialColor = {this.state.oneSpecialColor}
+          <PasswordValidationIdentifier
+            oneCapColor={this.state.oneCapColor}
+            lengthEightColor={this.state.lengthEightColor}
+            oneNumColor={this.state.oneNumColor}
+            oneSpecialColor={this.state.oneSpecialColor}
           ></PasswordValidationIdentifier>
           <div className="w-full flex flex-row justify-center items-center">
             <input
@@ -434,14 +565,11 @@ class signup extends Component {
               {this.state.code}
             </div>
           </div>
-          <div className="w-full sm:space-y-0 space-y-1">
-            {this.state.codeMessage}
-          </div>
           <SubmitButton
             title="Sign Up"
             btnState={this.state.buttonState}
             btnbg={this.state.btnBg}
-            cursor = {this.state.cursor}
+            cursor={this.state.cursor}
             onClick={this.handleUserRegistrationOnClick}
           ></SubmitButton>
           <div className="w-full py-2 flex justify-between items-center">
@@ -451,18 +579,51 @@ class signup extends Component {
               title="Login"
             ></SecondaryButton>
           </div>
-        </form>
-      );
-    }
-      return (
-        <div className="app-bg-color w-full sm:h-screen overflow-y-scroll h-auto sm:overflow-hidden flex flex-col justify-between items-center lg:space-y-0 space-y-10">
-          <Navbar></Navbar>
-          {body}
-          <div className="h-20 w-full "></div>
         </div>
       );
     }
+
+    return (
+      <div className="app-bg-color w-full sm:h-screen overflow-y-scroll h-auto sm:overflow-hidden flex flex-col justify-between items-center lg:space-y-0 space-y-10">
+        <Snackbar
+          open={this.state.snackbarOpen}
+          autoHideDuration={5000}
+          onClose={this.handleSnacbarClose}
+          anchorOrigin={{ vertical: "top", horizontal: "center" }}
+        >
+          <Alert
+            style={{ border: "1px solid green" }}
+            onClose={this.state.handleSnacbarClose}
+            severity="success"
+            sx={{ width: "100%" }}
+          >
+            {" "}
+            {this.state.codeMessage}
+          </Alert>
+        </Snackbar>
+        <Snackbar
+          open={this.state.errorSnackbarOpen}
+          autoHideDuration={5000}
+          onClose={this.handleSnacbarClose}
+          anchorOrigin={{ vertical: "top", horizontal: "center" }}
+        >
+          <Alert
+            style={{ border: "1px solid red"}}
+            onClose={this.state.handleSnacbarClose}
+            severity="error"
+            sx={{ width: "100%" }}
+          >
+            {" "}
+            {this.state.codeMessage}
+          </Alert>
+        </Snackbar>
+        <Navbar></Navbar>
+        {body}
+        <div className="h-20 w-full "></div>
+      </div>
+    );
   }
+}
 
 
 export default signup;
