@@ -9,6 +9,8 @@ import SubmitButton from "./components/Submit";
 import SecondaryButton from "./components/SecondaryButton";
 import InputField from "./components/inputField";
 import PasswordValidationIdentifier from "./components/Password_Indicator";
+import { PropagateLoader } from "react-spinners";
+import { Alert, Snackbar } from "@mui/material";
 
 class ForgotPassword extends Component {
   constructor(props) {
@@ -30,33 +32,39 @@ class ForgotPassword extends Component {
       lengthEight: false,
       emailCheck: false,
       isLoading: false,
+      isSendLoading: false,
+      snackbarOpen: false,
+      errorsnackbarOpen: false,
       seconds: 0,
       oneNumColor: "#DC2626",
       oneCapColor: "#DC2626",
       oneSpecialColor: "#DC2626",
       lengthEightColor: "#DC2626",
-      cursor:"not-allowed",
+      cursor: "not-allowed",
       btnBg: 0.6,
       buttonState: true,
       codeButtonColor: 0.3,
       visibleButtonClass: "",
       visibleOffButtonClass: "hidden",
       codeButtonState: false,
+      loadingMessage: "",
     };
     this.timer = 0;
     this.handleVisibilityClick = this.handleVisibilityClick.bind(this);
     this.handleEmailChange = this.handleEmailChange.bind(this);
     this.handlePasswordChange = this.handlePasswordChange.bind(this);
     this.handleConfirmPasswordChange =
-    this.handleConfirmPasswordChange.bind(this);
-    this.handleUserRegistrationOnClick =
-    this.handleUserRegistrationOnClick.bind(this);
+      this.handleConfirmPasswordChange.bind(this);
+    this.handleChangePasswordOnClick = this.handleChangePasswordOnClick.bind(this);
     this.checkSubmissionForm = this.checkSubmissionForm.bind(this);
     this.handleVerificationCodeChange =
-    this.handleVerificationCodeChange.bind(this);
+      this.handleVerificationCodeChange.bind(this);
     this.startTimer = this.startTimer.bind(this);
     this.countDown = this.countDown.bind(this);
     this.sendCode = this.sendCode.bind(this);
+    this.handleSnacbarOpen = this.handleSnacbarOpen.bind(this);
+    this.handleSnacbarClose = this.handleSnacbarClose.bind(this);
+    this.handleErrorSnacbarOpen = this.handleErrorSnacbarOpen.bind(this);
   }
 
   checkSubmissionForm() {
@@ -254,11 +262,50 @@ class ForgotPassword extends Component {
     this.checkSubmissionForm();
   }
 
-  handleUserRegistrationOnClick() {
+  async handleChangePasswordOnClick() {
     this.setState({
       isLoading: true,
+      loadingMessage: "Redefining Credentials",
     });
-    // Call the API to register the user and redirect to login page
+    try {
+      await fetch(process.env.REACT_APP_API+"auth/forgotpassword",{
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: this.state.email,
+          password: this.state.password,
+          code: this.state.verificationCode,
+        }),
+      }).catch((err) => {
+        this.setState({
+          isLoading: false,
+          loadingMessage: "",
+          codeMessage: "Error Updating Password",
+        });
+        this.handleErrorSnacbarOpen();
+      })
+      .then((response) => response.json())
+      .then((data)=>{
+        if(data.message === "Password updated successfully"){
+          this.setState({
+            codeMessage: "Password Updated Successfully",
+          });
+          this.handleSuccessSnacbarOpen();
+          setTimeout(() => {
+            this.props.history.push("/login");
+          }, 1000);
+        }
+      })
+    } catch (error) {
+      this.setState({
+        isLoading: false,
+        loadingMessage: "",
+        codeMessage: "Error in Changing Password",
+      });
+      this.handleErrorSnacbarOpen();
+    }
   }
 
   countDown() {
@@ -289,6 +336,9 @@ class ForgotPassword extends Component {
   }
 
   async sendCode() {
+    this.setState({
+      isSendLoading: true,
+    });
     if (
       this.state.emailCheck &&
       (this.state.code === "Send Code" || this.state.code === "Resend")
@@ -300,40 +350,120 @@ class ForgotPassword extends Component {
         codeButtonState: true,
       });
       this.startTimer();
-
-      // Call api to send code
-
-      this.setState({
-        codeMessage: "Code has been sent to your mail ID",
-      });
+      try{
+      await fetch(process.env.REACT_APP_API + "auth/sendCode", {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: this.state.email,
+          need: "want to change your credentials",
+        }),
+      })
+        .catch((error) => {
+          console.log(error);
+          this.setState({
+            codeMessage: "Error Sending Code try again",
+            isSendLoading: false,
+          });
+          this.handleErrorSnacbarOpen();
+          return;
+        })
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.message === "Code sent successfully") {
+            this.setState({
+              isSendLoading: false,
+              codeMessage: "Code Sent Successfully",
+            });
+            this.handleSnacbarOpen();
+          } else {
+            this.setState({
+              isSendLoading: false,
+              codeMessage: "Error Sending Code Try Again",
+            });
+            this.handleErrorSnacbarOpen();
+          }
+        });
+      }catch(error){
+        this.setState({
+          isSendLoading: false,
+          codeMessage: "Error Sending Code Try Again",
+        });
+        this.handleErrorSnacbarOpen();
+      }
     } else if (this.state.seconds > 0) {
+      this.setState({
+        isSendLoading: false,
+        codeMessage: "Wait For "+this.state.seconds+" Seconds",
+      });
+      this.handleErrorSnacbarOpen();
       return;
-    } else {
+    } else if(this.state.code !== "Mail Please") {
       this.setState({
         code: "Mail Please",
+        isSendLoading: false,
+        codeMessage: "Enter a valid Email ID",
       });
+      this.handleErrorSnacbarOpen();
       setTimeout(() => {
         this.setState({
           code: "Send Code",
         });
       }, 2000);
+    }else{
+      this.setState({
+        isSendLoading: false,
+      })
     }
+  }
+
+  handleSnacbarOpen() {
+    this.setState({
+      snackbarOpen: true,
+    });
+  }
+
+  handleErrorSnacbarOpen() {
+    this.setState({
+      errorSnackbarOpen: true,
+    });
+  }
+
+  handleSnacbarClose() {
+    this.setState({
+      snackbarOpen: false,
+      errorSnackbarOpen: false,
+    });
   }
 
   render() {
     let body;
-
+    let sendCodeLoader;
+    if (this.state.isSendLoading) {
+      sendCodeLoader = (
+        <div className="h-10">
+          <PropagateLoader color={"#EB5757"} size={13} />
+        </div>
+      );
+    } else {
+      sendCodeLoader = (
+        <div className="text-red-700 font-medium lg:text-base text-sm">
+          {this.state.loginMessage}
+        </div>
+      );
+    }
     if (this.state.isLoading) {
-      body = <Loader message="Changing Credentials" />;
+      body = <Loader message={this.state.loadingMessage} />;
     } else {
       body = (
-        <form className="xl:w-1/3 lg:w-1/2 sm:w-3/4 max-w-7xl w-full lg:p-0 px-6 h-auto flex flex-col justify-between space-y-2 items-center">
-          <div className="lg:text-3xl text-lg tracking-normal sm:font-mono font-serif font-bg-color font-semibold lg:tracking-wide lg:mb-2">
+        <div className="xl:w-1/3 lg:w-1/2 sm:w-3/4 max-w-7xl w-full lg:p-0 px-6 h-auto flex flex-col justify-between space-y-2 items-center">
+          <div className="lg:text-3xl text-2xl sm:font-mono font-serif font-bg-color font-semibold tracking-wide lg:mb-2">
             Forgot Password
           </div>
-          <div className="text-red-700 font-medium lg:text-lg text-sm">
-            {this.loginMessage}
-          </div>
+          {sendCodeLoader}
           <InputField
             onChange={this.handleEmailChange}
             value={this.state.email}
@@ -401,15 +531,12 @@ class ForgotPassword extends Component {
               {this.state.code}
             </div>
           </div>
-          <div className="w-full sm:space-y-0 space-y-1">
-            {this.state.codeMessage}
-          </div>
           <SubmitButton
-            title="Change Password"
+            title="Change Credentials"
             btnState={this.state.buttonState}
             btnbg={this.state.btnBg}
-            cursor = {this.state.cursor}
-            onClick={this.handleUserRegistrationOnClick}
+            cursor={this.state.cursor}
+            onClick={this.handleChangePasswordOnClick}
           ></SubmitButton>
           <div className="w-full py-2 flex justify-between items-center">
             <SecondaryButton
@@ -418,11 +545,43 @@ class ForgotPassword extends Component {
               title="Login"
             ></SecondaryButton>
           </div>
-        </form>
+        </div>
       );
     }
+
     return (
       <div className="app-bg-color w-full sm:h-screen overflow-y-scroll h-auto sm:overflow-hidden flex flex-col justify-between items-center lg:space-y-0 space-y-10">
+        <Snackbar
+          open={this.state.snackbarOpen}
+          autoHideDuration={5000}
+          onClose={this.handleSnacbarClose}
+          anchorOrigin={{ vertical: "top", horizontal: "center" }}
+        >
+          <Alert
+            style={{ border: "1px solid green" }}
+            onClose={this.state.handleSnacbarClose}
+            severity="success"
+            sx={{ width: "100%" }}
+          >
+            {" "}
+            {this.state.codeMessage}
+          </Alert>
+        </Snackbar>
+        <Snackbar
+          open={this.state.errorSnackbarOpen}
+          autoHideDuration={5000}
+          onClose={this.handleSnacbarClose}
+          anchorOrigin={{ vertical: "top", horizontal: "center" }}
+        >
+          <Alert
+            style={{ border: "1px solid red" }}
+            severity="error"
+            sx={{ width: "100%" }}
+          >
+            {" "}
+            {this.state.codeMessage}
+          </Alert>
+        </Snackbar>
         <Navbar></Navbar>
         {body}
         <div className="h-20 w-full "></div>

@@ -5,13 +5,17 @@
   Custom Colors Section
 
 */
-  .app-bg-color{
-    background: #F9f5f1;
+  .btn-bg-color{
+    background:#EB5757;
   }
   .nav-bg-color{
-    background:#EB5757;
+    background: rgb(248, 242, 239);
   }
   .font-bg-color{
     color:#111111;
   }
+  .border-clr {
+  --tw-border-opacity: 1;
+  border-color: rgba(235,87,87, var(--tw-border-opacity));
+}
 }

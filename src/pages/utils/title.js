@@ -1,4 +1,4 @@
-import Logo from "../../assets/pentagon.svg";
+import Logo from "../../assets/pentlogolight.svg";
 
 function Title(props) {
   return (

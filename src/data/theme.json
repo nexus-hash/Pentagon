@@ -1,0 +1,13 @@
+{
+  "theme": true,
+  "DarkTheme":{
+    "backgroundColor":"#1A202C",
+    "textColor":"#F9f5f1",
+    "secondaryColor":"#25A9E2"
+  },
+  "LightTheme":{
+    "backgroundColor":"#F9f5f1",
+    "textColor":"#111111",
+    "secondaryColor":"#EB5757"
+  }
+}

@@ -7,6 +7,7 @@ import Dashboard from './pages/dashboard/dashboard';
 
 function App() {
   let name = 'React';
+  window.localStorage.setItem('theme',true);
   return (
     <BrowserRouter>
       <Switch>
