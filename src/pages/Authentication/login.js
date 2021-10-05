@@ -43,6 +43,7 @@ class login extends Component {
   }
 
   render() {
+    
     return (
       <div className="app-bg-color w-full h-screen overflow-hidden flex flex-col justify-between items-center">
         <Navbar></Navbar>

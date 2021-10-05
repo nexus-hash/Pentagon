@@ -11,7 +11,6 @@ import secureData from '../../assets/secure.svg';
 import Logo from "../../assets/pentlogolight.svg";
 import LogoDark from "../../assets/pentlogodark.svg";
 import Loader from "../utils/Loader";
-import Switch from "@mui/material/Switch";
 import TrackLogo from '../Icons/trackLogo.jsx';
 
 var pagetheme = window.localStorage.getItem("theme");
@@ -93,11 +92,6 @@ class WelcomePage extends Component{
                     PENTAGON
                   </div>
                   <div className="w-full"></div>
-                  <Switch
-                    className=""
-                    onClick={this.handleThemeChange}
-                    checked = {this.state.checked}
-                  ></Switch>
                   <button
                     className="navbar-btn-no-bg"
                     onClick={this.handleFeatureOnclick}

@@ -9,8 +9,10 @@ import SubmitButton from "./components/Submit";
 import SecondaryButton from "./components/SecondaryButton";
 import InputField from "./components/inputField";
 import PasswordValidationIdentifier from "./components/Password_Indicator";
-import { BeatLoader } from "react-spinners";
+import { PropagateLoader } from "react-spinners";
 import { Alert, Snackbar } from "@mui/material";
+
+import sha256 from "sha256";
 
 class signup extends Component {
   constructor(props) {
@@ -50,6 +52,7 @@ class signup extends Component {
       visibleButtonClass: "",
       visibleOffButtonClass: "hidden",
       codeButtonState: false,
+      loadingMessage:"",
     };
     this.timer = 0;
     this.handleVisibilityClick = this.handleVisibilityClick.bind(this);
@@ -288,19 +291,22 @@ class signup extends Component {
 
   async handleUserRegistrationOnClick() {
     this.setState({
+      loadingMessage:"Introducing You to Pentagon",
       isLoading: true,
     });
     var data = {
       name: this.state.name,
       username: this.state.username,
-      password: this.state.password,
+      password: sha256(this.state.password),
       email: this.state.email,
+      code: this.state.verificationCode,
     };
     try{
     await fetch(process.env.REACT_APP_API+"auth/signup",{
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        Accept: "application/json",
       },
       body: JSON.stringify(data),
     }).catch((error) => {
@@ -312,23 +318,42 @@ class signup extends Component {
     })
     .then((res) => res.json())
     .then((data) => {
-      if(data.message === "Sucessful Signup"){
+      if (data.message === "Successfully Signed Up") {
         this.setState({
-          isLoading: false,
+          loadingMessage:"Hello "+this.state.name+"!",
           codeMessage: "Sucessful Signup",
         });
         this.handleSnacbarOpen();
-        this.props.history.push("/React");
+        setTimeout(() => {
+          this.props.history.push("/login");
+        }, 2000);
+      }else if(data.message === "Invalid Code"){
+        this.setState({
+          isLoading: false,
+          codeMessage: "Invalid Code",
+        });
+        this.handleErrorSnacbarOpen();
+      }else if (data.message === "User already Signed Up") {
+        this.setState({
+          isLoading: false,
+          codeMessage: "User already Signed Up. Try login Option...",
+        });
+        this.handleErrorSnacbarOpen();
+      } else {
+        this.setState({
+          isLoading: false,
+          codeMessage: "Error Signing Up",
+        });
+        this.handleErrorSnacbarOpen();
       }
     })
   }catch(error){
     this.setState({
       isLoading: false,
-      codeMessage: "Error Signing up",
+      codeMessage: "Error Connecting to Server",
     })
     this.handleErrorSnacbarOpen();
-  }
-    // Call the API to register the user and redirect to login page
+   }
   }
 
   countDown() {
@@ -384,6 +409,7 @@ class signup extends Component {
         body: JSON.stringify({
           email: this.state.email,
           type: "signup",
+          need: "want to sign up",
         }),
       })
         .catch((error) => {
@@ -399,17 +425,19 @@ class signup extends Component {
         .then((data) => {
           if (data.message === "Error in sending code") {
             this.setState({
+              isSendLoading:false,
               codeMessage: "Error Sending Code try again",
             });
             this.handleErrorSnacbarOpen();
           } else if (data.message === "Code sent successfully") {
             this.setState({
+              isSendLoading:false,
               codeMessage: "Code sent successfully",
             })
             this.handleSnacbarOpen();
           } else if (data.message === "User with the email already exists") {
-            console.log("User with the email already exists");
             this.setState({
+              isSendLoading:false,
               loginMessage:
                 "User with the email already exists. Try Login option ..",
             });
@@ -417,28 +445,29 @@ class signup extends Component {
         });
       }catch(error){
         this.setState({
-          codeMessage: "Error Sending Code try again",
+          codeMessage: "Error Connecting to the Server",
           isSendLoading: false,
         });
         this.handleErrorSnacbarOpen();
       }
     } else if (this.state.seconds > 0) {
+      this.setState({
+        isSendLoading: false,
+      })
       return;
     } else {
       this.setState({
         code: "Mail Please",
+        isSendLoading: false,
+        codeMessage: "Enter a valid Email ID",
       });
+      this.handleErrorSnacbarOpen();
       setTimeout(() => {
         this.setState({
           code: "Send Code",
         });
       }, 2000);
     }
-    setTimeout(() => {
-      this.setState({
-        isSendLoading: false,
-      });
-    }, 2000);
   }
 
   handleSnacbarOpen() {
@@ -466,7 +495,7 @@ class signup extends Component {
     if (this.state.isSendLoading) {
       sendCodeLoader = (
         <div className="h-10">
-          <BeatLoader color={"#EB5757"} size={20} margin={3} />
+          <PropagateLoader color={"#EB5757"} size={13} />
         </div>
       );
     } else {
@@ -477,7 +506,7 @@ class signup extends Component {
       );
     }
     if (this.state.isLoading) {
-      body = <Loader message="Introducing you to Pentagon" />;
+      body = <Loader message={this.state.loadingMessage} />;
     } else {
       body = (
         <div className="xl:w-1/3 lg:w-1/2 sm:w-3/4 max-w-7xl w-full lg:p-0 px-6 h-auto flex flex-col justify-between space-y-2 items-center">
