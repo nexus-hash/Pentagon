@@ -5,6 +5,7 @@ import Title from "../utils/title";
 import VisibilityOffIcon from "@material-ui/icons/VisibilityOff";
 import Dialogue from "../utils/dialogue";
 import CreateProject from "./createproject";
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 
 
 class Dashboard extends Component {
@@ -14,14 +15,18 @@ class Dashboard extends Component {
       counter: 0,
       createProjectDialogueState: false,
       createProjectOpen: false,
+      joinProjectOpen: false,
     };
 
     this.handleClickOpen = this.handleClickOpen.bind(this);
     this.handleClose = this.handleClose.bind(this);
     this.handleCreateProjectOpen = this.handleCreateProjectOpen.bind(this);
     this.handleCreateProjectClose = this.handleCreateProjectClose.bind(this);
+    this.handleJoinProjectOpen = this.handleJoinProjectOpen.bind(this);
+    this.handleJoinProjectClose = this.handleJoinProjectClose.bind(this);
     this.handleNone = this.handleNone.bind(this);
     this.handleLogoutOnClick = this.handleLogoutOnClick.bind(this);
+
   }
 
   componentDidMount() {
@@ -64,6 +69,15 @@ class Dashboard extends Component {
     e.stopPropagation();
   };
 
+  handleJoinProjectOpen = () => {
+    this.setState({ joinProjectOpen: true });
+  }
+
+  handleJoinProjectClose = (e) => {
+    this.setState({ joinProjectOpen: false });
+    e.stopPropagation();
+  }
+
   handleClose = () => {
     this.setState({ createProjectDialogueState: false });
   };
@@ -96,7 +110,7 @@ class Dashboard extends Component {
               Create Project
             </button>
           </div>
-          <button className="lg:flex hidden">Join Project</button>
+          <button onClick = {this.handleJoinProjectOpen} className="lg:flex hidden">Join Project</button>
           <div className="w-5/12 items-end justify-end flex">
             <button onClick={this.handleLogoutOnClick}>Logout</button>
           </div>
@@ -105,6 +119,7 @@ class Dashboard extends Component {
           <Dialogue open={this.state.createProjectOpen} handleClose = {this.handleCreateProjectClose} handlesub = {this.handleNone}>
           <CreateProject></CreateProject>
           </Dialogue>
+          <Dialogue open={this.state.joinProjectOpen} handleClose = {this.handleJoinProjectClose} handlesub  = {this.handleNone}></Dialogue>
         </div>
       </div>
     );

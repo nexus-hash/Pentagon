@@ -9,7 +9,7 @@ function Dialogue(props){
   return (
     <div hidden={!props.open}>
       <div onClick={props.handleClose} className="absolute top-0 left-0 h-screen w-screen backdrop-blur-xl bg-black bg-opacity-30 flex justify-center items-center">
-        <div onClick={stopOnclick} className="relative w-1/2 h-1/2 btn-bg-color px-8 py-5 rounded-xl">
+        <div onClick={stopOnclick} className="relative w-1/2 h-1/2 btn-bg-color px-8 py-5 rounded-xl overflow-y-scroll">
           {props.children}
         </div>
       </div>

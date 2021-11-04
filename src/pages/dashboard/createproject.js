@@ -31,10 +31,19 @@ function CreateProject(props) {
 
       <InputField
         placeholder="Enter the Title"
-        css="w-full btn-bg-dark px-4 py-2 rounded-lg focus:shadow-xl placeholder-gray-200 focus:outline-none text-gray-100 focus:border-transparent"
+        css="w-full nav-bg-color px-4 py-2 rounded-lg focus:shadow-xl placeholder-gray-600 focus:outline-none text-black focus:border-transparent"
         onChange={TitleOnChange}
         value={projecttitle}
       ></InputField>
+      <textarea className="w-full nav-bg-color px-4 py-2 rounded-lg focus:shadow-xl placeholder-gray-600 focus:outline-none text-black focus:border-transparent mt-4"
+        placeholder="Enter the Description"
+        rows="3" 
+      />
+      <div className=" w-full flex justify-end mt-2 items-end space-x-3">
+        <button className="px-4 py-2 rounded-lg nav-bg-color border-2 text-gray-800 group-hover: border-red-50">
+          Create
+        </button>
+      </div>
     </div>
   );
 }
