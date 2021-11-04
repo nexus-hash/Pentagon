@@ -6,7 +6,6 @@ import ForgotPassword from './pages/Authentication/forgotpassword';
 import Dashboard from './pages/dashboard/dashboard';
 
 function App() {
-  let name = 'React';
   window.localStorage.setItem('theme',true);
   return (
     <BrowserRouter>
@@ -15,7 +14,7 @@ function App() {
         <Route exact path="/signup" component={signup} />
         <Route exact path="/login" component={login} />
         <Route exact path="/forgotpassword" component={ForgotPassword}/>
-        <Route exact path={`/${name}`} component={Dashboard} />
+        <Route exact path={`/dashboard`} component={Dashboard} />
       </Switch>
     </BrowserRouter>
   );

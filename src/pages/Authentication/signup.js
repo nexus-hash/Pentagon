@@ -75,6 +75,32 @@ class signup extends Component {
     this.handleErrorSnacbarOpen = this.handleErrorSnacbarOpen.bind(this);
   }
 
+  componentDidMount() {
+    var authtoken = localStorage.getItem("token");
+    console.log(authtoken);
+    if(authtoken){
+    console.log(authtoken);
+    fetch(process.env.REACT_APP_API + "auth/verifytoken", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        token: authtoken,
+      }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.message === "Token is valid") {
+          this.props.history.push("/dashboard");
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+    }
+  }
+
   checkSubmissionForm() {
     setTimeout(() => {
       if (

@@ -55,7 +55,8 @@ class ForgotPassword extends Component {
     this.handlePasswordChange = this.handlePasswordChange.bind(this);
     this.handleConfirmPasswordChange =
       this.handleConfirmPasswordChange.bind(this);
-    this.handleChangePasswordOnClick = this.handleChangePasswordOnClick.bind(this);
+    this.handleChangePasswordOnClick =
+      this.handleChangePasswordOnClick.bind(this);
     this.checkSubmissionForm = this.checkSubmissionForm.bind(this);
     this.handleVerificationCodeChange =
       this.handleVerificationCodeChange.bind(this);
@@ -65,6 +66,32 @@ class ForgotPassword extends Component {
     this.handleSnacbarOpen = this.handleSnacbarOpen.bind(this);
     this.handleSnacbarClose = this.handleSnacbarClose.bind(this);
     this.handleErrorSnacbarOpen = this.handleErrorSnacbarOpen.bind(this);
+    this.openErrorSnackbar = this.openErrorSnackbar.bind(this);
+  }
+
+  componentDidMount() {
+    var authtoken = localStorage.getItem("token");
+    if (authtoken) {
+      console.log(authtoken);
+      fetch(process.env.REACT_APP_API + "auth/verifytoken", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          token: authtoken,
+        }),
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.message === "Token is valid") {
+            this.props.history.push("/dashboard");
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
   }
 
   checkSubmissionForm() {
@@ -262,13 +289,22 @@ class ForgotPassword extends Component {
     this.checkSubmissionForm();
   }
 
+  openErrorSnackbar(message) {
+    this.setState({
+      isLoading: false,
+      loadingMessage: "",
+      codeMessage: message,
+    });
+    this.handleErrorSnacbarOpen();
+  }
+
   async handleChangePasswordOnClick() {
     this.setState({
       isLoading: true,
       loadingMessage: "Redefining Credentials",
     });
     try {
-      await fetch(process.env.REACT_APP_API+"auth/forgotpassword",{
+      await fetch(process.env.REACT_APP_API + "auth/forgotpassword", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -278,33 +314,31 @@ class ForgotPassword extends Component {
           password: this.state.password,
           code: this.state.verificationCode,
         }),
-      }).catch((err) => {
-        this.setState({
-          isLoading: false,
-          loadingMessage: "",
-          codeMessage: "Error Updating Password",
+      })
+        .catch((err) => {
+          console.log(err);
+          this.openErrorSnackbar("Error in connecting to server");
+        })
+        .then((response) => response.json())
+        .then((data) => {
+          console.log(data);
+          if (data.message === "Password updated successfully") {
+            this.setState({
+              codeMessage: "Password updated successfully",
+            });
+            this.handleSnacbarOpen();
+            setTimeout(() => {
+              this.props.history.push("/login");
+            }, 1000);
+          } else if (data.message === "Error updating password") {
+            this.openErrorSnackbar("Error updating password");
+          } else if (data.message === "Invalid Code") {
+          }
+          this.openErrorSnackbar(data.message);
         });
-        this.handleErrorSnacbarOpen();
-      })
-      .then((response) => response.json())
-      .then((data)=>{
-        if(data.message === "Password updated successfully"){
-          this.setState({
-            codeMessage: "Password Updated Successfully",
-          });
-          this.handleSuccessSnacbarOpen();
-          setTimeout(() => {
-            this.props.history.push("/login");
-          }, 1000);
-        }
-      })
     } catch (error) {
-      this.setState({
-        isLoading: false,
-        loadingMessage: "",
-        codeMessage: "Error in Changing Password",
-      });
-      this.handleErrorSnacbarOpen();
+      console.log(error);
+      this.openErrorSnackbar("Error in connecting to server");
     }
   }
 
@@ -350,58 +384,60 @@ class ForgotPassword extends Component {
         codeButtonState: true,
       });
       this.startTimer();
-      try{
-      await fetch(process.env.REACT_APP_API + "auth/sendCode", {
-        method: "POST",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          email: this.state.email,
-          need: "want to change your credentials",
-        }),
-      })
-        .catch((error) => {
-          console.log(error);
-          this.setState({
-            codeMessage: "Error Sending Code try again",
-            isSendLoading: false,
-          });
-          this.handleErrorSnacbarOpen();
-          return;
+      try {
+        await fetch(process.env.REACT_APP_API + "auth/sendCode", {
+          method: "POST",
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            email: this.state.email,
+            need: "want to change your credentials",
+          }),
         })
-        .then((res) => res.json())
-        .then((data) => {
-          if (data.message === "Code sent successfully") {
+          .then((res) => res.json())
+          .then((data) => {
+            if (data.message === "Code sent successfully") {
+              this.setState({
+                isSendLoading: false,
+                codeMessage: "Code Sent Successfully",
+              });
+              this.handleSnacbarOpen();
+              return;
+            } else {
+              this.setState({
+                isSendLoading: false,
+                codeMessage: "Error Sending Code Try Again",
+              });
+              this.handleErrorSnacbarOpen();
+              return;
+            }
+          })
+          .catch((error) => {
             this.setState({
+              codeMessage: "Error Sending Code try again",
               isSendLoading: false,
-              codeMessage: "Code Sent Successfully",
-            });
-            this.handleSnacbarOpen();
-          } else {
-            this.setState({
-              isSendLoading: false,
-              codeMessage: "Error Sending Code Try Again",
             });
             this.handleErrorSnacbarOpen();
-          }
-        });
-      }catch(error){
+            return;
+          });
+      } catch (error) {
         this.setState({
           isSendLoading: false,
           codeMessage: "Error Sending Code Try Again",
         });
         this.handleErrorSnacbarOpen();
+        return;
       }
     } else if (this.state.seconds > 0) {
       this.setState({
         isSendLoading: false,
-        codeMessage: "Wait For "+this.state.seconds+" Seconds",
+        codeMessage: "Wait For " + this.state.seconds + " Seconds",
       });
       this.handleErrorSnacbarOpen();
       return;
-    } else if(this.state.code !== "Mail Please") {
+    } else if (this.state.code !== "Mail Please") {
       this.setState({
         code: "Mail Please",
         isSendLoading: false,
@@ -413,10 +449,10 @@ class ForgotPassword extends Component {
           code: "Send Code",
         });
       }, 2000);
-    }else{
+    } else {
       this.setState({
         isSendLoading: false,
-      })
+      });
     }
   }
 
@@ -427,15 +463,16 @@ class ForgotPassword extends Component {
   }
 
   handleErrorSnacbarOpen() {
+    console.log("error");
     this.setState({
-      errorSnackbarOpen: true,
+      errorsnackbarOpen: true,
     });
   }
 
   handleSnacbarClose() {
     this.setState({
       snackbarOpen: false,
-      errorSnackbarOpen: false,
+      errorsnackbarOpen: false,
     });
   }
 
@@ -568,8 +605,7 @@ class ForgotPassword extends Component {
           </Alert>
         </Snackbar>
         <Snackbar
-          open={this.state.errorSnackbarOpen}
-          autoHideDuration={5000}
+          open={this.state.errorsnackbarOpen}
           onClose={this.handleSnacbarClose}
           anchorOrigin={{ vertical: "top", horizontal: "center" }}
         >
