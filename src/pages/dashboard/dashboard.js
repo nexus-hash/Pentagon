@@ -5,8 +5,8 @@ import Title from "../utils/title";
 import VisibilityOffIcon from "@material-ui/icons/VisibilityOff";
 import Dialogue from "../utils/dialogue";
 import CreateProject from "./createproject";
-import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import JoinProject from "./joinproject";
+import verifyToken from "../utils/verifytoken";
 
 
 class Dashboard extends Component {
@@ -31,29 +31,9 @@ class Dashboard extends Component {
   }
 
   componentDidMount() {
-    console.log(localStorage.getItem("token"));
-    if(!localStorage.getItem("token")){
+    if(!verifyToken()){
       this.props.history.push("/login");
     }
-    var authtoken = localStorage.getItem("token");
-    fetch(process.env.REACT_APP_API + "auth/verifytoken", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        token: authtoken,
-      }),
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.message === "Token is not valid") {
-          this.props.history.push("/login");
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-      });
   }
 
   handleClickOpen = () => {
