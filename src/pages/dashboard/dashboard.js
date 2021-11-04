@@ -74,8 +74,6 @@ class Dashboard extends Component {
   }
 
   handleLogoutOnClick = (e) => {
-    console.log("logout");
-    localStorage.removeItem("token");
     this.props.history.push("/logout");
   }
 
