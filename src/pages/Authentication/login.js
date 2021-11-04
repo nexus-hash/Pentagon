@@ -35,7 +35,6 @@ class login extends Component {
   componentDidMount() {
     var authtoken = localStorage.getItem("token");
     if (authtoken) {
-      console.log(authtoken);
       fetch(process.env.REACT_APP_API + "auth/verifytoken", {
         method: "POST",
         headers: {

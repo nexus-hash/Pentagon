@@ -5,6 +5,8 @@ import Title from "../utils/title";
 import VisibilityOffIcon from "@material-ui/icons/VisibilityOff";
 import Dialogue from "../utils/dialogue";
 import CreateProject from "./createproject";
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import JoinProject from "./joinproject";
 
 
 class Dashboard extends Component {
@@ -15,14 +17,18 @@ class Dashboard extends Component {
       counter: 0,
       createProjectDialogueState: false,
       createProjectOpen: false,
+      joinProjectOpen: false,
     };
 
     this.handleClickOpen = this.handleClickOpen.bind(this);
     this.handleClose = this.handleClose.bind(this);
     this.handleCreateProjectOpen = this.handleCreateProjectOpen.bind(this);
     this.handleCreateProjectClose = this.handleCreateProjectClose.bind(this);
+    this.handleJoinProjectOpen = this.handleJoinProjectOpen.bind(this);
+    this.handleJoinProjectClose = this.handleJoinProjectClose.bind(this);
     this.handleNone = this.handleNone.bind(this);
     this.handleLogoutOnClick = this.handleLogoutOnClick.bind(this);
+
   }
 
   componentDidMount() {
@@ -31,7 +37,6 @@ class Dashboard extends Component {
       this.props.history.push("/login");
     }
     var authtoken = localStorage.getItem("token");
-    console.log(authtoken);
     fetch(process.env.REACT_APP_API + "auth/verifytoken", {
       method: "POST",
       headers: {
@@ -65,6 +70,15 @@ class Dashboard extends Component {
     e.stopPropagation();
   };
 
+  handleJoinProjectOpen = () => {
+    this.setState({ joinProjectOpen: true });
+  }
+
+  handleJoinProjectClose = (e) => {
+    this.setState({ joinProjectOpen: false });
+    e.stopPropagation();
+  }
+
   handleClose = () => {
     this.setState({ createProjectDialogueState: false });
   };
@@ -76,8 +90,6 @@ class Dashboard extends Component {
   }
 
   handleLogoutOnClick = (e) => {
-    console.log("logout");
-    localStorage.removeItem("token");
     this.props.history.push("/logout");
   }
 
@@ -116,7 +128,7 @@ class Dashboard extends Component {
               Create Project
             </button>
           </div>
-          <button className="lg:flex hidden">Join Project</button>
+          <button onClick = {this.handleJoinProjectOpen} className="lg:flex hidden">Join Project</button>
           <div className="w-5/12 items-end justify-end flex">
             <button onClick={this.handleLogoutOnClick}>Logout</button>
 
@@ -125,6 +137,9 @@ class Dashboard extends Component {
         <div className="w-full overflow-y-scroll bg-white flex flex-col justify-center items-start">
           <Dialogue open={this.state.createProjectOpen} handleClose = {this.handleCreateProjectClose} handlesub = {this.handleNone}>
           <CreateProject></CreateProject>
+          </Dialogue>
+          <Dialogue open={this.state.joinProjectOpen} handleClose = {this.handleJoinProjectClose} handlesub  = {this.handleNone}>
+            <JoinProject></JoinProject>
           </Dialogue>
         </div>
       </div>
