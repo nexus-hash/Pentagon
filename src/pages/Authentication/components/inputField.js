@@ -5,7 +5,7 @@ function InputField(props) {
     <input
       type="text"
       placeholder={props.placeholder}
-      className="inputField"
+      className={props.css?props.css: "inputField"}
       onChange={props.onChange}
       value={props.value}
     ></input>
