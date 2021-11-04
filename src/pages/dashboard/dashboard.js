@@ -11,6 +11,7 @@ class Dashboard extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      anchorEl: null,
       counter: 0,
       createProjectDialogueState: false,
       createProjectOpen: false,
@@ -68,6 +69,7 @@ class Dashboard extends Component {
     this.setState({ createProjectDialogueState: false });
   };
 
+
   handleNone = (e) => {
     e.preventDefault();
     console.log("none");
@@ -80,6 +82,7 @@ class Dashboard extends Component {
   }
 
   render() {
+    var open = Boolean(this.state.anchorEl);
     return (
       <div className="flex flex-col justify-start items-center">
         <div className="w-full flex justify-between nav-bg-color fixed items-center lg:px-12 px-4">
@@ -89,7 +92,22 @@ class Dashboard extends Component {
             </button>
             <Title width="2.25rem" color="#FFFFFF"></Title>
           </div>
-          <button className="lg:flex hidden">Projects</button>
+          <div>
+          <Button className="lg:flex hidden" onClick={this.handleShowProjectsClick} aria-controls="basic-menu" aria-haspopup="true" aria-expanded={open?true:undefined}>All Projects</Button>
+          <Menu
+        id="basic-menu"
+        anchorEl={this.state.anchorEl}
+        open={open}
+        onClose={this.handleShowProjectsClose}
+        MenuListProps={{
+          'aria-labelledby': 'basic-button',
+        }}
+      >
+        <MenuItem onClick={this.handleShowProjectsClose}>Profile</MenuItem>
+        <MenuItem onClick={this.handleShowProjectsClose}>My account</MenuItem>
+        <MenuItem onClick={this.handleShowProjectsClose}>Logout</MenuItem>
+      </Menu>
+        </div>
           <div>
             <button
               className="lg:flex hidden font-bg-color px-1 py-4 border-b-4 border-opacity-0 border-pink-600 lg:hover:border-opacity-100"
@@ -101,6 +119,7 @@ class Dashboard extends Component {
           <button className="lg:flex hidden">Join Project</button>
           <div className="w-5/12 items-end justify-end flex">
             <button onClick={this.handleLogoutOnClick}>Logout</button>
+
           </div>
         </div>
         <div className="w-full overflow-y-scroll bg-white flex flex-col justify-center items-start">
