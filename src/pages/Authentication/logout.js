@@ -8,7 +8,7 @@ export default function Logout(props) {
       localStorage.clear();
       props.history.push("/login");
     },2000)
-  },[])
+  },[props])
   return (
     <Loader message="Logging out"></Loader>
   );

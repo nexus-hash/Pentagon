@@ -6,6 +6,7 @@ import VisibilityOffIcon from "@material-ui/icons/VisibilityOff";
 import Dialogue from "../utils/dialogue";
 import CreateProject from "./createproject";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import JoinProject from "./joinproject";
 
 
 class Dashboard extends Component {
@@ -35,7 +36,6 @@ class Dashboard extends Component {
       this.props.history.push("/login");
     }
     var authtoken = localStorage.getItem("token");
-    console.log(authtoken);
     fetch(process.env.REACT_APP_API + "auth/verifytoken", {
       method: "POST",
       headers: {
@@ -119,7 +119,9 @@ class Dashboard extends Component {
           <Dialogue open={this.state.createProjectOpen} handleClose = {this.handleCreateProjectClose} handlesub = {this.handleNone}>
           <CreateProject></CreateProject>
           </Dialogue>
-          <Dialogue open={this.state.joinProjectOpen} handleClose = {this.handleJoinProjectClose} handlesub  = {this.handleNone}></Dialogue>
+          <Dialogue open={this.state.joinProjectOpen} handleClose = {this.handleJoinProjectClose} handlesub  = {this.handleNone}>
+            <JoinProject></JoinProject>
+          </Dialogue>
         </div>
       </div>
     );
