@@ -9,7 +9,7 @@ function Title(props) {
         style={{ width: props.width, height: props.height,fill:props.color }}
         className="mr-2"
       />
-      <h1 className="font-serif tracking-wider font-bg-color lg:text-2xl text-xl">
+      <h1 className={`font-serif tracking-wider ${props.fontColor.length?props.fontColor:"font-bg-color"} lg:text-2xl text-xl`}>
         PENTAGON
       </h1>
     </div>

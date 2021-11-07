@@ -1,9 +1,9 @@
-export default function verifyToken() {
+export default async function verifyToken() {
   if (!localStorage.getItem("token")) {
     return false;
   }
   var authtoken = localStorage.getItem("token");
-  fetch(process.env.REACT_APP_API + "auth/verifytoken", {
+  await fetch(process.env.REACT_APP_API + "auth/verifytoken", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -19,12 +19,12 @@ export default function verifyToken() {
         data.message === "Internal server error"
       ) {
         return false;
-      }else{
+      }else if(data.message === "Token is valid"){
         return true;
       }
     })
     .catch((err) => {
-      console.log(err);
       return false;
     });
+    return true;
 }

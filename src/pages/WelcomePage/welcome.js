@@ -12,6 +12,7 @@ import Logo from "../../assets/pentlogolight.svg";
 import LogoDark from "../../assets/pentlogodark.svg";
 import Loader from "../utils/Loader";
 import TrackLogo from '../Icons/trackLogo.jsx';
+import Fade from 'react-reveal/Fade';
 
 var pagetheme = window.localStorage.getItem("theme");
 
@@ -25,9 +26,7 @@ class WelcomePage extends Component {
       textColor: pagetheme
         ? Theme.LightTheme.textColor
         : Theme.DarkTheme.textColor,
-      secondaryColor: pagetheme
-        ? Theme.LightTheme.secondaryColor
-        : Theme.DarkTheme.secondaryColor,
+      secondaryColor: Theme.LightTheme.secondaryColor,
       isLoading: false,
       checked: pagetheme ? false : true,
     };
@@ -172,98 +171,101 @@ class WelcomePage extends Component {
               </div>
             </div>
           </header>
-          <div
-            className="details-section"
-            style={{ background: this.state.backgroundColor }}
-          >
-            <div className="feature-grid" id="Features">
-              <div
-                className="sub-pg-title"
-                style={{ color: this.state.textColor }}
-              >
-                Features
-              </div>
-              <div className="features-listing-section">
-                <div className="feature-card">
-                  <Collaboration
-                    fill={this.state.secondaryColor}
-                  ></Collaboration>
-                  <font className="sub-card-title">Collaborate</font>
-                  <p className="feature-description-text">
-                    Collaborate with teammates to manage and complete projects
-                    in a single environment.
-                  </p>
+            <div
+              className="details-section"
+              style={{ background: this.state.backgroundColor }}
+            >
+              <Fade bottom cascade>
+              <div className="feature-grid" id="Features">
+                <div
+                  className="sub-pg-title"
+                  style={{ color: this.state.textColor }}
+                >
+                  Features
                 </div>
-                <div className="feature-card">
-                  <Database fill={this.state.secondaryColor}></Database>
-                  <font className="sub-card-title">File Storage</font>
-                  <p className="feature-description-text">
-                    Easy to store and share files related to the project and
-                    also mention files specific to a task.
-                  </p>
-                </div>
-                <div className="feature-card">
-                  <TrackLogo fill={this.state.secondaryColor}></TrackLogo>
-                  <font className="sub-card-title">Track Progress</font>
-                  <p className="feature-description-text">
-                    Track your and the team’s progress status in one go.
-                  </p>
-                </div>
-              </div>
-              <div className="getting-strd">
-                <div className="sub-pg-title" id="startguide">
-                  Getting Started
-                </div>
-                <div className="getting-strd-grid-parent">
-                  <ul className="getting-strd-grid">
-                    <li className="getting-strd-cont">
-                      SignUp If you are a new user else Login to continue to the
-                      Application.
-                    </li>
-                    <li className="getting-strd-cont lg:mb-10">
-                      Create Projects and Manage all ToDos in one place.
-                    </li>
-                    <li className="getting-strd-cont">
-                      Upload and share Files, Links to Documents with teammates.
-                    </li>
-                  </ul>
-                  <ul className="getting-strd-grid">
-                    <li className="getting-strd-cont">
-                      Mention Files and links related to TODOs in the TODO
-                      section itself.
-                    </li>
-                    <li className="getting-strd-cont">
-                      Plan your project from the begining and manage it in a
-                      professional way.
-                    </li>
-                    <li className="getting-strd-cont">
-                      After you finish, you can also delete the project work
-                      details if you want to.
-                    </li>
-                  </ul>
-                </div>
-              </div>
-              <div className="data-bg-grid">
-                <div className="sub-pg-title" id="data">
-                  How safe is your data?
-                </div>
-                <div className="data-sub-grid">
-                  <img
-                    alt="Secure Database"
-                    src={secureData}
-                    className="data-grid-icon"
-                  ></img>
-                  <div className="data-description-text">
-                    <p>
-                      All your project details and files are safe in our
-                      database. Not even we can access it due to AES 256
-                      Encryption, you can enable it while creating a project.
+                <div className="features-listing-section">
+                  <div className="feature-card">
+                    <Collaboration
+                      fill={this.state.secondaryColor}
+                    ></Collaboration>
+                    <font className="sub-card-title">Collaborate</font>
+                    <p className="feature-description-text">
+                      Collaborate with teammates to manage and complete projects
+                      in a single environment.
+                    </p>
+                  </div>
+                  <div className="feature-card">
+                    <Database fill={this.state.secondaryColor}></Database>
+                    <font className="sub-card-title">File Storage</font>
+                    <p className="feature-description-text">
+                      Easy to store and share files related to the project and
+                      also mention files specific to a task.
+                    </p>
+                  </div>
+                  <div className="feature-card">
+                    <TrackLogo fill={this.state.secondaryColor}></TrackLogo>
+                    <font className="sub-card-title">Track Progress</font>
+                    <p className="feature-description-text">
+                      Track your and the team’s progress status in one go.
                     </p>
                   </div>
                 </div>
+                <div className="getting-strd">
+                  <div className="sub-pg-title" id="startguide">
+                    Getting Started
+                  </div>
+                  <div className="getting-strd-grid-parent">
+                    <ul className="getting-strd-grid">
+                      <li className="getting-strd-cont">
+                        SignUp If you are a new user else Login to continue to
+                        the Application.
+                      </li>
+                      <li className="getting-strd-cont lg:mb-10">
+                        Create Projects and Manage all ToDos in one place.
+                      </li>
+                      <li className="getting-strd-cont">
+                        Upload and share Files, Links to Documents with
+                        teammates.
+                      </li>
+                    </ul>
+                    <ul className="getting-strd-grid">
+                      <li className="getting-strd-cont">
+                        Mention Files and links related to TODOs in the TODO
+                        section itself.
+                      </li>
+                      <li className="getting-strd-cont">
+                        Plan your project from the begining and manage it in a
+                        professional way.
+                      </li>
+                      <li className="getting-strd-cont">
+                        After you finish, you can also delete the project work
+                        details if you want to.
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+                <div className="data-bg-grid">
+                  <div className="sub-pg-title" id="data">
+                    How safe is your data?
+                  </div>
+                  <div className="data-sub-grid">
+                    <img
+                      alt="Secure Database"
+                      src={secureData}
+                      className="data-grid-icon"
+                    ></img>
+                    <div className="data-description-text">
+                      <p>
+                        All your project details and files are safe in our
+                        database. Not even we can access it due to AES 256
+                        Encryption, you can enable it while creating a project.
+                      </p>
+                    </div>
+                  </div>
+                </div>
               </div>
+              </Fade>
             </div>
-          </div>
           <footer>
             <div className="footer-line"></div>
             <div className="">Contact the Developers</div>
