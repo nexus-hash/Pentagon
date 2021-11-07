@@ -127,6 +127,8 @@ class login extends Component {
       .then((data) => {
         if (data.message === "Login Successful" && data.token !== "") {
           localStorage.setItem("token", data.token);
+          localStorage.setItem("email", this.state.email);
+          localStorage.setItem("uname", data.uname);
           this.setState({
             loadingMessage: "Remembering user",
           });

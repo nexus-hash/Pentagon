@@ -59,7 +59,7 @@ export default function JoinProject() {
             
             disabled={!checkForm()}
             style={{ cursor: !checkForm() ? "not-allowed" : "pointer" }}
-            className="px-5 py-1 rounded-lg nav-bg-color border-2 text-gray-800 group-hover: border-red-50"
+            className="px-5 py-1 rounded-lg bg-blue-500 text-white border-2 group-hover: border-red-50"
           >
             Join
           </button>
