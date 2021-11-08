@@ -10,6 +10,7 @@ import verifyToken from "../utils/verifytoken";
 import Fade from "react-reveal/Fade";
 import ArrowForwardIosOutlinedIcon from "@mui/icons-material/ArrowForwardIosOutlined";
 import AddOutlinedIcon from "@mui/icons-material/AddOutlined";
+import { FadeLoader } from "react-spinners";
 function TeamCard(props) {
   return (
     <Fade bottom>
@@ -36,6 +37,7 @@ class Dashboard extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      isLoading:false,
       anchorEl: null,
       counter: 0,
       createProjectDialogueState: false,
@@ -128,11 +130,14 @@ class Dashboard extends Component {
   render() {
     var open = Boolean(this.state.anchorEl);
     return (
-      <div className={`flex flex-col h-screen justify-start items-center overflow-hidden `}>
-
+      <div
+        className={`flex flex-col h-screen justify-start items-center overflow-hidden `}
+      >
         <Fade top>
-          <header style={{height:"7%"}} className="w-full rounded-b-md flex justify-between bg-gradient-to-r from-indigo-400 text-gray-100 to-blue-500  sticky z-50 shadow-xl top-0  items-center lg:px-12 px-4">
-            
+          <header
+            style={{ height: "7%" }}
+            className="w-full rounded-b-md flex justify-between bg-gradient-to-r from-indigo-400 text-gray-100 to-blue-500  sticky z-50 shadow-xl top-0  items-center lg:px-12 px-4"
+          >
             <div className="flex items-center py-3 space-x-3">
               <button className="flex lg:hidden">
                 <VisibilityOffIcon></VisibilityOffIcon>
@@ -165,80 +170,91 @@ class Dashboard extends Component {
             </button>
 
             <div className="w-5/12 items-end justify-end flex">
-              <button onClick={this.handleLogoutOnClick} className="transform transition duration-100 hover:scale-110">Logout</button>
+              <button
+                onClick={this.handleLogoutOnClick}
+                className="transform transition duration-100 hover:scale-110"
+              >
+                Logout
+              </button>
             </div>
-
           </header>
         </Fade>
 
-        <div style={{height:"93%"}} className=" w-full bg-gray-50 flex flex-row justify-center items-start">
+        <div style={{ height: "93%" }} className=" w-full ">
+          {this.state.isLoading ? (
+            <div className="w-full h-full flex justify-center items-center">
+              <FadeLoader color="#2563eb" />
+            </div>
+          ) : (
+            <div className="w-full h-full bg-gray-50 flex flex-row justify-center items-start">
+              <div className="w-3/12 h-full px-6 py-6">
+                <Fade left>
+                  <div className="w-full flex flex-col items-center h-full justify-start rounded-xl pt-4 space-y-2">
+                    <Fade top>
+                      <div className=" w-full flex justify-between items-center px-4 ">
+                        <div className="font-serrif font-bold text-lg text-blue-800">
+                          {localStorage
+                            .getItem("uname")
+                            .charAt(0)
+                            .toUpperCase() +
+                            localStorage.getItem("uname").slice(1)}
+                          's Projects
+                        </div>
+                        <button
+                          onClick={this.handleCreateProjectOpen}
+                          className="btn-bg-color px-2 py-1 rounded-lg text-white font-semibold"
+                        >
+                          New
+                        </button>
+                      </div>
+                    </Fade>
 
-          <div className="w-3/12 h-full px-6 py-6">
-
-            <Fade left>
-              <div className="w-full flex flex-col items-center h-full justify-start rounded-xl pt-4 space-y-2">
-
-                <Fade top>
-                  <div className=" w-full flex justify-between items-center px-4 ">
-
-                    <div className="font-serrif font-bold text-lg text-blue-800">
-                      {localStorage.getItem("uname").charAt(0).toUpperCase() +
-                        localStorage.getItem("uname").slice(1)}
-                      's Projects
+                    <div className="w-full h-auto space-y-2 px-4 overflow-y-scroll scrollbar-hide">
+                      {this.state.teamList.length ? (
+                        this.state.teamList.map((team, index) => {
+                          return (
+                            <TeamCard
+                              name={team.name}
+                              onClick={() => this.handleTeamClick(team.name)}
+                              index={index}
+                            ></TeamCard>
+                          );
+                        })
+                      ) : (
+                        <Fade clear>
+                          <div className="text-center text-base h-16 flex justify-center items-center text-opacity-40 text-gray-600 font-bold">
+                            No Projects Create one
+                          </div>
+                        </Fade>
+                      )}
                     </div>
-                    <button onClick={this.handleCreateProjectOpen} className="btn-bg-color px-2 py-1 rounded-lg text-white font-semibold">
-                      New
-                    </button>
+                  </div>
+                </Fade>
+              </div>
 
+              <div className="w-9/12 h-full p-6 flex flex-col justify-start items-center">
+                <Fade top>
+                  <div className="w-full h-1/2 border-2 z-0 rounded-2xl flex flex-col justify-start p-4 font-serrif font-bold items-center">
+                    <div className="text-xl z-0 text-blue-800">
+                      Recent Tasks
+                    </div>
+                    <div className="text-xl text-blue-900 text-opacity-50 h-full flex justify-center items-center">
+                      This feature will be available soon
+                    </div>
                   </div>
                 </Fade>
 
-                <div className="w-full h-auto space-y-2 px-4 overflow-y-scroll scrollbar-hide">
-                  {this.state.teamList.length ? (
-                    this.state.teamList.map((team, index) => {
-                      return (
-                        <TeamCard
-                          name={team.name}
-                          onClick={() => this.handleTeamClick(team.name)}
-                          index={index}
-                        ></TeamCard>
-                      );
-                    })
-                  ) : (
-                    <Fade clear>
-                      <div className="text-center text-base h-16 flex justify-center items-center text-opacity-40 text-gray-600 font-bold">
-                        No Projects Create one
-                      </div>
-                    </Fade>
-                  )}
-                </div>
-
+                <Fade bottom>
+                  <div className="w-full h-1/2 border-2 mt-4 rounded-2xl flex flex-col justify-start p-4 font-serrif font-bold text-xl text-blue-800 items-center">
+                    <div>Recent Completed Tasks</div>
+                    <div className="text-xl text-blue-900 text-opacity-50 h-full flex justify-center items-center">
+                      This feature will be available soon
+                    </div>
+                  </div>
+                </Fade>
               </div>
-            </Fade>
-
-          </div>
-
-          <div className="w-9/12 h-full p-6 flex flex-col justify-start items-center">
-
-            <Fade top>
-              <div className="w-full h-1/2 border-2 z-0 rounded-2xl flex flex-col justify-start p-4 font-serrif font-bold items-center">
-                <div className="text-xl z-0 text-blue-800">Recent Tasks</div>
-                <div className="text-xl text-blue-900 text-opacity-50 h-full flex justify-center items-center">
-                  This feature will be available soon
-                </div>
-              </div>
-            </Fade>
-
-            <Fade bottom>
-              <div className="w-full h-1/2 border-2 mt-4 rounded-2xl flex flex-col justify-start p-4 font-serrif font-bold text-xl text-blue-800 items-center">
-                <div>Recent Completed Tasks</div>
-                <div className="text-xl text-blue-900 text-opacity-50 h-full flex justify-center items-center">
-                  This feature will be available soon
-                </div>
-              </div>
-            </Fade>
-
-          </div>
+            </div>
+          )}
         </div>
 
         <Dialogue

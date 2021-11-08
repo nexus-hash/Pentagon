@@ -11,7 +11,6 @@ import {useHistory} from "react-router-dom";
 export default function TeamNavbar(props) {
   const history = useHistory();
   return (
-    <Fade left cascade>
       <div className="navbar w-1/5 h-screen bg-white flex flex-col justify-start items-start">
         <Link
           to="/dashboard"
@@ -29,7 +28,7 @@ export default function TeamNavbar(props) {
           <button
             onClick={() => (props.isTask ? null : history.push("/team"))}
             className={`px-3 py-2 rounded-lg ${
-              props.isTask ? "bg-blue-300 bg-opacity-60" : ""
+              props.isTask ? "bg-blue-300 bg-opacity-60" : "hover:bg-blue-300 hover:bg-opacity-60"
             } w-full items-start justify-start flex`}
           >
             <AssignmentIcon className="mr-2" />
@@ -68,6 +67,5 @@ export default function TeamNavbar(props) {
           </button>
         </div>
       </div>
-    </Fade>
   );
 }
