@@ -165,7 +165,7 @@ class Dashboard extends Component {
             </button>
 
             <div className="w-5/12 items-end justify-end flex">
-              <button onClick={this.handleLogoutOnClick}>Logout</button>
+              <button onClick={this.handleLogoutOnClick} className="transform transition duration-100 hover:scale-110">Logout</button>
             </div>
 
           </header>
@@ -176,7 +176,7 @@ class Dashboard extends Component {
           <div className="w-3/12 h-full px-6 py-6">
 
             <Fade left>
-              <div className="w-full flex flex-col items-center h-full justify-start border-2 border-gray-300 border-opacity-70 rounded-xl py-4 space-y-2">
+              <div className="w-full flex flex-col items-center h-full justify-start rounded-xl pt-4 space-y-2">
 
                 <Fade top>
                   <div className=" w-full flex justify-between items-center px-4 ">

@@ -8,6 +8,13 @@
   .btn-bg-color{
     background:#EB5757;
   }
+  .btn-bg-opacityh:hover{
+    background:rgba(235,87,87,0.5);
+    color:"#000000";
+  }
+  .btn-bg-opacity{
+    background:rgba(235,87,87,0.5);
+  }
   .btn-bg-dark{
     background:#d44e4e;
   }

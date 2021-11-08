@@ -6,6 +6,8 @@ import ForgotPassword from './pages/Authentication/forgotpassword';
 import Dashboard from './pages/dashboard/dashboard';
 import Logout from './pages/Authentication/logout';
 import TeamDashboard from './pages/Team/teamdashboard';
+import TeamDocument from './pages/Team/teamdocument';
+import TeamSettings from './pages/Team/teamsettings';
 
 function App() {
   window.localStorage.setItem('theme',true);
@@ -15,10 +17,12 @@ function App() {
         <Route exact path="/" component={WelcomePage} />
         <Route exact path="/signup" component={signup} />
         <Route exact path="/login" component={login} />
-        <Route exact path="/forgotpassword" component={ForgotPassword}/>
+        <Route exact path="/forgotpassword" component={ForgotPassword} />
         <Route exact path={`/dashboard`} component={Dashboard} />
         <Route exact path={`/logout`} component={Logout} />
-        <Route exact path={'/team'} component={TeamDashboard} />
+        <Route exact path={"/team"} component={TeamDashboard} />
+        <Route exact path={"/team/docs"} component={TeamDocument} />
+        <Route exact path={"/team/setting"} component={TeamSettings} />
       </Switch>
     </BrowserRouter>
   );
