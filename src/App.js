@@ -22,7 +22,7 @@ function App() {
         <Route exact path={`/logout`} component={Logout} />
         <Route exact path={"/team"} component={TeamDashboard} />
         <Route exact path={"/team/docs"} component={TeamDocument} />
-        <Route exact path={"/team/setting"} component={TeamSettings} />
+        <Route exact path={"/team/settings"} component={TeamSettings} />
       </Switch>
     </BrowserRouter>
   );

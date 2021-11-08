@@ -27,6 +27,7 @@ export default function TeamNavbar(props) {
         </div>
         <div className="w-full flex flex-col justify-start items-start px-1 mt-4 space-y-2">
           <button
+            onClick={() => (props.isTask ? null : history.push("/team"))}
             className={`px-3 py-2 rounded-lg ${
               props.isTask ? "bg-blue-300 bg-opacity-60" : ""
             } w-full items-start justify-start flex`}
@@ -35,6 +36,7 @@ export default function TeamNavbar(props) {
             Task List
           </button>
           <button
+            onClick={() => (props.isDocs ? null : history.push("/team/docs"))}
             className={`px-3 py-2 rounded-lg ${
               props.isDocs
                 ? "bg-blue-300 bg-opacity-60"
@@ -45,6 +47,7 @@ export default function TeamNavbar(props) {
             Project Documents
           </button>
           <button
+            onClick={() => (props.isSettings ? null : history.push("/team/settings"))}
             className={`px-3 py-2 rounded-lg ${
               props.isSettings
                 ? "bg-blue-300 bg-opacity-60"
@@ -56,7 +59,10 @@ export default function TeamNavbar(props) {
           </button>
         </div>
         <div className="h-full w-full flex justify-center items-end py-6 px-4">
-          <button onClick={()=>history.push("/logout")} className="btn-bg-color w-full py-2 text-white text-lg rounded-md">
+          <button
+            onClick={() => history.push("/logout")}
+            className="btn-bg-color w-full py-2 text-white text-lg rounded-md"
+          >
             Logout
             <LogoutIcon className="ml-4" />
           </button>
