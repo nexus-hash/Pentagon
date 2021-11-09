@@ -11,7 +11,7 @@ import {useHistory} from "react-router-dom";
 export default function TeamNavbar(props) {
   const history = useHistory();
   return (
-      <div className="navbar w-1/5 h-screen bg-white flex flex-col justify-start items-start">
+      <div className="navbar w-1/5 h-screen bg-white flex flex-col justify-start shadow-2xl items-start">
         <Link
           to="/dashboard"
           className="flex justify-start w-full px-4 py-4 items-center"
