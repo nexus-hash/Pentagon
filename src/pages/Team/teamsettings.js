@@ -7,8 +7,17 @@ export default class TeamSettings extends Component {
   constructor(props){
     super(props);
     this.state = {
-      isLoading: false,
+      isLoading: true,
     }
+  }
+  async componentDidMount() {
+    console.log(localStorage.getItem("team"),"team");
+    if(localStorage.getItem('team') === null){
+      this.props.history.push('/login');
+    }
+    this.setState({
+      isLoading: false,
+    });
   }
   render() {
     return (
@@ -20,7 +29,7 @@ export default class TeamSettings extends Component {
               <FadeLoader color="#2563eb" />
             </div>
           ) : (
-            <div className="w-full h-full p-4 flex flex-col justify-start items-start">
+            <div className="w-full h-full p-8 flex flex-col justify-start items-start">
               <div className="w-full">
                  <h1 className="text-3xl text-blue-800 font-bold">Settings</h1> 
               </div>

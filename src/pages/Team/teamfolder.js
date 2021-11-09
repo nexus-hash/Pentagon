@@ -11,10 +11,15 @@ export default class MaterialFolder extends Component {
     super(props);
     this.state = {
       isLoading: false,
-      folderName: this.props.location.state.FolderName,
+      folderName: this.props.location.state === undefined ? "" : this.props.location.state.FolderName,
     };
-    console.log(this.props.location.state.FolderName);
   }
+  componentDidMount() {
+    if (this.props.location.state === undefined) {
+      this.props.history.push("/login");
+    }
+  }
+
   render() {
     return (
       <div className="w-full h-full flex justify-start items-start overflow-hidden">
@@ -53,7 +58,7 @@ export default class MaterialFolder extends Component {
                     placeholder="Enter the Url"
                     required
                   ></input>
-                  <button className="p-1 rounded-full bg-gradient-to-tl text-blue-700 bg-gray-50 border-2 border-gray-200 hover:shadow-xl">
+                  <button onClick={()=>null} className="p-1 rounded-full bg-gradient-to-tl text-blue-700 bg-gray-50 border-2 border-gray-200 hover:shadow-xl">
                     <AddIcon fontSize="large"></AddIcon>
                   </button>
                 </form>

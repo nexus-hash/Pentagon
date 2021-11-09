@@ -85,6 +85,7 @@ class Dashboard extends Component {
     if (!p) {
       this.props.history.push("/login");
     }
+    this.setState({isLoading:false})
   }
 
   handleClickOpen = () => {

@@ -36,6 +36,7 @@ function TaskCard(props) {
       deadline.substring(6, 10);
     return dateF;
   };
+
   return (
     <Fade bottom>
       <div className="w-auto max-w-xs p-4 mr-4 mb-4 rounded-lg hover:shadow-2xl drop-shadow-lg h-auto transform transition hover:scale-105 bg-gradient-to-br from-blue-500 to-blue-600 ">
@@ -44,7 +45,7 @@ function TaskCard(props) {
             <AccessTimeIcon fontSize="small" className="mr-3" />
             {convertToMonth(props.deadline)}
           </span>
-          <button className="bg-white rounded-md transform transition hover:scale-110 text-blue-500 flex justify-center items-center py-1 my-4">
+          <button onClick={props.onClick} className="bg-white rounded-md transform transition hover:scale-110 text-blue-500 flex justify-center items-center py-1 my-4">
             <KeyboardArrowLeftIcon />
             <KeyboardArrowRightIcon className=" -ml-3" />
           </button>
@@ -55,18 +56,18 @@ function TaskCard(props) {
           <div className="text-white font-bold text-lg ">
             {props.assignedto}
           </div>
-          <div class="relative w-full">
-            <div class="flex mb-2 items-center justify-between">
-              <div class="text-right w-full">
-                <span class="text-xs font-semibold inline-block text-white">
+          <div className="relative w-full">
+            <div className="flex mb-2 items-center justify-between">
+              <div className="text-right w-full">
+                <span className="text-xs font-semibold inline-block text-white">
                   {props.progress+"%"}
                 </span>
               </div>
             </div>
-            <div class="overflow-hidden h-2 mb-4 text-xs flex rounded bg-blue-700">
+            <div className="overflow-hidden h-2 mb-4 text-xs flex rounded bg-blue-700">
               <div
                 style={{width: props.progress + "%"}}
-                class=" shadow-none rounded-full flex flex-col text-center whitespace-nowrap text-white justify-center bg-white"
+                className=" shadow-none rounded-full flex flex-col text-center whitespace-nowrap text-white justify-center bg-white"
               ></div>
             </div>
           </div>
@@ -147,18 +148,22 @@ export default class TeamDashboard extends Component {
     };
 
     this.handleGoalCloseOnClick = this.handleGoalCloseOnClick.bind(this);
+    this.handleTaskDetailOnClick = this.handleTaskDetailOnClick.bind(this);
   }
 
   async componentDidMount() {
     console.log(localStorage.getItem("team"));
     
       this.setState({
-        isLoading: false,
+        isLoading: true,
       });
     var p = await verifyToken();
     if (!p) {
       this.props.history.push("/login");
     }
+    this.setState({
+      isLoading: false,
+    });
   }
 
   handleGoalCloseOnClick() {
@@ -169,6 +174,15 @@ export default class TeamDashboard extends Component {
     });
     localStorage.setItem("goal", "hidden");
   }
+
+  handleTaskDetailOnClick = (taskid) => {
+    this.props.history.push({
+      pathname: "/team/task",
+      state: {
+        taskid: taskid,
+      },
+    });
+  };
 
   render() {
     return (
@@ -241,13 +255,14 @@ export default class TeamDashboard extends Component {
                 </Fade>
               </div>
               <div className="w-full h-full scrollbar-hide overflow-y-scroll flex flex-wrap justify-start items-start mt-10">
-                {this.state.task.map((task) => (
+                {this.state.task.map((task,index) => (
                   <TaskCard
                     title={task.title}
                     assignedto={task.assignedto}
                     status={task.status}
                     deadline={task.deadline}
                     progress={task.progress}
+                    onClick={()=>this.handleTaskDetailOnClick(index)}
                   />
                 ))}
               </div>
