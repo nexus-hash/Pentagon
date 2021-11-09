@@ -9,6 +9,7 @@ import TeamDashboard from "./pages/Team/teamdashboard";
 import TeamDocument from "./pages/Team/teamdocument";
 import TeamSettings from "./pages/Team/teamsettings";
 import MaterialFolder from "./pages/Team/teamfolder";
+import TaskDetails from "./pages/Team/task/taskdetail";
 
 function App() {
   window.localStorage.setItem("theme", true);
@@ -25,6 +26,7 @@ function App() {
         <Route exact path={"/team/docs"} component={TeamDocument} />
         <Route exact path={"/team/settings"} component={TeamSettings} />
         <Route exact path={"/team/docs/content"} component={MaterialFolder} />
+        <Route exact path={'/team/task'} component={TaskDetails} />
       </Switch>
     </BrowserRouter>
   );
