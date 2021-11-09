@@ -11,16 +11,34 @@ import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 import KeyboardArrowLeftIcon from "@mui/icons-material/KeyboardArrowLeft";
 
-function TaskCard(props){
-  var convertToMonth = (deadline) =>{
-    var months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-    var month = deadline.substring(3,5);
-    var dateF = deadline.substring(0,2)+" "+months[month-1]+" "+deadline.substring(6,10); 
-    return (dateF);
-  }
+function TaskCard(props) {
+  var convertToMonth = (deadline) => {
+    var months = [
+      "January",
+      "February",
+      "March",
+      "April",
+      "May",
+      "June",
+      "July",
+      "August",
+      "September",
+      "October",
+      "November",
+      "December",
+    ];
+    var month = deadline.substring(3, 5);
+    var dateF =
+      deadline.substring(0, 2) +
+      " " +
+      months[month - 1] +
+      " " +
+      deadline.substring(6, 10);
+    return dateF;
+  };
   return (
     <Fade bottom>
-      <button className="w-full max-w-xs p-4 mr-4 mb-4 rounded-lg shadow-lg drop-shadow-lg h-auto transform transition hover:scale-105 bg-gradient-to-br from-blue-500 to-blue-600 ">
+      <button className="w-full max-w-xs p-4 mr-4 mb-4 rounded-lg hover:shadow-2xl drop-shadow-lg h-auto transform transition hover:scale-105 bg-gradient-to-br from-blue-500 to-blue-600 ">
         <div className="flex flex-col justify-start items-start h-full ">
           <span className="text-white text-sm text-opacity-70 flex justify-center items-center">
             <AccessTimeIcon fontSize="small" className="mr-3" />
@@ -28,12 +46,30 @@ function TaskCard(props){
           </span>
           <div className="bg-white rounded-md text-blue-500 flex justify-center items-center py-1 my-4">
             <KeyboardArrowLeftIcon />
-            <KeyboardArrowRightIcon className=" -ml-3"/>
+            <KeyboardArrowRightIcon className=" -ml-3" />
           </div>
-          <div className=" line-clamp-2 text-white font-semibold text-lg text-left mb-3">{props.title}</div>
+          <div className=" line-clamp-2 text-white font-semibold text-lg text-left mb-3">
+            {props.title}
+          </div>
           <div className="text-white text-opacity-50">Assigned to</div>
-          <div className="text-white font-bold text-lg ">{props.assignedto}</div>
-
+          <div className="text-white font-bold text-lg ">
+            {props.assignedto}
+          </div>
+          <div class="relative w-full">
+            <div class="flex mb-2 items-center justify-between">
+              <div class="text-right w-full">
+                <span class="text-xs font-semibold inline-block text-white">
+                  {props.progress+"%"}
+                </span>
+              </div>
+            </div>
+            <div class="overflow-hidden h-2 mb-4 text-xs flex rounded bg-blue-700">
+              <div
+                style={{width: props.progress + "%"}}
+                class=" shadow-none rounded-full flex flex-col text-center whitespace-nowrap text-white justify-center bg-white"
+              ></div>
+            </div>
+          </div>
         </div>
       </button>
     </Fade>
@@ -54,6 +90,7 @@ export default class TeamDashboard extends Component {
           assignedto: "Nexus",
           status: "In Progress",
           deadline: "01/03/2021",
+          progress: "50",
         },
         {
           title:
@@ -61,12 +98,14 @@ export default class TeamDashboard extends Component {
           assignedto: "Nexus",
           status: "In Progress",
           deadline: "20/10/2020",
+          progress: "70",
         },
         {
           title: "Add Search Feature in DashBoard Page",
           assignedto: "Nexus",
           status: "In Progress",
           deadline: "20/10/2020",
+          progress: "83",
         },
         {
           title: "Add Search Feature in DashBoard Page",
@@ -112,9 +151,10 @@ export default class TeamDashboard extends Component {
 
   async componentDidMount() {
     console.log(localStorage.getItem("team"));
-    setTimeout(()=>{this.setState({
-      isLoading: false,
-    })},2000);
+    
+      this.setState({
+        isLoading: false,
+      });
     var p = await verifyToken();
     if (!p) {
       this.props.history.push("/login");
@@ -182,13 +222,19 @@ export default class TeamDashboard extends Component {
                 </Fade>
                 <Fade right>
                   <div className="w-full flex justify-end items-center">
-                    <div  className="w-auto h-auto bg-blue-300 flex rounded-full mr-4 ">
-                    <input type="text" className=" hidden bg-blue-300 text-blue-900 py-1 px-3 rounded-full border-none outline-none"></input>
-                    <button className="p-1 text-blue-700 rounded-full flex justify-center items-center shadow-mg px-2 placeholder-blue-600" placeholder="Search">
-                      <SearchOutlinedIcon />
-                    </button>
+                    <div className="w-auto h-auto bg-blue-300 flex rounded-full mr-4 ">
+                      <input
+                        type="text"
+                        className=" hidden bg-blue-300 text-blue-900 py-1 px-3 rounded-full border-none outline-none"
+                      ></input>
+                      <button
+                        className="p-1 text-blue-700 rounded-full flex justify-center items-center shadow-mg px-2 placeholder-blue-600"
+                        placeholder="Search"
+                      >
+                        <SearchOutlinedIcon />
+                      </button>
                     </div>
-                    <button className="btn-bg-color px-6 text-white rounded-lg py-1">
+                    <button className="btn-bg-color px-6 text-white rounded-lg py-1 hover:shadow-lg">
                       New Task
                     </button>
                   </div>
@@ -196,7 +242,13 @@ export default class TeamDashboard extends Component {
               </div>
               <div className="w-full h-full scrollbar-hide overflow-y-scroll grid-cols-3 justify-start items-start mt-10">
                 {this.state.task.map((task) => (
-                  <TaskCard title={task.title} assignedto={task.assignedto} status={task.status} deadline={task.deadline} />
+                  <TaskCard
+                    title={task.title}
+                    assignedto={task.assignedto}
+                    status={task.status}
+                    deadline={task.deadline}
+                    progress={task.progress}
+                  />
                 ))}
               </div>
             </div>
