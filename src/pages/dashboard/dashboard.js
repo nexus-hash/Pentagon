@@ -80,6 +80,7 @@ class Dashboard extends Component {
   }
 
   async componentDidMount() {
+    this.setState({isLoading:true})
     var p = await verifyToken();
     if (!p) {
       this.props.history.push("/login");
@@ -193,11 +194,11 @@ class Dashboard extends Component {
                     <Fade top>
                       <div className=" w-full flex justify-between items-center px-4 ">
                         <div className="font-serrif font-bold text-lg text-blue-800">
-                          {localStorage
+                          {localStorage.getItem("uname")?localStorage
                             .getItem("uname")
                             .charAt(0)
                             .toUpperCase() +
-                            localStorage.getItem("uname").slice(1)}
+                            localStorage.getItem("uname").slice(1):""}
                           's Projects
                         </div>
                         <button

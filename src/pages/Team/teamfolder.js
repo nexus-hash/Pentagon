@@ -45,6 +45,7 @@ export default class MaterialFolder extends Component {
 
               </div>
               <div className="w-full h-auto p-2 flex items-center justify-between bg-blue-50">
+                <Fade bottom>
                 <form className="w-full h-auto p-2 flex items-center justify-between rounded-xl" >
                   <input
                     type="url"
@@ -56,6 +57,7 @@ export default class MaterialFolder extends Component {
                     <AddIcon fontSize="large"></AddIcon>
                   </button>
                 </form>
+                </Fade>
               </div>
             </div>
           )}

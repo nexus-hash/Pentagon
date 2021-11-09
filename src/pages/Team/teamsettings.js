@@ -20,7 +20,11 @@ export default class TeamSettings extends Component {
               <FadeLoader color="#2563eb" />
             </div>
           ) : (
-            <div></div>
+            <div className="w-full h-full p-4 flex flex-col justify-start items-start">
+              <div className="w-full">
+                 <h1 className="text-3xl text-blue-800 font-bold">Settings</h1> 
+              </div>
+            </div>
           )}
         </main>
       </div>

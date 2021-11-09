@@ -38,16 +38,16 @@ function TaskCard(props) {
   };
   return (
     <Fade bottom>
-      <button className="w-full max-w-xs p-4 mr-4 mb-4 rounded-lg hover:shadow-2xl drop-shadow-lg h-auto transform transition hover:scale-105 bg-gradient-to-br from-blue-500 to-blue-600 ">
+      <div className="w-auto max-w-xs p-4 mr-4 mb-4 rounded-lg hover:shadow-2xl drop-shadow-lg h-auto transform transition hover:scale-105 bg-gradient-to-br from-blue-500 to-blue-600 ">
         <div className="flex flex-col justify-start items-start h-full ">
           <span className="text-white text-sm text-opacity-70 flex justify-center items-center">
             <AccessTimeIcon fontSize="small" className="mr-3" />
             {convertToMonth(props.deadline)}
           </span>
-          <div className="bg-white rounded-md text-blue-500 flex justify-center items-center py-1 my-4">
+          <button className="bg-white rounded-md transform transition hover:scale-110 text-blue-500 flex justify-center items-center py-1 my-4">
             <KeyboardArrowLeftIcon />
             <KeyboardArrowRightIcon className=" -ml-3" />
-          </div>
+          </button>
           <div className=" line-clamp-2 text-white font-semibold text-lg text-left mb-3">
             {props.title}
           </div>
@@ -71,7 +71,7 @@ function TaskCard(props) {
             </div>
           </div>
         </div>
-      </button>
+      </div>
     </Fade>
   );
 }
@@ -240,7 +240,7 @@ export default class TeamDashboard extends Component {
                   </div>
                 </Fade>
               </div>
-              <div className="w-full h-full scrollbar-hide overflow-y-scroll grid-cols-3 justify-start items-start mt-10">
+              <div className="w-full h-full scrollbar-hide overflow-y-scroll flex flex-wrap justify-start items-start mt-10">
                 {this.state.task.map((task) => (
                   <TaskCard
                     title={task.title}

@@ -4,13 +4,16 @@ import TeamNavbar from "./components/teamnavbar";
 import { FadeLoader } from "react-spinners";
 import AddIcon from '@mui/icons-material/Add';
 import FolderIcon from "@mui/icons-material/Folder";
+import Fade from "react-reveal";
 
 function FolderCard(props){
   return(
+    <Fade bottom>
     <button onClick={props.onClick} className="w-auto max-w-xs flex justify-between mr-3 mb-3 items-center h-12 border-2 border-blue-900 border-opacity-40 px-4 rounded-lg">
       <FolderIcon className="text-3xl mr-2 text-yellow-500" />
       <div className="truncate w-28 text-left">{props.Folder}</div>
     </button>
+    </Fade>
   );
 }
 
@@ -52,20 +55,24 @@ export default class TeamDocument extends Component {
             </div>
           ) : (
             <div className="w-full h-full flex flex-col justify-start items-start p-8">
+              <Fade top>
               <h2 className="text-3xl text-blue-800 font-bold">
                 Project Reference Materials
               </h2>
-              <div className="w-full h-full rounded-lg border-2 my-2">
-                <div className="p-4 flex flex-wrap w-full h-auto">
+              </Fade>
+              <div className="w-full h-full my-2">
+                <div className="py-4 flex flex-wrap w-full h-auto">
                   {this.state.folders.map((folder) => {
                     return <FolderCard onClick={()=> this.handleFolderOnClick(folder)} Folder={folder} />;
                   })}
                 </div>
               </div>
               <div className="w-full flex justify-center items-center">
+                <Fade bottom>
                 <button className="p-2 rounded-full bg-gradient-to-tl text-white hover:shadow-xl from-blue-500 to-blue-700">
                   <AddIcon fontSize="large"></AddIcon>
                 </button>
+                </Fade>
               </div>
             </div>
           )}

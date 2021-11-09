@@ -40,10 +40,10 @@ export default function TeamNavbar(props) {
               props.isDocs
                 ? "bg-blue-300 bg-opacity-60"
                 : "hover:bg-blue-300 hover:bg-opacity-60"
-            } w-full items-start justify-start flex`}
+            } w-full items-start justify-start flex truncate`}
           >
             <InsertDriveFileIcon className="mr-2" />
-            Project Documents
+            Reference Materials
           </button>
           <button
             onClick={() => (props.isSettings ? null : history.push("/team/settings"))}
