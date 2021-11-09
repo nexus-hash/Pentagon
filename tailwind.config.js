@@ -3,17 +3,18 @@ module.exports = {
   darkMode: false, // or 'media' or 'class'
   theme: {
     extend: {},
-    fontFamily:{
-      'sans': ['ui-sans-serif', 'system-ui'],
-      'serif': ['ui-serif', 'Georgia'],
-      'mono': ['ui-monospace', 'SFMono-Regular'],
-      'robo':['ui-nova','Nova Square'],
-    }
+    fontFamily: {
+      sans: ["ui-sans-serif", "system-ui"],
+      serif: ["ui-serif", "Georgia"],
+      mono: ["ui-monospace", "SFMono-Regular"],
+      robo: ["ui-nova", "Nova Square"],
+    },
   },
   variants: {
     extend: {},
   },
   plugins: [
-    require('tailwind-scrollbar-hide')
+    require("tailwind-scrollbar-hide"),
+    require("@tailwindcss/line-clamp"),
   ],
 };
