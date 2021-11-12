@@ -125,12 +125,11 @@ export default class NewTask extends Component {
             ></input>
           </div>
           <div className="w-full flex justify-between items-center mt-6">
-            <label className="mb-2 text-blue-700">Subtasks</label>
             <button
               className="px-4 py-1 rounded-lg btn-bg-color text-white"
               onClick={this.handleNewSubTask}
             >
-              Add
+              Add Subtask
             </button>
           </div>
           </Fade>

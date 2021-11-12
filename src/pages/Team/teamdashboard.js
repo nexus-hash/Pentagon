@@ -10,8 +10,10 @@ import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 import KeyboardArrowLeftIcon from "@mui/icons-material/KeyboardArrowLeft";
+import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
 import TeamLoader from "./components/TeamLoader";
 import StartTemplate from "./components/StartTemplate";
+import { useHistory } from "react-router";
 
 function TaskCard(props) {
   var convertToMonth = (deadline) => {
@@ -38,15 +40,21 @@ function TaskCard(props) {
       deadline.substring(6, 10);
     return dateF;
   };
+  var history = useHistory()
 
   return (
     <Fade bottom>
       <div className="w-auto max-w-xs p-4 mr-4 mb-4 rounded-lg hover:shadow-2xl drop-shadow-lg h-auto transform transition hover:scale-105 bg-gradient-to-br from-blue-500 to-blue-600 ">
         <div className="flex flex-col justify-start items-start h-full ">
+          <div className="flex justify-between items-center w-full">
           <span className="text-white text-sm text-opacity-70 flex justify-center items-center">
             <AccessTimeIcon fontSize="small" className="mr-3" />
             {convertToMonth(props.deadline)}
           </span>
+          <button onClick={()=>history.push('/team/task/delete')} className="text-red-500 p-1 flex justify-center items-center bg-white rounded-lg bg-opacity-80 transform transition hover:scale-110">
+            <DeleteOutlineOutlinedIcon fontSize="small"/>
+          </button>
+          </div>
           <button onClick={props.onClick} className="bg-white rounded-md transform transition hover:scale-110 text-blue-500 flex justify-center items-center py-1 my-4">
             <KeyboardArrowLeftIcon />
             <KeyboardArrowRightIcon className=" -ml-3" />
