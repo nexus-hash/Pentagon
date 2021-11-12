@@ -5,7 +5,9 @@ export default function BackButton(prop) {
   return (
     <button
       onClick={() => prop.this.props.history.goBack()}
-      className="p-1 rounded-full border-2 border-black flex items-center justify-center"
+      className={`p-1 rounded-full border-2 ${
+        prop.style ? "border-white text-white" : "border-black"
+      } flex items-center justify-center`}
     >
       <ArrowBackIcon />
     </button>

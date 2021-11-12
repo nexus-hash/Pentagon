@@ -241,7 +241,7 @@ export default class TeamDashboard extends Component {
                     <SearchOutlinedIcon />
                   </button>
                 </div>
-                <button className="btn-bg-color px-6 text-white rounded-lg py-1 hover:shadow-lg">
+                <button onClick={()=>this.props.history.push('/team/task/new')} className="btn-bg-color px-6 text-white rounded-lg py-1 hover:shadow-lg">
                   New Task
                 </button>
               </div>
