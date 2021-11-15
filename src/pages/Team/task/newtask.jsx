@@ -25,7 +25,6 @@ export default class NewTask extends Component {
     this.setState({ isLoading: true });
     var teamMembers = localStorage.getItem("teamdetails");
     teamMembers = JSON.parse(teamMembers)[0].projectmembers;
-    console.log(teamMembers);
     this.setState({ teamMembers: teamMembers });
     this.setState({ isLoading: false });
   }
