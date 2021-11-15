@@ -10,9 +10,10 @@ export default class NewTask extends Component {
     super(props);
     this.state = {
       isLoading: false,
-      subTasks:0,
-      subTaskTitle:Array(100).fill(''),
-      subHide:Array(100).fill(''),
+      subTasks: 0,
+      subTaskTitle: Array(100).fill(''),
+      subHide: Array(100).fill(''),
+      subHidden: -1,
       teamMembers: [
         {
           name: "John Doe",
@@ -73,17 +74,14 @@ export default class NewTask extends Component {
   handleSubTaskDelete = (e) => {
     var Subtask = this.state.subTaskTitle;
     Subtask.splice(e.target.id, 1);
-    var hide = this.state.subHide;
-    hide[e.target.id] = 'hidden';
     this.setState({
-      subHide: hide,
+      subHidden: e.target.id,
     });
     setTimeout(()=>{
-      hide.splice(e.target.id, 1);
       this.setState({
       subTaskTitle: Subtask,
       subTasks: this.state.subTasks - 1,
-    });}, 1000);
+    });}, 1);
   }
 
   render(){
@@ -134,10 +132,23 @@ export default class NewTask extends Component {
           </div>
           </Fade>
           <div className="w-full h-full flex flex-col overflow-y-scroll scrollbar-hide  py-4 px-2">
-            {[...Array(this.state.subTasks)].map((item, index) => {
+            {this.state.subTasks===0?(
+              <div className="w-full flex flex-col justify-center items-center h-full">
+                <div className="text-green-600 font-semibold text-lg">You can create Task with no Subtask</div>
+                </div>
+            ):[...Array(this.state.subTasks)].map((item, index) => {
               return (
-                <Fade left collapse when={this.state.subHide[index]?false:true} key={index}>
-                  <div className={`w-full flex flex-col justify-start mt-2 items-start ${this.state.subHide[index]}`}>
+                <Fade
+                  left
+                  collapse
+                  when={this.state.subHidden === index ? false : true}
+                  key={index}
+                >
+                  <div
+                    className={`w-full flex flex-col justify-start mt-2 items-start ${
+                      this.state.subHidden === index ? "hidden" : ""
+                    }`}
+                  >
                     <label className="mb-2 text-blue-700">
                       Subtask {index + 1}
                     </label>

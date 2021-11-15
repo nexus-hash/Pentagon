@@ -1,11 +1,8 @@
 import { Component } from "react";
-import TeamNavbar from "./components/teamnavbar";
 
-import { FadeLoader } from "react-spinners";
 import AddIcon from '@mui/icons-material/Add';
 import FolderIcon from "@mui/icons-material/Folder";
 import Fade from "react-reveal";
-import TeamLoader from "./components/TeamLoader";
 import StartTemplate from "./components/StartTemplate";
 
 function FolderCard(props){

@@ -1,10 +1,7 @@
 import { Component } from "react";
 
-import TeamNavbar from "./components/teamnavbar";
-import { FadeLoader } from "react-spinners";
 import AddIcon from "@mui/icons-material/Add";
 import Fade from "react-reveal";
-import TeamLoader from "./components/TeamLoader";
 import BackButton from "./components/BackButton";
 import StartTemplate from "./components/StartTemplate";
 

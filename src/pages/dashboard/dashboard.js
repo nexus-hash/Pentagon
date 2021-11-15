@@ -3,13 +3,12 @@ import { Component } from "react";
 import "../../css/global.css";
 import Title from "../utils/title";
 import VisibilityOffIcon from "@material-ui/icons/VisibilityOff";
-import Dialogue from "../utils/dialogue";
+import Dialogue from "../utils/dialogue.jsx";
 import CreateProject from "./createproject";
 import JoinProject from "./joinproject";
 import verifyToken from "../utils/verifytoken";
 import Fade from "react-reveal/Fade";
 import ArrowForwardIosOutlinedIcon from "@mui/icons-material/ArrowForwardIosOutlined";
-import AddOutlinedIcon from "@mui/icons-material/AddOutlined";
 import { FadeLoader } from "react-spinners";
 function TeamCard(props) {
   return (

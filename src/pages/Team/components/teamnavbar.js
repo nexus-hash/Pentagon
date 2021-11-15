@@ -1,7 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import ArrowBackOutlinedIcon from "@mui/icons-material/ArrowBackOutlined";
-import Fade from "react-reveal/Fade";
 import AssignmentIcon from "@mui/icons-material/Assignment";
 import InsertDriveFileIcon from "@mui/icons-material/InsertDriveFile";
 import SettingsIcon from "@mui/icons-material/Settings";

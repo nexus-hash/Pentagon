@@ -2,8 +2,6 @@ import { Component } from "react";
 import verifyToken from "../utils/verifytoken";
 
 import "../../css/global.css";
-import TeamNavbar from "./components/teamnavbar";
-import { FadeLoader } from "react-spinners";
 import Fade from "react-reveal/Fade";
 import CloseIcon from "@mui/icons-material/Close";
 import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
@@ -11,7 +9,6 @@ import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 import KeyboardArrowLeftIcon from "@mui/icons-material/KeyboardArrowLeft";
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
-import TeamLoader from "./components/TeamLoader";
 import StartTemplate from "./components/StartTemplate";
 import { useHistory } from "react-router";
 
@@ -51,7 +48,7 @@ function TaskCard(props) {
             <AccessTimeIcon fontSize="small" className="mr-3" />
             {convertToMonth(props.deadline)}
           </span>
-          <button onClick={()=>history.push('/team/task/delete')} className="text-red-500 p-1 flex justify-center items-center bg-white rounded-lg bg-opacity-80 transform transition hover:scale-110">
+          <button onClick={()=>history.push('/team/task/delete')} className="text-red-300 font-bold p-1 flex justify-center items-center bg-white rounded-lg bg-opacity-90 transform transition hover:scale-110">
             <DeleteOutlineOutlinedIcon fontSize="small"/>
           </button>
           </div>

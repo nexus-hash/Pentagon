@@ -25,7 +25,6 @@ class login extends Component {
       emailMessage: "",
       isLoading: false,
     };
-    console.log(localStorage.getItem("token"));
     this.handleVisibilityClick = this.handleVisibilityClick.bind(this);
     this.checkFormValidation = this.checkFormValidation.bind(this);
     this.handleEmailChange = this.handleEmailChange.bind(this);
@@ -129,6 +128,8 @@ class login extends Component {
           localStorage.setItem("token", data.token);
           localStorage.setItem("email", this.state.email);
           localStorage.setItem("uname", data.uname);
+          localStorage.setItem("uid",data.uid)
+          console.log(data.uid)
           this.setState({
             loadingMessage: "Remembering user",
           });

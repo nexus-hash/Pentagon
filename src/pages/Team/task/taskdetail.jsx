@@ -3,8 +3,6 @@ import { Component } from "react";
 import '../../../css/global.css';
 
 import BackButton from "../components/BackButton";
-import TeamLoader from "../components/TeamLoader";
-import TeamNavbar from "../components/teamnavbar";
 
 import Fade from "react-reveal/Fade";
 import StartTemplate from "../components/StartTemplate";
