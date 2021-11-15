@@ -27,167 +27,10 @@ export default class TeamSettings extends Component {
     super(props);
     this.state = {
       isLoading: true,
-      joinCode: "Hello Code",
-      admins: [
-        {
-          name: "John Doe",
-          user_id: "12345",
-        },
-        {
-          name: "John Doe",
-          user_id: "12345",
-        },
-        {
-          name: "John Doe",
-          user_id: "12345",
-        },
-        {
-          name: "John Doe",
-          user_id: "12345",
-        },
-        {
-          name: "John Doe",
-          user_id: "12345",
-        },
-        {
-          name: "John Doe",
-          user_id: "12345",
-        },
-        {
-          name: "John Doe",
-          user_id: "12345",
-        },
-        {
-          name: "John Doe",
-          user_id: "12345",
-        },
-        {
-          name: "John Doe",
-          user_id: "12345",
-        },
-        {
-          name: "John Doe",
-          user_id: "12345",
-        },
-        {
-          name: "John Doe",
-          user_id: "12345",
-        },
-        {
-          name: "John Doe",
-          user_id: "12345",
-        },
-        {
-          name: "John Doe",
-          user_id: "12345",
-        },
-        {
-          name: "John Doe",
-          user_id: "12345",
-        },
-        {
-          name: "John Doe",
-          user_id: "12345",
-        },
-        {
-          name: "John Doe",
-          user_id: "12345",
-        },
-        {
-          name: "John Doe",
-          user_id: "12345",
-        },
-        {
-          name: "John Doe",
-          user_id: "12345",
-        },
-        {
-          name: "John Doe",
-          user_id: "12345",
-        },
-        {
-          name: "John Doe",
-          user_id: "12345",
-        },
-        {
-          name: "John Doe",
-          user_id: "12345",
-        },
-        {
-          name: "John Doe",
-          user_id: "12345",
-        },
-        {
-          name: "John Doe",
-          user_id: "12345",
-        },
-        {
-          name: "John Doe",
-          user_id: "12345",
-        },
-      ],
-      members: [
-        {
-          name: "John DoeM",
-          user_id: "12345",
-        },
-        {
-          name: "Johny Aspiro Doe",
-          user_id: "12345",
-        },
-        {
-          name: "John Doe",
-          user_id: "12345",
-        },
-        {
-          name: "John Doe",
-          user_id: "12345",
-        },
-        {
-          name: "John Doe",
-          user_id: "12345",
-        },
-        {
-          name: "John Doe",
-          user_id: "12345",
-        },
-        {
-          name: "John Doe",
-          user_id: "12345",
-        },
-        {
-          name: "John Doe",
-          user_id: "12345",
-        },
-        {
-          name: "John Doe",
-          user_id: "12345",
-        },
-        {
-          name: "John Doe",
-          user_id: "12345",
-        },
-        {
-          name: "John Doe",
-          user_id: "12345",
-        },
-        {
-          name: "John Doe",
-          user_id: "12345",
-        },
-        {
-          name: "John Doe",
-          user_id: "12345",
-        },
-        {
-          name: "John Doe",
-          user_id: "12345",
-        },
-        {
-          name: "John Doe",
-          user_id: "12345",
-        },
-      ],
+      joinCode: "",
+      projectName: "",
+      admins: [],
+      members: []
     };
   }
   async componentDidMount() {
@@ -195,7 +38,25 @@ export default class TeamSettings extends Component {
     if (localStorage.getItem("team") === null) {
       this.props.history.push("/login");
     }
+    var teamdetails = localStorage.getItem("teamdetails");
+    var team = JSON.parse(teamdetails);
+    console.log(team, "team");
+    var admins = [];
+    var members = [];
+    var membersdetails = team[0].projectmembers;
+    console.log(membersdetails, "membersdetails");
+    for(var i=0;i<membersdetails.length;i++){
+      if(membersdetails[i].isAdmin){
+        admins.push(membersdetails[i]);
+      }else{
+        members.push(membersdetails[i]);
+      }
+    }
     this.setState({
+      admins: admins,
+      members: members,
+      projectName: team[0].pname,
+      joinCode: team[0].joinId,
       isLoading: false,
     });
   }
@@ -209,7 +70,7 @@ export default class TeamSettings extends Component {
             </Fade>
             <div className="flex justify-between items-center w-full">
               <h2 className="text-2xl font-serif tracking-wide">
-                Project Name
+                {this.state.projectName}
               </h2>
               <Fade>
                 <div className="flex flex-col items-start bg-blue-600 text-white rounded-lg py-2 px-3 shadow-lg">
@@ -217,7 +78,7 @@ export default class TeamSettings extends Component {
                     Join Code
                   </label>
                   <div className="flex">
-                    <div className="mr-2">1234-1234-1234</div>
+                    <div className="mr-2">{this.state.joinCode}</div>
                     <button
                       className="focus:text-opacity-100 text-opacity-75 transform transition hover:scale-105"
                       onClick={() =>
@@ -238,7 +99,7 @@ export default class TeamSettings extends Component {
             <Fade bottom>
             <div className="w-full mt-2 h-14 overflow-y-scroll flex flex-wrap justify-start items-center">
               {this.state.admins.map((admin, index) => (
-                <UserCard isAdmin={true} name={admin.name} />
+                <UserCard isAdmin={true} name={admin.username} />
               ))}
             </div>
             </Fade>
@@ -246,7 +107,7 @@ export default class TeamSettings extends Component {
             <div className="text-lg font-bold tracking-wide">Members</div>
             <div className="w-full mt-2 overflow-y-scroll flex flex-wrap justify-start items-center">
               {this.state.members.map((member, index) => (
-                <UserCard name={member.name} isAdmin={false} />
+                <UserCard name={member.username} isAdmin={false} />
               ))}
             </div>
             </Fade>
