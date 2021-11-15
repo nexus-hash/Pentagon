@@ -291,7 +291,7 @@ class Dashboard extends Component {
           handleClose={this.handleJoinProjectClose}
           handlesub={this.handleNone}
         >
-          <JoinProject></JoinProject>
+          <JoinProject reload={this.refreshPage}></JoinProject>
         </Dialogue>
       </div>
     );

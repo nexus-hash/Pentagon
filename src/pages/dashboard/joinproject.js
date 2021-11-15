@@ -30,29 +30,60 @@ export default function JoinProject(props) {
         "Content-Type": "application/json"
       },
       body: JSON.stringify({
-        accessCode: accessCode,
+        joinId: accessCode,
         uid: localStorage.getItem("uid"),
         uname: localStorage.getItem("uname"),
       })
     })
     .then((res) => res.json())
     .then((data) => {
-      if(data.acknowledge === "Already member"){
+      if (data.acknowledge === "You have joined the team") {
         setMessage("You have joined the project successfully");
+        fetch(process.env.REACT_APP_API + "team/getteams", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            uid: localStorage.getItem("uid"),
+          }),
+        })
+          .then((res) => res.json())
+          .then((data) => {
+            if (data.projects.length > 0) {
+              localStorage.setItem("teamList", JSON.stringify(data.projects));
+              setIsJoin(true);
+              setIsLoading(false);
+            }
+          })
+          .catch((err) => {
+            console.log(err);
+            setIsJoin(false);
+            setIsLoading(false);
+          });
         setIsLoading(false);
-      }
-      else if (data.acknowledge === "Already member") {
+      } else if (data.acknowledge === "Already member") {
+        setIsJoin(true);
         setMessage("Already a member of the project");
         setIsLoading(false);
-      }else{
+      } else {
         setMessage("Project not found");
-        props.reload();
+        setIsJoin(true);
         setIsLoading(false);
       }
+      setTimeout(() => {
+        setIsJoin(false);
+        props.reload();
+      } , 3000);
     })
     .catch((err) => {
       setMessage("Project Joining Failed");
+      setIsJoin(true);
       setIsLoading(false);
+      setTimeout(() => {
+        setIsJoin(false);
+        props.reload();
+      }, 3000);
     })
   }
 
@@ -74,7 +105,7 @@ export default function JoinProject(props) {
         <FadeLoader color={"#fefefe"}></FadeLoader>
         <div className="font-semibold font-sans">{message}</div>
       </div>
-      <div hidden={isLoading}>
+      <div hidden={isLoading?true:isJoin}>
         <div className=" font-bold text-gray-50 text-2xl mb-2">
           Join a Project
         </div>
@@ -98,6 +129,7 @@ export default function JoinProject(props) {
         ></InputField>
         <div className=" w-full h-36 flex justify-end mt-2 items-end space-x-3">
           <button
+            onClick={joinProject}
             disabled={!checkForm()}
             style={{ cursor: !checkForm() ? "not-allowed" : "pointer" }}
             className="px-5 py-1 rounded-lg bg-blue-500 text-white border-2 group-hover: border-red-50"

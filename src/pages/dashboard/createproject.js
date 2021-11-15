@@ -65,6 +65,8 @@ function CreateProject(props) {
             })
             .catch((err) => {
               console.log(err);
+              setIsCreated(false);
+              setIsLoading(false);
             });
           
         }else if(data.acknowledge === "failure"){
