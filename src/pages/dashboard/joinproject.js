@@ -3,10 +3,12 @@ import React from "react";
 import { FadeLoader } from "react-spinners";
 import InputField from "../Authentication/components/inputField";
 
-export default function JoinProject() {
+export default function JoinProject(props) {
 
   var [isLoading , setIsLoading] = React.useState(false);
-  var [message, setMessage] = React.useState("Joining Project");
+  var [message, setMessage] = React.useState("");
+  var [isJoin, setIsJoin] = React.useState(false);
+  var [loadingMessage, setLoadingMessage] = React.useState("Checking Code Validity");
   var [accessCode, setAccessCode] = React.useState("");
 
   var accessCodeOnChange = (e) => {
@@ -20,11 +22,53 @@ export default function JoinProject() {
     return false;
   }
 
+  var joinProject = () => {
+    setIsLoading(true);
+    fetch(process.env.REACT_APP_API+"team/join",{
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        accessCode: accessCode,
+        uid: localStorage.getItem("uid"),
+        uname: localStorage.getItem("uname"),
+      })
+    })
+    .then((res) => res.json())
+    .then((data) => {
+      if(data.acknowledge === "Already member"){
+        setMessage("You have joined the project successfully");
+        setIsLoading(false);
+      }
+      else if (data.acknowledge === "Already member") {
+        setMessage("Already a member of the project");
+        setIsLoading(false);
+      }else{
+        setMessage("Project not found");
+        props.reload();
+        setIsLoading(false);
+      }
+    })
+    .catch((err) => {
+      setMessage("Project Joining Failed");
+      setIsLoading(false);
+    })
+  }
+
   return (
     <div>
       <div
         className={`w-full h-80 flex flex-col ${
           !isLoading ? "hidden" : null
+        } justify-center items-center text-white`}
+      >
+        <FadeLoader color={"#fefefe"}></FadeLoader>
+        <div className="font-semibold font-sans">{loadingMessage}</div>
+      </div>
+      <div
+        className={`w-full h-80 flex flex-col ${
+          !isJoin ? "hidden" : null
         } justify-center items-center text-white`}
       >
         <FadeLoader color={"#fefefe"}></FadeLoader>
@@ -42,9 +86,7 @@ export default function JoinProject() {
             <li>
               Project access code can be found in the project settings section.
             </li>
-            <li>
-              Ask the project admin for access code.
-            </li>
+            <li>Ask the project admin for access code.</li>
           </ul>
         </div>
 
@@ -56,7 +98,6 @@ export default function JoinProject() {
         ></InputField>
         <div className=" w-full h-36 flex justify-end mt-2 items-end space-x-3">
           <button
-            
             disabled={!checkForm()}
             style={{ cursor: !checkForm() ? "not-allowed" : "pointer" }}
             className="px-5 py-1 rounded-lg bg-blue-500 text-white border-2 group-hover: border-red-50"

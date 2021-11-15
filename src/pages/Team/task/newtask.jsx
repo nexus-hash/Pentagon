@@ -14,45 +14,30 @@ export default class NewTask extends Component {
       subTaskTitle: Array(100).fill(''),
       subHide: Array(100).fill(''),
       subHidden: -1,
-      teamMembers: [
-        {
-          name: "John Doe",
-        },
-        {
-          name: "John Doe",
-        },
-        {
-          name: "John Doe",
-        },
-        {
-          name: "John Doe",
-        },
-        {
-          name: "John Doe",
-        },
-        {
-          name: "John Doe",
-        },
-        {
-          name: "John Doe",
-        },
-        {
-          name: "John Doe",
-        },
-        {
-          name: "John Doe",
-        },
-        {
-          name: "John Doe",
-        },
-        {
-          name: "John Doe",
-        },
-      ],
+      teamMembers: [],
     };
     this.handleNewSubTask = this.handleNewSubTask.bind(this);
     this.handleSubTaskChange = this.handleSubTaskChange.bind(this);
     this.handleSubTaskDelete = this.handleSubTaskDelete.bind(this);
+  }
+
+  componentDidMount() {
+    this.setState({ isLoading: true });
+    var teamMembers = localStorage.getItem("teamdetails");
+    teamMembers = JSON.parse(teamMembers)[0].projectmembers;
+    console.log(teamMembers);
+    for(var i=0;i<teamMembers.length;i++){
+      fetch(process.env.REACT_APP_API+"user",{
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          uid: teamMembers[i].uid,
+        }),
+      })
+    }
+
   }
 
   handleNewSubTask = () => {

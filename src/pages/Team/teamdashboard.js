@@ -3,7 +3,6 @@ import verifyToken from "../utils/verifytoken";
 
 import "../../css/global.css";
 import Fade from "react-reveal/Fade";
-import CloseIcon from "@mui/icons-material/Close";
 import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
@@ -89,78 +88,15 @@ export default class TeamDashboard extends Component {
     super(props);
     this.state = {
       isLoading: true,
-      teamid: this.props.teamid,
-      goal: localStorage.getItem("goal") ? localStorage.getItem("goal") : "",
-      showGoal: localStorage.getItem("goal") ? false : true,
-      task: [
-        {
-          title: "Add Search Feature in DashBoard Page",
-          assignedto: "Nexus",
-          status: "In Progress",
-          deadline: "01/03/2021",
-          progress: "50",
-        },
-        {
-          title:
-            "Add Search Feature in DashBoard Page and Compelete other task mentioned before in other tasks",
-          assignedto: "Nexus",
-          status: "In Progress",
-          deadline: "20/10/2020",
-          progress: "70",
-        },
-        {
-          title: "Add Search Feature in DashBoard Page",
-          assignedto: "Nexus",
-          status: "In Progress",
-          deadline: "20/10/2020",
-          progress: "83",
-        },
-        {
-          title: "Add Search Feature in DashBoard Page",
-          assignedto: "Nexus",
-          status: "In Progress",
-          deadline: "20/10/2020",
-        },
-        {
-          title: "Add Search Feature in DashBoard Page",
-          assignedto: "Nexus",
-          status: "In Progress",
-          deadline: "20/10/2020",
-        },
-        {
-          title: "Add Search Feature in DashBoard Page",
-          assignedto: "Nexus",
-          status: "In Progress",
-          deadline: "20/10/2020",
-        },
-        {
-          title: "Add Search Feature in DashBoard Page",
-          assignedto: "Nexus",
-          status: "In Progress",
-          deadline: "20/10/2020",
-        },
-        {
-          title: "Add Search Feature in DashBoard Page",
-          assignedto: "Nexus",
-          status: "In Progress",
-          deadline: "20/10/2020",
-        },
-        {
-          title: "Add Search Feature in DashBoard Page",
-          assignedto: "Nexus",
-          status: "In Progress",
-          deadline: "20/10/2020",
-        },
-      ],
+      teamid: localStorage.getItem("team"),
+      teamdetails: [],
+      task: [],
     };
 
-    this.handleGoalCloseOnClick = this.handleGoalCloseOnClick.bind(this);
     this.handleTaskDetailOnClick = this.handleTaskDetailOnClick.bind(this);
   }
 
   async componentDidMount() {
-    console.log(localStorage.getItem("team"));
-    
       this.setState({
         isLoading: true,
       });
@@ -168,18 +104,16 @@ export default class TeamDashboard extends Component {
     if (!p) {
       this.props.history.push("/login");
     }
+    var teamList = localStorage.getItem("teamList");
+    var team = JSON.parse(teamList);
+    var teamid = this.state.teamid;
+    var teamdetails = team.filter((team) => team._id === teamid);
+    localStorage.setItem("teamdetails", JSON.stringify(teamdetails));
     this.setState({
+      teamdetails: teamdetails[0],
+      task: teamdetails[0].projecttasks,
       isLoading: false,
     });
-  }
-
-  handleGoalCloseOnClick() {
-    //save using team id
-    this.setState({
-      goal: "hidden",
-      showGoal: false,
-    });
-    localStorage.setItem("goal", "hidden");
   }
 
   handleTaskDetailOnClick = (taskid) => {
@@ -193,41 +127,13 @@ export default class TeamDashboard extends Component {
 
   render() {
     return (
-      <StartTemplate isLoading={this.state.isLoading} isTask={true} isDocs={false}>
+      <StartTemplate
+        isLoading={this.state.isLoading}
+        isTask={true}
+        isDocs={false}
+        teamName={this.state.teamdetails.pname}
+      >
         <div className="w-full h-screen flex flex-col justify-start items-start pt-8 px-8 transform transition duration-150">
-          <Fade top collapse when={this.state.showGoal}>
-            <div
-              className={`h-32 max-h-32 w-full bg-blue-700 rounded-lg py-1 px-4 ${this.state.goal} text-blue-100 font-semibold mb-4 shadow-inner`}
-            >
-              <div className="flex justify-between items-center mb-2">
-                <h4 className="w-full h-8 justify-center flex items-center text-xl">
-                  Project Goal
-                </h4>
-                <button
-                  onClick={this.handleGoalCloseOnClick}
-                  className="text-white"
-                >
-                  <CloseIcon />
-                </button>
-              </div>
-              <p className="w-full h-16 flex flex-wrap overflow-scroll scrollbar-hide text-justify break-normal">
-                This project is for the simulation of Ippts algorithm using
-                available technologies such as gRPC and sockets. This project is
-                for the simulation of Ippts algorithm using available
-                technologies such as gRPC and sockets. This project is for the
-                simulation of Ippts algorithm using available technologies such
-                as gRPC and sockets. This project is for the simulation of Ippts
-                algorithm using available technologies such as gRPC and sockets.
-                This project is for the simulation of Ippts algorithm using
-                available technologies such as gRPC and sockets. This project is
-                for the simulation of Ippts algorithm using available
-                technologies such as gRPC and sockets. This project is for the
-                simulation of Ippts algorithm using available technologies such
-                as gRPC and sockets. This project is for the simulation of Ippts
-                algorithm using available technologies such as gRPC and sockets.
-              </p>
-            </div>
-          </Fade>
           <div className="w-full flex justify-between items-center transform transition duration-200">
             <Fade top>
               <div className="text-3xl font-bold text-blue-800">Tasks</div>
@@ -246,14 +152,23 @@ export default class TeamDashboard extends Component {
                     <SearchOutlinedIcon />
                   </button>
                 </div>
-                <button onClick={()=>this.props.history.push('/team/task/new')} className="btn-bg-color px-6 text-white rounded-lg py-1 hover:shadow-lg">
+                <button
+                  onClick={() => this.props.history.push("/team/task/new")}
+                  className="btn-bg-color px-6 text-white rounded-lg py-1 hover:shadow-lg"
+                >
                   New Task
                 </button>
               </div>
             </Fade>
           </div>
           <div className="w-full h-full scrollbar-hide overflow-y-scroll flex flex-wrap justify-start items-start mt-10">
-            {this.state.task.map((task, index) => (
+            {this.state.task.length===0?(
+              <div className="w-full h-full flex justify-center items-center">
+                <div className="text-blue-700 text-lg font-semibold">
+                  No Tasks Found
+                </div>
+              </div>
+              ): this.state.task.map((task, index) => (
               <TaskCard
                 title={task.title}
                 assignedto={task.assignedto}

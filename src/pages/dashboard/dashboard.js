@@ -36,35 +36,16 @@ class Dashboard extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      isLoading:false,
+      isLoading: true,
       anchorEl: null,
       counter: 0,
       createProjectDialogueState: false,
       createProjectOpen: false,
       joinProjectOpen: false,
-      teamList: [
-        { name: "IPPTs Simulation" },
-        { name: "IPPTs Simulation" },
-        { name: "IPPTs Simulation" },
-        { name: "IPPTs Simulation" },
-        { name: "IPPTs Simulation" },
-        { name: "IPPTs Simulation" },
-        { name: "IPPTs Simulation" },
-        { name: "IPPTs Simulation" },
-        { name: "IPPTs Simulation" },
-        { name: "IPPTs Simulation" },
-        { name: "IPPTs Simulation" },
-        { name: "IPPTs Simulation" },
-        { name: "IPPTs Simulation" },
-        { name: "IPPTs Simulation" },
-        { name: "IPPTs Simulation" },
-        { name: "IPPTs Simulation" },
-        { name: "IPPTs Simulation" },
-        { name: "IPPTs Simulation" },
-        { name: "IPPTs Simulation" },
-        { name: "IPPTs Simulation" },
-        { name: "IPPTs Simulation" },
-      ],
+      teamList:
+        localStorage.getItem("teamList") === null
+          ? []
+          : JSON.parse(localStorage.getItem("teamList")),
     };
 
     this.handleClickOpen = this.handleClickOpen.bind(this);
@@ -76,16 +57,55 @@ class Dashboard extends Component {
     this.handleNone = this.handleNone.bind(this);
     this.handleLogoutOnClick = this.handleLogoutOnClick.bind(this);
     this.handleTeamClick = this.handleTeamClick.bind(this);
+    this.refreshPage = this.refreshPage.bind(this);
   }
 
   async componentDidMount() {
-    this.setState({isLoading:true})
+    this.setState({ isLoading: true });
     var p = await verifyToken();
     if (!p) {
       this.props.history.push("/login");
     }
-    this.setState({isLoading:false})
+    if (localStorage.getItem("teamList") === null) {
+      console.log("no team");
+      fetch(process.env.REACT_APP_API + "team/getteams", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          uid: localStorage.getItem("uid"),
+        }),
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.message === "No team found") {
+            this.setState({ teamList: [], isLoading: false });
+          } else if (data.projects.length > 0) {
+            this.setState({ teamList: data.projects, isLoading: false });
+            localStorage.setItem("teamList", JSON.stringify(data.projects));
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    } else {
+      this.setState({ isLoading: false });
+    }
   }
+
+  refreshPage = () => {
+    this.setState({
+      teamList:
+        localStorage.getItem("teamList") === null
+          ? []
+          : JSON.parse(localStorage.getItem("teamList")),
+      isLoading: true,
+      createProjectOpen: false,
+      joinProjectOpen: false,
+    });
+    this.setState({ isLoading: false });
+  };
 
   handleClickOpen = () => {
     this.setState({ createProjectDialogueState: true });
@@ -113,7 +133,6 @@ class Dashboard extends Component {
     this.setState({ createProjectDialogueState: false });
   };
 
-
   handleNone = (e) => {
     e.preventDefault();
     console.log("none");
@@ -123,8 +142,8 @@ class Dashboard extends Component {
     this.props.history.push("/logout");
   };
 
-  handleTeamClick = async (teamname) => {
-    await localStorage.setItem("team", teamname);
+  handleTeamClick = async (teamid) => {
+    await localStorage.setItem("team", teamid);
     this.props.history.push("/team");
   };
 
@@ -194,11 +213,13 @@ class Dashboard extends Component {
                     <Fade top>
                       <div className=" w-full flex justify-between items-center px-4 ">
                         <div className="font-serrif font-bold text-lg text-blue-800">
-                          {localStorage.getItem("uname")?localStorage
-                            .getItem("uname")
-                            .charAt(0)
-                            .toUpperCase() +
-                            localStorage.getItem("uname").slice(1):""}
+                          {localStorage.getItem("uname")
+                            ? localStorage
+                                .getItem("uname")
+                                .charAt(0)
+                                .toUpperCase() +
+                              localStorage.getItem("uname").slice(1)
+                            : ""}
                           's Projects
                         </div>
                         <button
@@ -210,13 +231,13 @@ class Dashboard extends Component {
                       </div>
                     </Fade>
 
-                    <div className="w-full h-auto space-y-2 px-4 overflow-y-scroll scrollbar-hide">
+                    <div className="w-full h-auto space-y-2 px-4 pb-4 overflow-y-scroll scrollbar-hide">
                       {this.state.teamList.length ? (
                         this.state.teamList.map((team, index) => {
                           return (
                             <TeamCard
-                              name={team.name}
-                              onClick={() => this.handleTeamClick(team.name)}
+                              name={team.pname}
+                              onClick={() => this.handleTeamClick(team._id)}
                               index={index}
                             ></TeamCard>
                           );
@@ -263,7 +284,7 @@ class Dashboard extends Component {
           handleClose={this.handleCreateProjectClose}
           handlesub={this.handleNone}
         >
-          <CreateProject></CreateProject>
+          <CreateProject reload={this.refreshPage}></CreateProject>
         </Dialogue>
         <Dialogue
           open={this.state.joinProjectOpen}

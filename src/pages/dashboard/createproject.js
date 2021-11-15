@@ -28,7 +28,6 @@ function CreateProject(props) {
   var handleCreateProject = () => {
       setIsLoading(true);
       var uid = localStorage.getItem("uid")
-      console.log(uid);
       fetch(process.env.REACT_APP_API+"team/create",{
         method: "POST",
         headers: {
@@ -39,6 +38,7 @@ function CreateProject(props) {
           pname: projecttitle,
           pdesc: projectdescription,
           uid: uid,
+          uname: localStorage.getItem("uname")
         })
       })
       .then((res) => res.json())
@@ -46,19 +46,47 @@ function CreateProject(props) {
         console.log(data);
         if(data.acknowledge === "success"){
           setMessage("Project Created Successfully");
-          setIsCreated(true);
-          setIsLoading(false);
+          fetch(process.env.REACT_APP_API + "team/getteams", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              uid: localStorage.getItem("uid"),
+            }),
+          })
+            .then((res) => res.json())
+            .then((data) => {
+            if (data.projects.length > 0) {
+                localStorage.setItem("teamList", JSON.stringify(data.projects));
+                setIsCreated(true);
+                setIsLoading(false);
+              }
+            })
+            .catch((err) => {
+              console.log(err);
+            });
+          
         }else if(data.acknowledge === "failure"){
           setMessage("Project Creation Failed");
           setIsCreated(true);
           setIsLoading(false);
+        }else{
+          setMessage("Project Creation Failed");
+          setIsCreated(true);
+          setIsLoading(false);
+          setTimeout(() => {
+            setIsCreated(false);
+            setIsLoading(false);
+            resetForm();
+          }, 2000);
         }
         setTimeout(() => {
           setIsCreated(false);
-          setIsLoading(true);
-          setLoadingMessage("Going back to previous state");
           setIsLoading(false);
           resetForm();
+          props.reload();
+          history.push("/dashboard");
         }, 2000);
       })
       .catch((err) => {
@@ -67,8 +95,6 @@ function CreateProject(props) {
         setIsLoading(false);
         setTimeout(() => {
           setIsCreated(false);
-          setIsLoading(true);
-          setLoadingMessage("Going back to previous state");
           setIsLoading(false);
           resetForm();
         }, 2000);
