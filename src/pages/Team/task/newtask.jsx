@@ -26,18 +26,8 @@ export default class NewTask extends Component {
     var teamMembers = localStorage.getItem("teamdetails");
     teamMembers = JSON.parse(teamMembers)[0].projectmembers;
     console.log(teamMembers);
-    for(var i=0;i<teamMembers.length;i++){
-      fetch(process.env.REACT_APP_API+"user",{
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          uid: teamMembers[i].uid,
-        }),
-      })
-    }
-
+    this.setState({ teamMembers: teamMembers });
+    this.setState({ isLoading: false });
   }
 
   handleNewSubTask = () => {
@@ -82,8 +72,8 @@ export default class NewTask extends Component {
                 <select className="w-2/3 px-4 border-2 shadow-lg rounded-lg py-2 overflow-y-scroll">
                   {this.state.teamMembers.map((member, index) => {
                     return (
-                      <option key={index} value={index}>
-                        {member.name}
+                      <option key={index} id={member.userid} value={index}>
+                        {member.username}
                       </option>
                     );
                   })}
