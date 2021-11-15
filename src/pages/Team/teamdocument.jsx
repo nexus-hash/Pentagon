@@ -21,15 +21,7 @@ export default class TeamDocument extends Component {
     super(props);
     this.state = {
       isLoading: false,
-      folders: [
-        "The infinite length folder",
-        "Folder 2",
-        "Folder 3",
-        "Folder 4",
-        "Folder 5",
-        "Folder 6",
-        "Folder 7",
-      ],
+      folders: [],
     };
   }
 
@@ -38,17 +30,21 @@ export default class TeamDocument extends Component {
     if (localStorage.getItem("team") === null) {
       this.props.history.push("/login");
     }
+    var team = JSON.parse(localStorage.getItem("teamdetails"))[0];
+    var folders = team.projectmaterials;
     this.setState({
+      folders: folders,
       isLoading: false,
     });
   }
 
-  handleFolderOnClick = (FolderName) => {
-    console.log(FolderName);
+  handleFolderOnClick = (FolderName,FolderID,FolderContents) => {
     this.props.history.push({
       pathname: "/team/docs/content",
       state: {
         FolderName: FolderName,
+        FolderID: FolderID,
+        FolderContents: FolderContents
       },
     });
   };
@@ -67,8 +63,8 @@ export default class TeamDocument extends Component {
               {this.state.folders.map((folder) => {
                 return (
                   <FolderCard
-                    onClick={() => this.handleFolderOnClick(folder)}
-                    Folder={folder}
+                    onClick={() => this.handleFolderOnClick(folder.foldername,folder.folderid,folder.contents)}
+                    Folder={folder.foldername}
                   />
                 );
               })}

@@ -91,7 +91,7 @@ export default class TeamSettings extends Component {
                 </div>
               </Fade>
             </div>        
-            <button className="pl-4 pr-2 py-2 bg-gradient-to-br from-blue-600 to-blue-500 text-white rounded-lg hover:scale-105 shadow-lg mb-6 mt-6 transform transition flex items-center">
+            <button onClick={()=>this.props.history.push('/team/goal')} className="pl-4 pr-2 py-2 bg-gradient-to-br from-blue-600 to-blue-500 text-white rounded-lg hover:scale-105 shadow-lg mb-6 mt-6 transform transition flex items-center">
               <div className="mr-2">Read Project Description and Goal</div>
               <ArrowForwardIosIcon fontSize="small" />
             </button>

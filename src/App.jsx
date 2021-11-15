@@ -12,6 +12,7 @@ import MaterialFolder from "./pages/Team/teamfolder";
 import TaskDetails from "./pages/Team/task/taskdetail";
 import NewTask from "./pages/Team/task/newtask";
 import DeleteTask from "./pages/Team/task/deletetask";
+import ProjectGoal from "./pages/Team/teamgoal";
 
 function App() {
   window.localStorage.setItem("theme", true);
@@ -27,6 +28,7 @@ function App() {
         <Route exact path={"/team"} component={TeamDashboard} />
         <Route exact path={"/team/docs"} component={TeamDocument} />
         <Route exact path={"/team/settings"} component={TeamSettings} />
+        <Route exact path={"/team/goal"} component={ProjectGoal} />
         <Route exact path={"/team/docs/content"} component={MaterialFolder} />
         <Route exact path={'/team/task'} component={TaskDetails} />
         <Route exact path={'/team/task/new'} component={NewTask} />

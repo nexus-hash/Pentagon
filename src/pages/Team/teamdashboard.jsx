@@ -109,6 +109,7 @@ export default class TeamDashboard extends Component {
     var teamid = this.state.teamid;
     var teamdetails = team.filter((team) => team._id === teamid);
     localStorage.setItem("teamdetails", JSON.stringify(teamdetails));
+    localStorage.setItem("teamname", teamdetails[0].pname);
     this.setState({
       teamdetails: teamdetails[0],
       task: teamdetails[0].projecttasks,

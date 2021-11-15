@@ -21,7 +21,7 @@ export default function TeamNavbar(props) {
           <div className="text-base text-gray-800">Back to All Projects</div>
         </Link>
         <div className="w-full bg-gradient-to-bl from-blue-400 via-blue-500 to-blue-600 px-4 py-14 flex items-center text-lg font-semibold text-white">
-          {props.teamName}
+          {props.teamName || localStorage.getItem("teamname")}
         </div>
         <div className="w-full flex flex-col justify-start items-start px-1 mt-4 space-y-2">
           <button

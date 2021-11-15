@@ -17,6 +17,9 @@ export default class MaterialFolder extends Component {
     if (this.props.location.state === undefined) {
       this.props.history.push("/login");
     }
+    var team = JSON.parse(localStorage.getItem("teamdetails"));
+    console.log(team, "team");
+
   }
 
   render() {
