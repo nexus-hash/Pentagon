@@ -27,6 +27,8 @@ function TaskCard(props) {
       "November",
       "December",
     ];
+    deadline = deadline.split("-");
+    deadline = deadline[2] + "-" + deadline[1] + "-" + deadline[0];
     var month = deadline.substring(3, 5);
     var dateF =
       deadline.substring(0, 2) +
@@ -36,26 +38,42 @@ function TaskCard(props) {
       deadline.substring(6, 10);
     return dateF;
   };
-  var history = useHistory()
+  var history = useHistory();
 
   return (
     <Fade bottom>
-      <div className="w-auto max-w-xs p-4 mr-4 mb-4 rounded-lg hover:shadow-2xl drop-shadow-lg h-auto transform transition hover:scale-105 bg-gradient-to-br from-blue-500 to-blue-600 ">
+      <div className="w-full max-w-xs p-4 mr-4 mb-4 rounded-lg hover:shadow-2xl drop-shadow-lg h-auto transform transition hover:scale-105 bg-gradient-to-br from-blue-500 to-blue-600 ">
         <div className="flex flex-col justify-start items-start h-full ">
           <div className="flex justify-between items-center w-full">
-          <span className="text-white text-sm text-opacity-70 flex justify-center items-center">
-            <AccessTimeIcon fontSize="small" className="mr-3" />
-            {convertToMonth(props.deadline)}
-          </span>
-          <button onClick={()=>history.push('/team/task/delete')} className="text-red-300 font-bold p-1 flex justify-center items-center bg-white rounded-lg bg-opacity-90 transform transition hover:scale-110">
-            <DeleteOutlineOutlinedIcon fontSize="small"/>
-          </button>
+            <span className="text-white text-sm text-opacity-70 flex justify-center items-center">
+              <AccessTimeIcon fontSize="small" className="mr-3" />
+              {convertToMonth(props.deadline)}
+            </span>
+            <button
+              onClick={() => history.push("/team/task/delete")}
+              disabled={props.progress === 100}
+              className={`text-red-300 ${
+                props.progress === 100
+                  ? "bg-opacity-0 cursor-default text-opacity-0"
+                  : "bg-opacity-90"
+              } font-bold p-1 flex justify-center items-center bg-white rounded-lg transform transition hover:scale-110`}
+            >
+              <DeleteOutlineOutlinedIcon fontSize="small" />
+            </button>
           </div>
-          <button onClick={props.onClick} className="bg-white rounded-md transform transition hover:scale-110 text-blue-500 flex justify-center items-center py-1 my-4">
+          <button
+            onClick={props.onClick}
+            disabled={props.progress === 100}
+            className={`${
+              props.progress === 100
+                ? "bg-blue-300 text-white cursor-not-allowed"
+                : "bg-white text-blue-500 hover:scale-110 "
+            } rounded-md transform transition flex justify-center items-center py-1 my-4`}
+          >
             <KeyboardArrowLeftIcon />
             <KeyboardArrowRightIcon className=" -ml-3" />
           </button>
-          <div className=" line-clamp-2 text-white font-semibold text-lg text-left mb-3">
+          <div className=" line-clamp-2 h-14 text-white font-semibold text-lg text-left mb-3">
             {props.title}
           </div>
           <div className="text-white text-opacity-50">Assigned to</div>
@@ -66,13 +84,13 @@ function TaskCard(props) {
             <div className="flex mb-2 items-center justify-between">
               <div className="text-right w-full">
                 <span className="text-xs font-semibold inline-block text-white">
-                  {props.progress+"%"}
+                  {props.progress + "%"}
                 </span>
               </div>
             </div>
             <div className="overflow-hidden h-2 mb-4 text-xs flex rounded bg-blue-700">
               <div
-                style={{width: props.progress + "%"}}
+                style={{ width: props.progress + "%" }}
                 className=" shadow-none rounded-full flex flex-col text-center whitespace-nowrap text-white justify-center bg-white"
               ></div>
             </div>
@@ -96,26 +114,97 @@ export default class TeamDashboard extends Component {
     this.handleTaskDetailOnClick = this.handleTaskDetailOnClick.bind(this);
   }
 
-  async componentDidMount() {
-      this.setState({
-        isLoading: true,
-      });
-    var p = await verifyToken();
-    if (!p) {
-      this.props.history.push("/login");
-    }
+  getData = () => {
     var teamList = localStorage.getItem("teamList");
     var team = JSON.parse(teamList);
     var teamid = this.state.teamid;
     var teamdetails = team.filter((team) => team._id === teamid);
     localStorage.setItem("teamdetails", JSON.stringify(teamdetails));
     localStorage.setItem("teamname", teamdetails[0].pname);
+    var task = teamdetails[0].projecttasks;
+    for (var i = 0; i < task.length; i++) {
+      var progress = 0;
+      for (var j = 0; j < task[i].taskdata.subTasks; j++) {
+        if (task[i].taskdata.subtask[j].isDone) {
+          progress += 1;
+        }
+      }
+      task[i].progress = (progress / task[i].taskdata.subTasks) * 100;
+      if (task[i].taskdata.subTasks === 0) {
+        if (task[i].taskdata.isDone) {
+          task[i].progress = 100;
+        } else {
+          task[i].progress = 0;
+        }
+      }
+    }
+
+    return { task, teamdetails };
+  };
+
+  async componentDidMount() {
     this.setState({
-      teamdetails: teamdetails[0],
-      task: teamdetails[0].projecttasks,
-      isLoading: false,
+      isLoading: true,
     });
+    var p = await verifyToken();
+    if (!p) {
+      this.props.history.push("/login");
+    }
+    this.refreshData();
   }
+
+  refreshData = () => {
+    fetch(process.env.REACT_APP_API + "team/getteams", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        uid: localStorage.getItem("uid"),
+      }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.projects.length > 0) {
+          localStorage.setItem("teamList", JSON.stringify(data.projects));
+          setTimeout(() => {
+            fetch(process.env.REACT_APP_API + "team/getteams", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                uid: localStorage.getItem("uid"),
+              }),
+            })
+              .then((res) => res.json())
+              .then((data) => {
+                if (data.message === "No team found") {
+                  this.setState({ teamList: [], isLoading: false });
+                } else if (data.projects.length > 0) {
+                  this.setState({ teamList: data.projects, isLoading: false });
+                  localStorage.setItem(
+                    "teamList",
+                    JSON.stringify(data.projects)
+                  );
+                  var { task, teamdetails } = this.getData();
+                  this.setState({
+                    teamdetails: teamdetails[0],
+                    task: task,
+                    isLoading: false,
+                  });
+                }
+              })
+              .catch((err) => {
+                console.log(err);
+              });
+          }, 50);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
   handleTaskDetailOnClick = (taskid) => {
     this.props.history.push({
@@ -154,7 +243,12 @@ export default class TeamDashboard extends Component {
                   </button>
                 </div>
                 <button
-                  onClick={() => this.props.history.push("/team/task/new")}
+                  onClick={() =>
+                    this.props.history.push({
+                      pathname: "/team/task/new",
+                      state: {},
+                    })
+                  }
                   className="btn-bg-color px-6 text-white rounded-lg py-1 hover:shadow-lg"
                 >
                   New Task
@@ -163,22 +257,24 @@ export default class TeamDashboard extends Component {
             </Fade>
           </div>
           <div className="w-full h-full scrollbar-hide overflow-y-scroll flex flex-wrap justify-start items-start mt-10">
-            {this.state.task.length===0?(
+            {this.state.task.length === 0 ? (
               <div className="w-full h-full flex justify-center items-center">
                 <div className="text-blue-700 text-lg font-semibold">
                   No Tasks Found
                 </div>
               </div>
-              ): this.state.task.map((task, index) => (
-              <TaskCard
-                title={task.title}
-                assignedto={task.assignedto}
-                status={task.status}
-                deadline={task.deadline}
-                progress={task.progress}
-                onClick={() => this.handleTaskDetailOnClick(index)}
-              />
-            ))}
+            ) : (
+              this.state.task.map((task, index) => (
+                <TaskCard
+                  title={task.taskdata.taskTitle}
+                  assignedto={task.taskdata.assign.username}
+                  status={task.status}
+                  deadline={task.taskdata.deadline}
+                  progress={task.progress}
+                  onClick={() => this.handleTaskDetailOnClick(index)}
+                />
+              ))
+            )}
           </div>
         </div>
       </StartTemplate>

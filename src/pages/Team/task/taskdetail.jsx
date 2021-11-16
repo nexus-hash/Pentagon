@@ -12,7 +12,16 @@ export default class TaskDetails extends Component {
     super(props);
     this.state ={
       isLoading: false,
+      taskDeadLine: "",
+      taskAssignedTo: "",
+      taskName: "",
+      subTasks: [],
     }
+  }
+
+  componentDidMount(){
+    var task = JSON.parse(localStorage.getItem("teamList")).filter((team) => team._id === localStorage.getItem("team"))[0].projecttasks;
+    console.log(task);
   }
 
   render(){

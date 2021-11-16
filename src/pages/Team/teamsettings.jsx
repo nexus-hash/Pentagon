@@ -30,11 +30,11 @@ export default class TeamSettings extends Component {
       joinCode: "",
       projectName: "",
       admins: [],
-      members: []
+      members: [],
+      goal: "",
     };
   }
   async componentDidMount() {
-    console.log(localStorage.getItem("team"), "team");
     if (localStorage.getItem("team") === null) {
       this.props.history.push("/login");
     }
@@ -56,6 +56,7 @@ export default class TeamSettings extends Component {
       admins: admins,
       members: members,
       projectName: team[0].pname,
+      goal: team[0].pdesc,
       joinCode: team[0].joinId,
       isLoading: false,
     });
@@ -91,7 +92,7 @@ export default class TeamSettings extends Component {
                 </div>
               </Fade>
             </div>        
-            <button onClick={()=>this.props.history.push('/team/goal')} className="pl-4 pr-2 py-2 bg-gradient-to-br from-blue-600 to-blue-500 text-white rounded-lg hover:scale-105 shadow-lg mb-6 mt-6 transform transition flex items-center">
+            <button onClick={()=>this.props.history.push({pathname:'/team/goal',state:{goal:this.state.goal}})} className="pl-4 pr-2 py-2 bg-gradient-to-br from-blue-600 to-blue-500 text-white rounded-lg hover:scale-105 shadow-lg mb-6 mt-6 transform transition flex items-center">
               <div className="mr-2">Read Project Description and Goal</div>
               <ArrowForwardIosIcon fontSize="small" />
             </button>
