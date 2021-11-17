@@ -18,8 +18,13 @@ export default class TaskDetails extends Component {
       taskAssignedTo: "",
       materials: "",
       taskName: "",
+      isDone: false,
       subTasks: [],
     };
+
+    this.handleCheck = this.handleCheck.bind(this);
+    this.checkRemainingTime = this.checkRemainingTime.bind(this);
+    this.handleGlobalCheck = this.handleGlobalCheck.bind(this);
   }
 
   componentDidMount() {
@@ -37,8 +42,28 @@ export default class TaskDetails extends Component {
       taskName: taskdetails.taskdata.taskTitle,
       subTasks: taskdetails.taskdata.subtask,
       materials: taskdetails.taskdata.materialFolder,
+      isDone: taskdetails.taskdata.isDone,
       isLoading: false,
     });
+  }
+
+  handleCheck = (e) => {
+    var sub = this.state.subTasks;
+    sub[e.target.id].isDone = e.target.checked;
+    this.setState({
+      subTasks: sub,
+    })
+  }
+
+  handleGlobalCheck = (e) => {
+    var sub = this.state.subTasks;
+    sub.forEach((subtask) => {
+      subtask.isDone = e.target.checked;
+    });
+    this.setState({
+      subTasks: sub,
+      isDone: e.target.checked,
+    })
   }
 
   checkRemainingTime = (date) => {
@@ -70,10 +95,12 @@ export default class TaskDetails extends Component {
               Reference Materials : {this.state.materials}
             </div>
             <div>
-              Status
+              {this.state.isDone?"Mark all as Incomplete":"Mark all as completed"}
               <input
                 type="checkbox"
                 className="ml-2 form-checkbox h-4 w-4 rounded text-blue-500"
+                checked={this.state.isDone}
+                onChange={this.handleGlobalCheck}
               />
             </div>
           </div>
@@ -127,7 +154,7 @@ export default class TaskDetails extends Component {
           <div className="w-full h-full flex flex-col justify-start items-start mt-6">
             <h2 className="text-lg font-semibold">Sub Tasks</h2>
             <div className="w-full h-inherit rounded-xl">
-              <table className="w-full h-full space-y-4 border-separate rounded-xl">
+              <table className="w-full h-full z-0 space-y-4 border-separate rounded-xl">
                 <thead className="bg-blue-600 text-white rounded-xl mt-2 mb-6">
                   <th className="w-1/12 px-4 py-2 rounded-xl">Sl No</th>
                   <th className="w-10/12 px-4 py-2 rounded-xl">
@@ -135,7 +162,7 @@ export default class TaskDetails extends Component {
                   </th>
                   <th className="w-1/12 px-4 py-2 rounded-xl">Completed?</th>
                 </thead>
-                <tbody className="overflow-y-scroll h-1/2 w-full">
+                <tbody className="overflow-y-scroll w-full" style={{height: "1rem"}}>
                   {this.state.subTasks.map((subTask, index) => {
                     return (
                       <tr
@@ -143,7 +170,7 @@ export default class TaskDetails extends Component {
                         className="shadow mt-2 h-28 overflow-y-scroll rounded-lg"
                       >
                         <td className="px-4 py-2 text-center">{index + 1}</td>
-                        <td className="px-4 py-2 ">
+                        <td className="px-4 py-2 h-2 overflow-y-scroll">
                           {subTask.subtask} Checking Large Subtasks for better
                           text performanceChecking Large Subtasks for better
                           text performance Checking Large Subtasks for better
@@ -169,6 +196,7 @@ export default class TaskDetails extends Component {
                             type="checkbox"
                             className="ml-2 form-checkbox h-4 w-4 rounded text-blue-500"
                             checked={subTask.isDone}
+                            onChange={this.handleCheck}
                             id={index}
                           />
                         </td>
@@ -177,7 +205,6 @@ export default class TaskDetails extends Component {
                   })}
                 </tbody>
               </table>
-              <div>Hello</div>
             </div>
           </div>
         </div>
