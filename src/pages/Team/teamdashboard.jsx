@@ -206,11 +206,12 @@ export default class TeamDashboard extends Component {
       });
   };
 
-  handleTaskDetailOnClick = (taskid) => {
+  handleTaskDetailOnClick = (taskid,progress) => {
     this.props.history.push({
       pathname: "/team/task",
       state: {
         taskid: taskid,
+        progress: progress
       },
     });
   };
@@ -271,7 +272,7 @@ export default class TeamDashboard extends Component {
                   status={task.status}
                   deadline={task.taskdata.deadline}
                   progress={task.progress}
-                  onClick={() => this.handleTaskDetailOnClick(index)}
+                  onClick={() => this.handleTaskDetailOnClick(task.taskdata.task_id,task.progress)}
                 />
               ))
             )}
