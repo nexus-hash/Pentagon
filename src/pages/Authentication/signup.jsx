@@ -5,6 +5,7 @@ import VisibilityIcon from "@material-ui/icons/Visibility";
 import VisibilityOffIcon from "@material-ui/icons/VisibilityOff";
 import Loader from "../utils/Loader";
 import Navbar from "./components/Navbar";
+import Footer from "./components/footer";
 import SubmitButton from "./components/Submit";
 import SecondaryButton from "./components/SecondaryButton";
 import InputField from "./components/inputField";
@@ -60,13 +61,10 @@ class signup extends Component {
     this.handleNameChange = this.handleNameChange.bind(this);
     this.handleEmailChange = this.handleEmailChange.bind(this);
     this.handlePasswordChange = this.handlePasswordChange.bind(this);
-    this.handleConfirmPasswordChange =
-      this.handleConfirmPasswordChange.bind(this);
-    this.handleUserRegistrationOnClick =
-      this.handleUserRegistrationOnClick.bind(this);
+    this.handleConfirmPasswordChange = this.handleConfirmPasswordChange.bind(this);
+    this.handleUserRegistrationOnClick = this.handleUserRegistrationOnClick.bind(this);
     this.checkSubmissionForm = this.checkSubmissionForm.bind(this);
-    this.handleVerificationCodeChange =
-      this.handleVerificationCodeChange.bind(this);
+    this.handleVerificationCodeChange = this.handleVerificationCodeChange.bind(this);
     this.startTimer = this.startTimer.bind(this);
     this.countDown = this.countDown.bind(this);
     this.sendCode = this.sendCode.bind(this);
@@ -674,7 +672,9 @@ class signup extends Component {
         </Snackbar>
         <Navbar></Navbar>
         {body}
-        <div className="h-20 w-full "></div>
+        <div className="h-20 w-full ">
+          <Footer></Footer>
+        </div>
       </div>
     );
   }

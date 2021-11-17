@@ -28,4 +28,24 @@
   --tw-border-opacity: 1;
   border-color: rgba(235,87,87, var(--tw-border-opacity));
 }
+.custom-shape-divider-bottom-1637175221 {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    overflow: hidden;
+    line-height: 0;
+    transform: rotate(180deg);
+}
+
+.custom-shape-divider-bottom-1637175221 svg {
+    position: relative;
+    display: block;
+    width: calc(300% + 1.3px);
+    height: 80px;
+}
+
+.custom-shape-divider-bottom-1637175221 .shape-fill {
+    fill: #EB5757;
+}
 }

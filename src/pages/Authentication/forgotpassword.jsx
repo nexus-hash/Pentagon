@@ -6,6 +6,7 @@ import VisibilityOffIcon from "@material-ui/icons/VisibilityOff";
 import Loader from "../utils/Loader";
 import Navbar from "./components/Navbar";
 import SubmitButton from "./components/Submit";
+import Footer from "./components/footer";
 import SecondaryButton from "./components/SecondaryButton";
 import InputField from "./components/inputField";
 import PasswordValidationIdentifier from "./components/Password_Indicator";
@@ -515,7 +516,7 @@ class ForgotPassword extends Component {
                 id="password"
                 type={this.state.passwordFieldType}
                 placeholder="Password"
-                className="px-4 py-2 w-full focus:shadow-xl focus:outline-none focus:border-transparent rounded-lg"
+                className="px-4 py-2 w-full focus:shadow-xl border-none focus:outline-none focus:border-transparent rounded-lg"
                 onChange={this.handlePasswordChange}
                 value={this.state.password}
               ></input>
@@ -620,7 +621,9 @@ class ForgotPassword extends Component {
         </Snackbar>
         <Navbar></Navbar>
         {body}
-        <div className="h-20 w-full "></div>
+        <div className="h-20 w-full ">
+          <Footer></Footer>
+        </div>
       </div>
     );
   }

@@ -40,9 +40,24 @@ function TaskCard(props) {
   };
   var history = useHistory();
 
+  const checkDeadline = (deadline) => {
+    var d1 = new Date(deadline);
+    d1.setHours(24, 0, 0, 0);
+    var d2 = new Date();
+    return d1 < d2;
+  }
+
   return (
     <Fade bottom>
-      <div className="w-full max-w-xs p-4 mr-4 mb-4 rounded-lg hover:shadow-2xl drop-shadow-lg h-auto transform transition hover:scale-105 bg-gradient-to-br from-blue-500 to-blue-600 ">
+      <div
+        className={`w-full max-w-xs p-4 mr-4 mb-4 rounded-lg hover:shadow-2xl drop-shadow-lg h-auto transform transition hover:scale-105 bg-gradient-to-br ${
+          props.progress !== 100
+            ? checkDeadline(props.deadline)
+              ? "from-red-500 to-red-600"
+              : " from-blue-500 to-blue-600 "
+            : "from-green-500 to-green-600"
+        } `}
+      >
         <div className="flex flex-col justify-start items-start h-full ">
           <div className="flex justify-between items-center w-full">
             <span className="text-white text-sm text-opacity-70 flex justify-center items-center">
@@ -51,24 +66,20 @@ function TaskCard(props) {
             </span>
             <button
               onClick={() => history.push("/team/task/delete")}
-              disabled={props.progress === 100}
-              className={`text-red-300 ${
-                props.progress === 100
-                  ? "bg-opacity-0 cursor-default text-opacity-0"
-                  : "bg-opacity-90"
-              } font-bold p-1 flex justify-center items-center bg-white rounded-lg transform transition hover:scale-110`}
+              className={`text-red-300 bg-opacity-90 font-bold p-1 flex justify-center items-center bg-white rounded-lg transform transition hover:scale-110`}
             >
               <DeleteOutlineOutlinedIcon fontSize="small" />
             </button>
           </div>
           <button
             onClick={props.onClick}
-            disabled={props.progress === 100}
-            className={`${
+            className={`bg-white ${
               props.progress === 100
-                ? "bg-blue-300 text-white cursor-not-allowed"
-                : "bg-white text-blue-500 hover:scale-110 "
-            } rounded-md transform transition flex justify-center items-center py-1 my-4`}
+                ? "text-green-600"
+                : checkDeadline(props.deadline)
+                ? "text-red-600"
+                : "text-blue-600"
+            } hover:scale-110 rounded-md transform transition flex justify-center items-center py-1 my-4`}
           >
             <KeyboardArrowLeftIcon />
             <KeyboardArrowRightIcon className=" -ml-3" />
@@ -88,7 +99,11 @@ function TaskCard(props) {
                 </span>
               </div>
             </div>
-            <div className="overflow-hidden h-2 mb-4 text-xs flex rounded bg-blue-700">
+            <div
+              className={`overflow-hidden h-2 mb-4 text-xs flex rounded ${
+                checkDeadline(props.deadline) ? " bg-red-700" : "bg-blue-700"
+              } `}
+            >
               <div
                 style={{ width: props.progress + "%" }}
                 className=" shadow-none rounded-full flex flex-col text-center whitespace-nowrap text-white justify-center bg-white"
@@ -138,6 +153,28 @@ export default class TeamDashboard extends Component {
         }
       }
     }
+    var sortedTask = [];
+    for (var i = 0; i < task.length; i++) {
+      var deadline = new Date(task[i].taskdata.deadline);
+      var today = new Date();
+      if(task[i].progress!==100 && deadline>=today){
+        sortedTask.push(task[i]);
+      }
+    }
+    for (var i = 0; i < task.length; i++) {
+      var deadline = new Date(task[i].taskdata.deadline);
+      var today = new Date();
+      if (deadline < today) {
+        sortedTask.push(task[i]);
+      }
+    }
+    for (var i = 0; i < task.length; i++) {
+      if (task[i].progress === 100) {
+        sortedTask.push(task[i]);
+      }
+    }
+
+    task = sortedTask;
 
     return { task, teamdetails };
   };

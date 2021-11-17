@@ -34,7 +34,12 @@ export default class MaterialFolder extends Component {
           : this.props.location.state.FolderName,
       url: this.props.location.state === undefined ? [] : this.props.location.state.FolderContents,
       FolderID: this.props.location.state === undefined ? "" : this.props.location.state.FolderID,
+      newUrl: "",
     };
+
+    this.handleAddUrl = this.handleAddUrl.bind(this);
+    this.checkForm = this.checkForm.bind(this);
+    this.handleUrlOnChange = this.handleUrlOnChange.bind(this);
   }
   componentDidMount() {
     if (this.props.location.state === undefined) {
@@ -42,8 +47,51 @@ export default class MaterialFolder extends Component {
     }
   }
 
+  handleUrlOnChange = (e) => {
+    this.setState({ newUrl: e.target.value });
+  }
+
+  isValidURL = (string) => {
+        var res = string.match(new RegExp(/(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g));
+        return (res !== null)
+    };
   checkForm = () => {
-    
+    return (this.isValidURL(this.state.newUrl))
+  }
+
+  handleAddUrl = async () => {
+    if(this.checkForm()){
+      this.setState({
+        isLoading: true,
+      });
+      await fetch(process.env.REACT_APP_API + "material/add", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          url: this.state.newUrl,
+          folderid: this.state.FolderID,
+          teamid: localStorage.getItem("team"),
+        })
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.message === "success"){
+            this.setState({
+              url: data.updatedData,
+              newUrl: "",
+              isLoading: false,
+            });
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        })
+    }
+    else{
+      alert("Invalid Url");
+    }
   }
 
   render() {
@@ -86,20 +134,20 @@ export default class MaterialFolder extends Component {
           </div>
           <div className="w-full h-auto p-2 flex items-center justify-between ">
             <Fade bottom>
-              <form className="w-full h-auto p-2 flex items-center justify-between rounded-xl">
                 <input
                   type="url"
                   className="outline-none w-full text-lg py-2 mr-4 rounded-lg border-2 px-4 focus:shadow-xl"
                   placeholder="Enter New Url"
+                  value={this.state.newUrl}
+                  onChange={this.handleUrlOnChange}
                   required
                 ></input>
                 <button
-                  onClick={() => null}
+                  onClick={() => this.handleAddUrl()}
                   className="p-1 rounded-full bg-gradient-to-tl text-white bg-blue-700 border-2 border-gray-200 hover:shadow-xl"
                 >
                   <AddIcon fontSize="large"></AddIcon>
                 </button>
-              </form>
             </Fade>
           </div>
         </div>

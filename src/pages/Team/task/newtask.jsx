@@ -231,7 +231,7 @@ export default class NewTask extends Component {
                     type="date"
                     className="px-4 py-2 w-2/3 rounded-lg shadow-lg  border-2 placeholder-gray-500"
                     placeholder="DD/MM/YYYY"
-                    min={this.setMinDate()}
+                    
                   ></input>
                 </div>
               </div>

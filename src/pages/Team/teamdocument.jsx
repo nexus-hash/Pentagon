@@ -15,7 +15,7 @@ function FolderCard(props) {
         className="w-auto hover:bg-blue-50 max-w-xs flex justify-between mr-3 mb-3 items-center h-12 border-2 border-blue-900 border-opacity-40 px-4 rounded-lg"
       >
         <FolderIcon className="text-3xl mr-2 text-yellow-500" />
-        <div className="truncate w-28 text-left">{props.Folder}</div>
+        <div className="truncate w-32 text-left">{props.Folder}</div>
       </button>
     </Fade>
   );

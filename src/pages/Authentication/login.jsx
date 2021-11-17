@@ -1,12 +1,13 @@
 import { Component } from "react";
 
-import "../../css/login.css";
+import "../../css/global.css";
 import VisibilityIcon from "@material-ui/icons/Visibility";
 import VisibilityOffIcon from "@material-ui/icons/VisibilityOff";
 import Navbar from "./components/Navbar";
 import SubmitButton from "./components/Submit";
 import SecondaryButton from "./components/SecondaryButton";
 import Loader from "../utils/Loader";
+import Footer from "./components/footer";
 
 class login extends Component {
   constructor(props) {
@@ -128,8 +129,8 @@ class login extends Component {
           localStorage.setItem("token", data.token);
           localStorage.setItem("email", this.state.email);
           localStorage.setItem("uname", data.uname);
-          localStorage.setItem("uid",data.uid)
-          console.log(data.uid)
+          localStorage.setItem("uid", data.uid);
+          console.log(data.uid);
           this.setState({
             loadingMessage: "Remembering user",
           });
@@ -141,16 +142,15 @@ class login extends Component {
             loginMessage: "Invalid Credentials",
             isLoading: false,
           });
-        } else if(data.message === "User not found"){
+        } else if (data.message === "User not found") {
           this.setState({
             loginMessage: "User not found",
             isLoading: false,
           });
           setTimeout(() => {
-          this.props.history.push("/signup");  
+            this.props.history.push("/signup");
           }, 1000);
-          
-        }else {
+        } else {
           this.setState({
             loginMessage: "Server Error",
             isLoading: false,
@@ -197,7 +197,7 @@ class login extends Component {
               id="password"
               type={this.state.passwordFieldType}
               placeholder="Password"
-              className="px-4 py-2 w-full outline-none border-none focus:shadow-xl focus:outline-none focus:border-transparent rounded-lg"
+              className="px-4 py-2 w-full outline-none border-none focus:shadow-xl focus:border-opacity-0 focus:outline-none focus:border-transparent rounded-lg"
               onChange={this.handlePasswordChange}
               value={this.state.password}
               required
@@ -245,7 +245,9 @@ class login extends Component {
       <div className="app-bg-color w-full h-screen overflow-hidden flex flex-col justify-between items-center">
         <Navbar></Navbar>
         {body}
-        <div className="h-20 w-full "></div>
+        <div className="h-20 w-full ">
+            <Footer></Footer>
+        </div>
       </div>
     );
   }

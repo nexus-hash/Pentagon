@@ -35,35 +35,46 @@ export default class TaskDetails extends Component {
 
   componentDidMount() {
     this.setState({ isLoading: true });
-    if(this.props.location.state === undefined) {
+    if (this.props.location.state === undefined) {
       this.props.history.push("/team");
-    }else{
-    var task = JSON.parse(localStorage.getItem("teamList")).filter(
-      (team) => team._id === localStorage.getItem("team")
-    )[0].projecttasks;
-    var taskdetails =
-      task[
-        task.findIndex((task) => task.taskdata.task_id === this.state.taskid)
-      ];
-    this.setState({
-      taskDeadLine: taskdetails.taskdata.deadline,
-      taskAssignedTo: taskdetails.taskdata.assign.username,
-      taskName: taskdetails.taskdata.taskTitle,
-      subTasks: taskdetails.taskdata.subtask,
-      materials: taskdetails.taskdata.materialFolder,
-      isDone: taskdetails.taskdata.isDone,
-      isLoading: false,
-    });
-  }
+    } else {
+      var task = JSON.parse(localStorage.getItem("teamList")).filter(
+        (team) => team._id === localStorage.getItem("team")
+      )[0].projecttasks;
+      var taskdetails =
+        task[
+          task.findIndex((task) => task.taskdata.task_id === this.state.taskid)
+        ];
+        console.log(taskdetails.taskdata.subtask);
+      this.setState({
+        taskDeadLine: taskdetails.taskdata.deadline,
+        taskAssignedTo: taskdetails.taskdata.assign.username,
+        taskName: taskdetails.taskdata.taskTitle,
+        subTasks: taskdetails.taskdata.subtask,
+        materials: taskdetails.taskdata.materialFolder,
+        isDone: taskdetails.taskdata.isDone,
+        isLoading: false,
+      });
+    }
   }
 
   handleCheck = (e) => {
     var sub = this.state.subTasks;
+    if(this.state.isDone && !e.target.checked){
+      this.setState({isDone: false});
+    }
     sub[e.target.id].isDone = e.target.checked;
+    var allDone = true;
+    sub.forEach((subtask) => {
+      if (!subtask.isDone) {
+        allDone = false;
+      }
+    })
     this.setState({
       subTasks: sub,
-    })
-  }
+      isDone: allDone,
+    });
+  };
 
   handleGlobalCheck = (e) => {
     var sub = this.state.subTasks;
@@ -73,8 +84,8 @@ export default class TaskDetails extends Component {
     this.setState({
       subTasks: sub,
       isDone: e.target.checked,
-    })
-  }
+    });
+  };
 
   checkRemainingTime = (date) => {
     var d1 = date.split("-");
@@ -157,6 +168,8 @@ export default class TaskDetails extends Component {
                 <span className="bg-white ml-4 px-2 py-2 rounded-lg shadow-lg text-blue-700 mr-4">
                   {this.checkRemainingTime(this.state.taskDeadLine) === 0
                     ? "Today"
+                    : this.checkRemainingTime(this.state.taskDeadLine) < 0
+                    ? "Over Due"
                     : this.checkRemainingTime(this.state.taskDeadLine) +
                       " Days"}
                 </span>
@@ -165,61 +178,59 @@ export default class TaskDetails extends Component {
           </div>
           <div className="w-full h-full flex flex-col justify-start items-start mt-6">
             <h2 className="text-lg font-semibold">Sub Tasks</h2>
-            <div class="w-full">
-              <table class="text-center w-full border-separate">
-                <thead class="bg-blue-600 rounded-lg text-white w-full">
-                  <tr class="flex w-full px-2 rounded-lg">
-                    <th class="p-4 w-2/12 rounded-lg">Sl No</th>
-                    <th class="p-4 w-8/12 text-center rounded-lg">Sub Task</th>
-                    <th class="p-4 w-2/12 rounded-lg">Completed?</th>
-                  </tr>
-                </thead>
-                <tbody
-                  class="bg-grey-light flex flex-col items-center justify-between overflow-y-scroll w-full"
-                  style={{ height: "40vh" }}
-                >
-                  {this.state.subTasks.map((subTask, index) => {
-                    return (
-                      <tr
-                        key={index}
-                        className="shadow flex w-full mt-2 h-4 rounded-lg"
-                      >
-                        <td className="px-4 py-2 text-center">{index + 1}</td>
-                        <td className="px-4 py-2 h-2 text-justify">
-                          {subTask.subtask} Checking Large Subtasks for better
-                          text performanceChecking Large Subtasks for better
-                          text performance Checking Large Subtasks for better
-                          text performance Checking Large Subtasks for better
-                          text performance Checking Large Subtasks for better
-                          text performance Checking Large Subtasks for better
-                          text performance Checking Large Subtasks for better
-                          text performance Checking Large Subtasks for better
-                          text performanceChecking Large Subtasks for better
-                          text performanceChecking Large Subtasks for better
-                          text performance performance Checking Large Subtasks
-                          for better text performance Checking Large Subtasks
-                          for better text performanceChecking Large Subtasks for
-                          better text performanceChecking Large Subtasks for
-                          better text performanceperformance Checking Large
-                          Subtasks for better text performance Checking Large
-                          Subtasks for better text performanceChecking Large
-                          Subtasks for better text performanceChecking Large
-                          Subtasks for better text performance
-                        </td>
-                        <td className="px-4 py-2 text-center">
-                          <input
-                            type="checkbox"
-                            className="ml-2 form-checkbox h-4 w-4 rounded text-blue-500"
-                            checked={subTask.isDone}
-                            onChange={this.handleCheck}
-                            id={index}
-                          />
-                        </td>
-                      </tr>
-                    );
-                  })}
-                </tbody>
-              </table>
+            <div class="w-full flex justify-between items-center text-center space-x-2 text-white">
+              <div className="w-2/12 bg-gradient-to-br from-blue-500 to-blue-600 py-2 rounded-md">
+                Sl No.
+              </div>
+              <div className="w-10/12 bg-gradient-to-br from-blue-500 to-blue-600 py-2 rounded-md">
+                Sub Task
+              </div>
+              <div className="w-2/12 bg-gradient-to-br from-blue-500 to-blue-600 py-2 rounded-md">
+                Sl No.
+              </div>
+            </div>
+            <div className="w-full flex flex-col justify-start items-start h-full overflow-y-scroll py-2">
+              {this.state.subTasks.map((subtask, index) => {
+                return (
+                  <div className="w-full h-auto max-h-32 flex justify-start items-center space-x-2 mb-3">
+                    <div className="w-2/12 h-full max-h-32 flex justify-center items-center py-2 rounded-md px-4 border-2 border-black border-opacity-10 ">
+                      {index + 1}
+                    </div>
+                    <div className="w-10/12 py-2 max-h-32 overflow-y-scroll rounded-md text-justify px-4 border-2 border-black border-opacity-10">
+                      {subtask.subtask} check overflow of task details check
+                      overflow of task detailscheck overflow of task
+                      detailscheck overflow of task detailscheck overflow of
+                      task detailscheck overflow of task detailscheck overflow
+                      of task detailscheck overflow of task detailscheck
+                      overflow of task detailscheck overflow of task
+                      detailscheck overflow of task detailscheck overflow of
+                      task detailscheck overflow of task detailscheck overflow
+                      of task detailscheck overflow of task detailscheck
+                      overflow of task detailscheck overflow of task
+                      detailscheck overflow of task detailscheck overflow of
+                      task detailscheck overflow of task detailscheck overflow
+                      of task detailscheck overflow of task detailscheck
+                      overflow of task detailscheck overflow of task
+                      detailscheck overflow of task detailscheck overflow of
+                      task detailscheck overflow of task detailscheck overflow
+                      of task detailscheck overflow of task detailscheck
+                      overflow of task detailscheck overflow of task
+                      detailscheck overflow of task detailscheck overflow of
+                      task detailscheck overflow of task detailscheck overflow
+                      of task detailscheck overflow of task details
+                    </div>
+                    <div className="w-2/12 h-full max-h-32 flex justify-center items-center py-2 rounded-md px-4 border-2 border-black border-opacity-10">
+                      <input
+                        type="checkbox"
+                        checked={subtask.isDone}
+                        onChange={this.handleCheck}
+                        className="form-checkbox h-4 w-4 rounded text-blue-500"
+                        id={index}
+                      />
+                    </div>
+                  </div>
+                );
+              })}
             </div>
           </div>
         </div>
