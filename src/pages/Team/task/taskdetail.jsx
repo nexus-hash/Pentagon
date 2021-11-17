@@ -12,8 +12,14 @@ export default class TaskDetails extends Component {
     super(props);
     this.state = {
       isLoading: false,
-      taskid: this.props.location.state.taskid,
-      progress: this.props.location.state.progress,
+      taskid:
+        this.props.location.state === undefined
+          ? ""
+          : this.props.location.state.taskid,
+      progress:
+        this.props.location.state === undefined
+          ? ""
+          : this.props.location.state.progress,
       taskDeadLine: "",
       taskAssignedTo: "",
       materials: "",
@@ -29,6 +35,9 @@ export default class TaskDetails extends Component {
 
   componentDidMount() {
     this.setState({ isLoading: true });
+    if(this.props.location.state === undefined) {
+      this.props.history.push("/team");
+    }else{
     var task = JSON.parse(localStorage.getItem("teamList")).filter(
       (team) => team._id === localStorage.getItem("team")
     )[0].projecttasks;
@@ -45,6 +54,7 @@ export default class TaskDetails extends Component {
       isDone: taskdetails.taskdata.isDone,
       isLoading: false,
     });
+  }
   }
 
   handleCheck = (e) => {
