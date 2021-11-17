@@ -44,6 +44,7 @@ export default class MaterialFolder extends Component {
         "https://www.npmjs.com/package/@dhaiwat10/react-link-preview",
         "https://ieeexplore.ieee.org/abstract/document/9276443",
         "https://qdoc.tips/engineers-archive-microprocessor-and-interfacing-douglas-v-hall-revised-secon-pdf-free.html",
+        "http://ggn.dronacharya.info/ECEDept/Downloads/QuestionBank/Vsem/MP_Sec.B.4.pdf",
       ],
     };
   }
@@ -78,6 +79,7 @@ export default class MaterialFolder extends Component {
                 this.state.url.map((url, index) => {
                   console.log(url, "url");
                   return (
+                    <Fade bottom>
                     <div className="w-1/4 px-2 mb-4">
                       <LinkPreview
                         url={url}
@@ -85,9 +87,10 @@ export default class MaterialFolder extends Component {
                         openInNewTab={true}
                         descriptionLength="25"
                         imageHeight="8rem"
-                        fallback={<FallBackCard url={url} />}
+                        
                       />
                     </div>
+                    </Fade>
                   );
                 } )
               )}

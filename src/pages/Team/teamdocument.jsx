@@ -1,17 +1,20 @@
 import { Component } from "react";
 
-import AddIcon from '@mui/icons-material/Add';
+import AddIcon from "@mui/icons-material/Add";
 import FolderIcon from "@mui/icons-material/Folder";
 import Fade from "react-reveal";
 import StartTemplate from "./components/StartTemplate";
 
-function FolderCard(props){
-  return(
+function FolderCard(props) {
+  return (
     <Fade bottom>
-    <button onClick={props.onClick} className="w-auto hover:bg-blue-50 max-w-xs flex justify-between mr-3 mb-3 items-center h-12 border-2 border-blue-900 border-opacity-40 px-4 rounded-lg">
-      <FolderIcon className="text-3xl mr-2 text-yellow-500" />
-      <div className="truncate w-28 text-left">{props.Folder}</div>
-    </button>
+      <button
+        onClick={props.onClick}
+        className="w-auto hover:bg-blue-50 max-w-xs flex justify-between mr-3 mb-3 items-center h-12 border-2 border-blue-900 border-opacity-40 px-4 rounded-lg"
+      >
+        <FolderIcon className="text-3xl mr-2 text-yellow-500" />
+        <div className="truncate w-28 text-left">{props.Folder}</div>
+      </button>
     </Fade>
   );
 }
@@ -22,7 +25,12 @@ export default class TeamDocument extends Component {
     this.state = {
       isLoading: false,
       folders: [],
+      newfolder: "",
     };
+
+    this.handleNewFolderOnChange = this.handleNewFolderOnChange.bind(this);
+    this.handleFolderOnClick = this.handleFolderOnClick.bind(this);
+    this.handleNewFolder = this.handleNewFolder.bind(this);
   }
 
   async componentDidMount() {
@@ -38,15 +46,42 @@ export default class TeamDocument extends Component {
     });
   }
 
-  handleFolderOnClick = (FolderName,FolderID,FolderContents) => {
+  handleNewFolderOnChange = (e) => {
+    this.setState({ newfolder: e.target.value });
+  };
+
+  handleFolderOnClick = (FolderName, FolderID, FolderContents) => {
     this.props.history.push({
       pathname: "/team/docs/content",
       state: {
         FolderName: FolderName,
         FolderID: FolderID,
-        FolderContents: FolderContents
+        FolderContents: FolderContents,
       },
     });
+  };
+
+  handleNewFolder = () => {
+    this.setState({ isLoading: true });
+    var foldername = this.state.newfolder;
+    var teamid = localStorage.getItem("team");
+    fetch(process.env.REACT_APP_API + "material/newfolder", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        foldername: foldername,
+        teamid: teamid,
+      }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+      })
+      .catch((err) => {
+        this.setState({ isLoading: false });
+        console.log(err);
+      });
   };
 
   render() {
@@ -63,7 +98,13 @@ export default class TeamDocument extends Component {
               {this.state.folders.map((folder) => {
                 return (
                   <FolderCard
-                    onClick={() => this.handleFolderOnClick(folder.foldername,folder.folderid,folder.contents)}
+                    onClick={() =>
+                      this.handleFolderOnClick(
+                        folder.foldername,
+                        folder.folderid,
+                        folder.contents
+                      )
+                    }
                     Folder={folder.foldername}
                   />
                 );
@@ -74,13 +115,15 @@ export default class TeamDocument extends Component {
             <Fade bottom>
               <form className="w-full h-auto flex items-center justify-between rounded-xl">
                 <input
-                  type="url"
+                  type="text"
                   className="outline-none w-full text-lg py-2 mr-4 rounded-lg border-2 px-4 focus:shadow-xl"
                   placeholder="New Folder Name"
+                  value={this.state.newfolder}
+                  onChange={this.handleNewFolderOnChange}
                   required
                 ></input>
                 <button
-                  onClick={() => null}
+                  onClick={() => this.handleNewFolder}
                   className="p-1 rounded-full bg-gradient-to-tl text-white bg-blue-700 border-2 border-gray-200 hover:shadow-xl"
                 >
                   <AddIcon fontSize="large"></AddIcon>

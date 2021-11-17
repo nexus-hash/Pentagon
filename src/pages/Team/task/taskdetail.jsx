@@ -95,7 +95,9 @@ export default class TaskDetails extends Component {
               Reference Materials : {this.state.materials}
             </div>
             <div>
-              {this.state.isDone?"Mark all as Incomplete":"Mark all as completed"}
+              {this.state.isDone
+                ? "Mark all as Incomplete"
+                : "Mark all as completed"}
               <input
                 type="checkbox"
                 className="ml-2 form-checkbox h-4 w-4 rounded text-blue-500"
@@ -153,24 +155,27 @@ export default class TaskDetails extends Component {
           </div>
           <div className="w-full h-full flex flex-col justify-start items-start mt-6">
             <h2 className="text-lg font-semibold">Sub Tasks</h2>
-            <div className="w-full h-inherit rounded-xl">
-              <table className="w-full h-full z-0 space-y-4 border-separate rounded-xl">
-                <thead className="bg-blue-600 text-white rounded-xl mt-2 mb-6">
-                  <th className="w-1/12 px-4 py-2 rounded-xl">Sl No</th>
-                  <th className="w-10/12 px-4 py-2 rounded-xl">
-                    Sub Task Title
-                  </th>
-                  <th className="w-1/12 px-4 py-2 rounded-xl">Completed?</th>
+            <div class="w-full">
+              <table class="text-center w-full border-separate">
+                <thead class="bg-blue-600 rounded-lg text-white w-full">
+                  <tr class="flex w-full px-2 rounded-lg">
+                    <th class="p-4 w-2/12 rounded-lg">Sl No</th>
+                    <th class="p-4 w-8/12 text-center rounded-lg">Sub Task</th>
+                    <th class="p-4 w-2/12 rounded-lg">Completed?</th>
+                  </tr>
                 </thead>
-                <tbody className="overflow-y-scroll w-full" style={{height: "1rem"}}>
+                <tbody
+                  class="bg-grey-light flex flex-col items-center justify-between overflow-y-scroll w-full"
+                  style={{ height: "40vh" }}
+                >
                   {this.state.subTasks.map((subTask, index) => {
                     return (
                       <tr
                         key={index}
-                        className="shadow mt-2 h-28 overflow-y-scroll rounded-lg"
+                        className="shadow flex w-full mt-2 h-4 rounded-lg"
                       >
                         <td className="px-4 py-2 text-center">{index + 1}</td>
-                        <td className="px-4 py-2 h-2 overflow-y-scroll">
+                        <td className="px-4 py-2 h-2 text-justify">
                           {subTask.subtask} Checking Large Subtasks for better
                           text performanceChecking Large Subtasks for better
                           text performance Checking Large Subtasks for better

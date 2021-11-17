@@ -567,7 +567,7 @@ class signup extends Component {
                 id="password"
                 type={this.state.passwordFieldType}
                 placeholder="Password"
-                className="px-4 py-2 w-full focus:shadow-xl focus:outline-none focus:border-transparent rounded-lg"
+                className="px-4 py-2 w-full focus:shadow-xl border-none focus:outline-none focus:border-transparent rounded-lg"
                 onChange={this.handlePasswordChange}
                 value={this.state.password}
               ></input>
