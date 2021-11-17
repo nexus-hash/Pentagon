@@ -42,6 +42,10 @@ export default class MaterialFolder extends Component {
     }
   }
 
+  checkForm = () => {
+    
+  }
+
   render() {
     return (
       <StartTemplate isLoading={this.state.isLoading} isDocs={true}>
