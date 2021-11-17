@@ -32,29 +32,14 @@ export default class MaterialFolder extends Component {
         this.props.location.state === undefined
           ? ""
           : this.props.location.state.FolderName,
-      url: [
-        "https://meet.google.com/bwu-nksu-xdv",
-        "https://leetcode.com/problems/self-dividing-numbers/",
-        "https://www.npmjs.com/package/@dhaiwat10/react-link-preview",
-        "https://meet.google.com/bwu-nksu-xdv",
-        "https://leetcode.com/problems/self-dividing-numbers/",
-        "https://www.npmjs.com/package/@dhaiwat10/react-link-preview",
-        "https://meet.google.com/bwu-nksu-xdv",
-        "https://leetcode.com/problems/self-dividing-numbers/",
-        "https://www.npmjs.com/package/@dhaiwat10/react-link-preview",
-        "https://ieeexplore.ieee.org/abstract/document/9276443",
-        "https://qdoc.tips/engineers-archive-microprocessor-and-interfacing-douglas-v-hall-revised-secon-pdf-free.html",
-        "http://ggn.dronacharya.info/ECEDept/Downloads/QuestionBank/Vsem/MP_Sec.B.4.pdf",
-      ],
+      url: this.props.location.state === undefined ? [] : this.props.location.state.FolderContents,
+      FolderID: this.props.location.state === undefined ? "" : this.props.location.state.FolderID,
     };
   }
   componentDidMount() {
     if (this.props.location.state === undefined) {
       this.props.history.push("/login");
     }
-    var team = JSON.parse(localStorage.getItem("teamdetails"));
-    console.log(team, "team");
-
   }
 
   render() {
