@@ -232,14 +232,11 @@ export default class TeamDashboard extends Component {
                     JSON.stringify(data.projects)
                   );
                   var { task, teamdetails } = this.getData();
-                  setTimeout(() => {
                     this.setState({
                       teamdetails: teamdetails[0],
                       task: task,
                       isLoading: false,
                     });
-                  }, 2000);
-                  
                 }
               })
               .catch((err) => {

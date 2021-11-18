@@ -23,6 +23,7 @@ export default class TaskDetails extends Component {
           : this.props.location.state.progress,
       taskDeadLine: "",
       taskAssignedTo: "",
+      userid:"",
       materials: "",
       taskName: "",
       isDone: false,
@@ -33,6 +34,7 @@ export default class TaskDetails extends Component {
     this.handleCheck = this.handleCheck.bind(this);
     this.checkRemainingTime = this.checkRemainingTime.bind(this);
     this.handleGlobalCheck = this.handleGlobalCheck.bind(this);
+    this.doUpdate = this.doUpdate.bind(this);
   }
 
   componentDidMount() {
@@ -59,6 +61,7 @@ export default class TaskDetails extends Component {
         subTasks: taskdetails.taskdata.subtask,
         materials: taskdetails.taskdata.materialFolder,
         isDone: taskdetails.taskdata.isDone,
+        userid: taskdetails.taskdata.assign.userid,
         isLoading: false,
       });
     }
@@ -96,6 +99,36 @@ export default class TaskDetails extends Component {
     });
   };
 
+  doUpdate = async () => {
+    this.setState({isLoading: true,loadingMessage: "Updating..."});
+    var taskdata = {taskdata:{
+      task_id: this.state.taskid,
+      taskTitle: this.state.taskName,
+      deadline: this.state.taskDeadLine,
+      assign: {
+        username: this.state.taskAssignedTo,
+        userid: this.state.userid,
+      },
+      subtask: this.state.subTasks,
+      materialFolder: this.state.materials,
+      isDone: this.state.isDone,
+      subTasks: this.state.subTasks.length,
+    }}
+    await fetch(process.env.REACT_APP_API + "task/update", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        taskdata: taskdata,
+        teamid: localStorage.getItem("team"),
+        taskid: this.state.taskid,
+        userid: this.state.userid,
+      }),
+    })
+    this.setState({isLoading: false,loadingMessage: "Updating..."});
+  }
+
   checkRemainingTime = (date) => {
     var d1 = date.split("-");
     d1 = d1[1] + "/" + d1[2] + "/" + d1[0];
@@ -115,7 +148,7 @@ export default class TaskDetails extends Component {
               <div className="w-full flex truncate justify-center items-center text-3xl font-bold text-blue-800 mx-4">
                 {this.state.taskName}
               </div>
-              <button className="w-auto btn-bg-color text-white rounded-xl py-1 px-4">
+              <button onClick={this.doUpdate} className="w-auto btn-bg-color hover:shadow-lg hover:border-opacity-100 border-2 border-red-800 transform transition hover:scale-105 border-opacity-0 text-white rounded-xl py-1 px-4">
                 <span>Update</span>
               </button>
             </div>
@@ -165,10 +198,10 @@ export default class TaskDetails extends Component {
                     </span>
                   </div>
                 </div>
-                <div className={`overflow-hidden h-2 mb-4 text-xs flex rounded ${this.state.isGone?"bg-red-700" :"bg-blue-700"}`}>
+                <div className={`overflow-hidden h-2 mb-4 text-xs flex rounded ${this.state.isGone?"bg-red-700" :"bg-white"}`}>
                   <div
                     style={{ width: this.state.progress + "%" }}
-                    className=" shadow-none rounded-full flex flex-col text-center whitespace-nowrap text-white justify-center bg-white"
+                    className=" shadow-none rounded-full flex flex-col text-center whitespace-nowrap text-white justify-center bg-blue-800"
                   ></div>
                 </div>
               </div>
