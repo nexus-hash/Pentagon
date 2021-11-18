@@ -156,15 +156,18 @@ export default class TeamDashboard extends Component {
     var sortedTask = [];
     for (var i = 0; i < task.length; i++) {
       var deadline = new Date(task[i].taskdata.deadline);
+      deadline.setHours(24, 0, 0, 0);
       var today = new Date();
       if(task[i].progress!==100 && deadline>=today){
+        console.log(task[i].taskdata.taskTitle)
         sortedTask.push(task[i]);
       }
     }
     for (var i = 0; i < task.length; i++) {
       var deadline = new Date(task[i].taskdata.deadline);
+      deadline.setHours(24, 0, 0, 0);
       var today = new Date();
-      if (deadline < today) {
+      if (deadline <= today) {
         sortedTask.push(task[i]);
       }
     }

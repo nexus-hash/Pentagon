@@ -70,8 +70,10 @@ export default class TaskDetails extends Component {
         allDone = false;
       }
     })
+    var progress = allDone ? 100 : Math.floor(sub.filter((subtask) => subtask.isDone).length / sub.length * 100);
     this.setState({
       subTasks: sub,
+      progress: progress,
       isDone: allDone,
     });
   };
@@ -82,6 +84,7 @@ export default class TaskDetails extends Component {
       subtask.isDone = e.target.checked;
     });
     this.setState({
+      progress: e.target.checked ? 100 : 0,
       subTasks: sub,
       isDone: e.target.checked,
     });
