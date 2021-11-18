@@ -12,6 +12,7 @@ export default class TaskDetails extends Component {
     super(props);
     this.state = {
       isLoading: false,
+      loadingMessage: "",
       taskid:
         this.props.location.state === undefined
           ? ""
@@ -25,6 +26,7 @@ export default class TaskDetails extends Component {
       materials: "",
       taskName: "",
       isDone: false,
+      isGone: false,
       subTasks: [],
     };
 
@@ -45,9 +47,13 @@ export default class TaskDetails extends Component {
         task[
           task.findIndex((task) => task.taskdata.task_id === this.state.taskid)
         ];
-        console.log(taskdetails.taskdata.subtask);
+      var d1 = new Date(taskdetails.taskdata.deadline);
+      var d2 = new Date();
+      d1.setHours(24,0,0,0);
+      var isGone = d1 < d2;
       this.setState({
         taskDeadLine: taskdetails.taskdata.deadline,
+        isGone: isGone,
         taskAssignedTo: taskdetails.taskdata.assign.username,
         taskName: taskdetails.taskdata.taskTitle,
         subTasks: taskdetails.taskdata.subtask,
@@ -101,7 +107,7 @@ export default class TaskDetails extends Component {
 
   render() {
     return (
-      <StartTemplate isLoading={this.state.isLoading} isTask={true}>
+      <StartTemplate isLoading={this.state.isLoading} isTask={true} message={this.state.loadingMessage}>
         <div className="w-full h-full flex flex-col justify-start items-start p-8">
           <Fade top>
             <div className="w-full flex justify-between items-center">
@@ -130,7 +136,7 @@ export default class TaskDetails extends Component {
               />
             </div>
           </div>
-          <div className="w-full flex flex-col justify-between items-center mt-6 bg-blue-200 rounded-lg p-4">
+          <div className={`w-full flex flex-col justify-between items-center mt-6 ${this.state.isGone?"bg-red-200":"bg-blue-200" } rounded-lg p-4`}>
             <div className="w-full flex justify-between items-center">
               <div className="text-gray-500">
                 Assigned To{"  "}
@@ -159,7 +165,7 @@ export default class TaskDetails extends Component {
                     </span>
                   </div>
                 </div>
-                <div className="overflow-hidden h-2 mb-4 text-xs flex rounded bg-blue-700">
+                <div className={`overflow-hidden h-2 mb-4 text-xs flex rounded ${this.state.isGone?"bg-red-700" :"bg-blue-700"}`}>
                   <div
                     style={{ width: this.state.progress + "%" }}
                     className=" shadow-none rounded-full flex flex-col text-center whitespace-nowrap text-white justify-center bg-white"
@@ -192,7 +198,7 @@ export default class TaskDetails extends Component {
                 Sl No.
               </div>
             </div>
-            <div className="w-full flex flex-col justify-start items-start h-full overflow-y-scroll py-2">
+            <div className="w-full flex flex-col justify-start items-start overflow-y-scroll py-2" style={{height:"57%"}}>
               {this.state.subTasks.map((subtask, index) => {
                 return (
                   <div className="w-full h-auto max-h-32 flex justify-start items-center space-x-2 mb-3">
@@ -200,27 +206,7 @@ export default class TaskDetails extends Component {
                       {index + 1}
                     </div>
                     <div className="w-10/12 py-2 max-h-32 overflow-y-scroll rounded-md text-justify px-4 border-2 border-black border-opacity-10">
-                      {subtask.subtask} check overflow of task details check
-                      overflow of task detailscheck overflow of task
-                      detailscheck overflow of task detailscheck overflow of
-                      task detailscheck overflow of task detailscheck overflow
-                      of task detailscheck overflow of task detailscheck
-                      overflow of task detailscheck overflow of task
-                      detailscheck overflow of task detailscheck overflow of
-                      task detailscheck overflow of task detailscheck overflow
-                      of task detailscheck overflow of task detailscheck
-                      overflow of task detailscheck overflow of task
-                      detailscheck overflow of task detailscheck overflow of
-                      task detailscheck overflow of task detailscheck overflow
-                      of task detailscheck overflow of task detailscheck
-                      overflow of task detailscheck overflow of task
-                      detailscheck overflow of task detailscheck overflow of
-                      task detailscheck overflow of task detailscheck overflow
-                      of task detailscheck overflow of task detailscheck
-                      overflow of task detailscheck overflow of task
-                      detailscheck overflow of task detailscheck overflow of
-                      task detailscheck overflow of task detailscheck overflow
-                      of task detailscheck overflow of task details
+                      {subtask.subtask}
                     </div>
                     <div className="w-2/12 h-full max-h-32 flex justify-center items-center py-2 rounded-md px-4 border-2 border-black border-opacity-10">
                       <input

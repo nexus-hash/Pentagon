@@ -121,6 +121,7 @@ export default class TeamDashboard extends Component {
     super(props);
     this.state = {
       isLoading: true,
+      loadingMessage: "Retrieving Data",
       teamid: localStorage.getItem("team"),
       teamdetails: [],
       task: [],
@@ -130,6 +131,9 @@ export default class TeamDashboard extends Component {
   }
 
   getData = () => {
+    this.setState({
+      loadingMessage: "Arranging Task",
+    })
     var teamList = localStorage.getItem("teamList");
     var team = JSON.parse(teamList);
     var teamid = this.state.teamid;
@@ -178,8 +182,8 @@ export default class TeamDashboard extends Component {
     }
 
     task = sortedTask;
-
-    return { task, teamdetails };
+    return { task, teamdetails };  
+    
   };
 
   async componentDidMount() {
@@ -222,17 +226,20 @@ export default class TeamDashboard extends Component {
                 if (data.message === "No team found") {
                   this.setState({ teamList: [], isLoading: false });
                 } else if (data.projects.length > 0) {
-                  this.setState({ teamList: data.projects, isLoading: false });
+                  this.setState({ teamList: data.projects});
                   localStorage.setItem(
                     "teamList",
                     JSON.stringify(data.projects)
                   );
                   var { task, teamdetails } = this.getData();
-                  this.setState({
-                    teamdetails: teamdetails[0],
-                    task: task,
-                    isLoading: false,
-                  });
+                  setTimeout(() => {
+                    this.setState({
+                      teamdetails: teamdetails[0],
+                      task: task,
+                      isLoading: false,
+                    });
+                  }, 2000);
+                  
                 }
               })
               .catch((err) => {
@@ -263,6 +270,7 @@ export default class TeamDashboard extends Component {
         isTask={true}
         isDocs={false}
         teamName={this.state.teamdetails.pname}
+        message={this.state.loadingMessage}
       >
         <div className="w-full h-screen flex flex-col justify-start items-start pt-8 px-8 transform transition duration-150">
           <div className="w-full flex justify-between items-center transform transition duration-200">

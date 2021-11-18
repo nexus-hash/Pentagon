@@ -8,6 +8,7 @@ import SubmitButton from "./components/Submit";
 import SecondaryButton from "./components/SecondaryButton";
 import Loader from "../utils/Loader";
 import Footer from "./components/footer";
+import { Fade } from "react-reveal";
 
 class login extends Component {
   constructor(props) {
@@ -177,12 +178,15 @@ class login extends Component {
     } else {
       body = (
         <div className="lg:w-1/3 sm:w-3/4 w-full lg:p-0 px-12 h-auto flex flex-col justify-between space-y-2 items-center">
+          <Fade >
           <div className="lg:text-3xl text-2xl font-mono font-bg-color font-semibold tracking-wide lg:mb-2">
             Provide Your Credential
           </div>
+          </Fade>
           <div className="text-red-700 font-medium lg:text-lg text-sm">
             {this.state.loginMessage}
           </div>
+          <Fade >
           <input
             type="email"
             placeholder="Email"
@@ -192,6 +196,8 @@ class login extends Component {
             required
           ></input>
           <div className="text-red-500">{this.state.emailMessage}</div>
+          </Fade>
+          <Fade>
           <div className="w-full bg-white flex justify-center pr-2 items-center border-2 rounded-lg border-gray-100 mb-1 ">
             <input
               id="password"
@@ -217,6 +223,7 @@ class login extends Component {
               ></VisibilityOffIcon>
             </div>
           </div>
+          </Fade>
           <div className="w-full px-2 flex justify-start items-center space-x-4 text-xs"></div>
           <div></div>
           <SubmitButton

@@ -1,8 +1,10 @@
 import Logo from "../../assets/pentlogolight.svg";
+import { useHistory } from "react-router";
 
 function Title(props) {
+  var history = useHistory();
   return (
-    <div className="flex justify-start items-center">
+    <div onClick={()=> history.push('/')}  className="flex justify-start cursor-pointer items-center">
       <img
         alt="Pentagon Logo"
         src={Logo}

@@ -9,7 +9,7 @@ export default function StartTemplate(props) {
         <TeamNavbar isTask={props.isTask} isDocs={props.isDocs} isSettings={props.isSettings} teamName={props.teamName} />
         <main className="bg-gray-50 w-4/5 h-screen shadow-2xl">
           {props.isLoading ? (
-            <TeamLoader />
+            <TeamLoader message={props.message}/>
           ) : (
             props.children
           )}

@@ -192,7 +192,7 @@ class Dashboard extends Component {
             <div className="w-5/12 items-end justify-end flex">
               <button
                 onClick={this.handleLogoutOnClick}
-                className="transform transition duration-100 hover:scale-110"
+                className="transform transition duration-100 hover:text-red-400 hover:scale-110"
               >
                 Logout
               </button>
@@ -202,8 +202,9 @@ class Dashboard extends Component {
 
         <div style={{ height: "93%" }} className=" w-full ">
           {this.state.isLoading ? (
-            <div className="w-full h-full flex justify-center items-center">
+            <div className="w-full h-full flex flex-col justify-center items-center">
               <FadeLoader color="#2563eb" />
+              <div className="text-blue-500 font-semibold mt-4">Retrieving Data</div>
             </div>
           ) : (
             <div className="w-full h-full bg-gray-50 flex flex-row justify-center items-start">
