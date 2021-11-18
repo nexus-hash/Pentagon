@@ -140,7 +140,11 @@ export default class TaskDetails extends Component {
 
   render() {
     return (
-      <StartTemplate isLoading={this.state.isLoading} isTask={true} message={this.state.loadingMessage}>
+      <StartTemplate
+        isLoading={this.state.isLoading}
+        isTask={true}
+        message={this.state.loadingMessage}
+      >
         <div className="w-full h-full flex flex-col justify-start items-start p-8">
           <Fade top>
             <div className="w-full flex justify-between items-center">
@@ -148,7 +152,10 @@ export default class TaskDetails extends Component {
               <div className="w-full flex truncate justify-center items-center text-3xl font-bold text-blue-800 mx-4">
                 {this.state.taskName}
               </div>
-              <button onClick={this.doUpdate} className="w-auto btn-bg-color hover:shadow-lg hover:border-opacity-100 border-2 border-red-800 transform transition hover:scale-105 border-opacity-0 text-white rounded-xl py-1 px-4">
+              <button
+                onClick={this.doUpdate}
+                className="w-auto btn-bg-color hover:shadow-lg hover:border-opacity-100 border-2 border-red-800 transform transition hover:scale-105 border-opacity-0 text-white rounded-xl py-1 px-4"
+              >
                 <span>Update</span>
               </button>
             </div>
@@ -169,7 +176,11 @@ export default class TaskDetails extends Component {
               />
             </div>
           </div>
-          <div className={`w-full flex flex-col justify-between items-center mt-6 ${this.state.isGone?"bg-red-200":"bg-blue-200" } rounded-lg p-4`}>
+          <div
+            className={`w-full flex flex-col justify-between items-center mt-6 ${
+              this.state.isGone ? "bg-red-200" : "bg-blue-200"
+            } rounded-lg p-4`}
+          >
             <div className="w-full flex justify-between items-center">
               <div className="text-gray-500">
                 Assigned To{"  "}
@@ -177,11 +188,19 @@ export default class TaskDetails extends Component {
                   {this.state.taskAssignedTo}
                 </span>
               </div>
-              <div className="text-gray-500">
+              <div className="flex w-auto justify-end items-center text-gray-500">
+                <div>
                 Due Date
-                <span className="bg-white ml-4 px-2 py-2 rounded-lg shadow-lg text-blue-700">
-                  {this.state.taskDeadLine.split("-").reverse().join("-")}
-                </span>
+                </div>
+                <input
+                type="date"
+                  className="bg-white ml-4 px-2 py-2 border-none rounded-lg shadow-lg text-blue-700"
+                  value={this.state.taskDeadLine}
+                  onChange={(e) => {
+                    this.setState({ taskDeadLine: e.target.value });
+                  }}
+                >
+                </input>
               </div>
             </div>
             <div className="mt-4 w-full flex justify-between items-center">
@@ -198,7 +217,11 @@ export default class TaskDetails extends Component {
                     </span>
                   </div>
                 </div>
-                <div className={`overflow-hidden h-2 mb-4 text-xs flex rounded ${this.state.isGone?"bg-red-700" :"bg-white"}`}>
+                <div
+                  className={`overflow-hidden h-2 mb-4 text-xs flex rounded ${
+                    this.state.isGone ? "bg-red-700" : "bg-white"
+                  }`}
+                >
                   <div
                     style={{ width: this.state.progress + "%" }}
                     className=" shadow-none rounded-full flex flex-col text-center whitespace-nowrap text-white justify-center bg-blue-800"
@@ -231,7 +254,10 @@ export default class TaskDetails extends Component {
                 Sl No.
               </div>
             </div>
-            <div className="w-full flex flex-col justify-start items-start overflow-y-scroll py-2" style={{height:"57%"}}>
+            <div
+              className="w-full flex flex-col justify-start items-start overflow-y-scroll py-2"
+              style={{ height: "57%" }}
+            >
               {this.state.subTasks.map((subtask, index) => {
                 return (
                   <div className="w-full h-auto max-h-32 flex justify-start items-center space-x-2 mb-3">
