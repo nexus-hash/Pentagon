@@ -2,8 +2,8 @@ import { Component } from "react";
 import verifyToken from "../utils/verifytoken";
 
 import "../../css/global.css";
+import "../../css/taskcard.css"
 import Fade from "react-reveal/Fade";
-import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 import KeyboardArrowLeftIcon from "@mui/icons-material/KeyboardArrowLeft";
@@ -49,65 +49,67 @@ function TaskCard(props) {
 
   return (
     <Fade bottom>
-      <div
-        className={`w-full max-w-xs p-4 mr-4 mb-4 rounded-lg hover:shadow-2xl drop-shadow-lg h-auto transform transition hover:scale-105 bg-gradient-to-br ${
-          props.progress !== 100
-            ? checkDeadline(props.deadline)
-              ? "from-red-500 to-red-600"
-              : " from-blue-500 to-blue-600 "
-            : "from-green-500 to-green-600"
-        } `}
-      >
-        <div className="flex flex-col justify-start items-start h-full ">
-          <div className="flex justify-between items-center w-full">
-            <span className="text-white text-sm text-opacity-70 flex justify-center items-center">
-              <AccessTimeIcon fontSize="small" className="mr-3" />
-              {convertToMonth(props.deadline)}
-            </span>
-            <button
-              onClick={() => history.push("/team/task/delete")}
-              className={`text-red-300 bg-opacity-90 font-bold p-1 flex justify-center items-center bg-white rounded-lg transform transition hover:scale-110`}
-            >
-              <DeleteOutlineOutlinedIcon fontSize="small" />
-            </button>
-          </div>
-          <button
-            onClick={props.onClick}
-            className={`bg-white ${
-              props.progress === 100
-                ? "text-green-600"
-                : checkDeadline(props.deadline)
-                ? "text-red-600"
-                : "text-blue-600"
-            } hover:scale-110 rounded-md transform transition flex justify-center items-center py-1 my-4`}
-          >
-            <KeyboardArrowLeftIcon />
-            <KeyboardArrowRightIcon className=" -ml-3" />
-          </button>
-          <div className=" line-clamp-2 h-14 text-white font-semibold text-lg text-left mb-3">
-            {props.title}
-          </div>
-          <div className="text-white text-opacity-50">Assigned to</div>
-          <div className="text-white font-bold text-lg ">
-            {props.assignedto}
-          </div>
-          <div className="relative w-full">
-            <div className="flex mb-2 items-center justify-between">
-              <div className="text-right w-full">
-                <span className="text-xs font-semibold inline-block text-white">
-                  {props.progress + "%"}
-                </span>
-              </div>
+      <div className="relative w-full max-w-xs p-2">
+        <div
+          className={`w-full max-w-xs p-4 rounded-lg hover:shadow-2xl drop-shadow-lg h-auto transform transition hover:scale-105 bg-gradient-to-br ${
+            props.progress !== 100
+              ? checkDeadline(props.deadline)
+                ? " from-red-500 to-red-600"
+                : " from-blue-500 to-blue-600 "
+              : "from-green-500 to-green-600"
+          } `}
+        >
+          <div className="flex flex-col justify-start items-start h-full opacity-100">
+            <div className="flex justify-between items-center w-full">
+              <span className="text-white text-sm text-opacity-70 flex justify-center items-center">
+                <AccessTimeIcon fontSize="small" className="mr-3" />
+                {convertToMonth(props.deadline)}
+              </span>
+              <button
+                onClick={() => history.push("/team/task/delete")}
+                className={`text-red-300 bg-opacity-90 font-bold p-1 flex justify-center items-center bg-white rounded-lg transform transition hover:scale-110`}
+              >
+                <DeleteOutlineOutlinedIcon fontSize="small" />
+              </button>
             </div>
-            <div
-              className={`overflow-hidden h-2 mb-4 text-xs flex rounded ${
-                checkDeadline(props.deadline) ? " bg-red-700" : "bg-blue-700"
-              } `}
+            <button
+              onClick={props.onClick}
+              className={`bg-white ${
+                props.progress === 100
+                  ? "text-green-600"
+                  : checkDeadline(props.deadline)
+                  ? "text-red-600"
+                  : "text-blue-600"
+              } hover:scale-110 rounded-md transform transition flex justify-center items-center py-1 my-4`}
             >
+              <KeyboardArrowLeftIcon />
+              <KeyboardArrowRightIcon className=" -ml-3" />
+            </button>
+            <div className=" line-clamp-2 h-14 text-white font-semibold text-lg text-left mb-3">
+              {props.title}
+            </div>
+            <div className="text-white text-opacity-50">Assigned to</div>
+            <div className="text-white font-bold text-lg ">
+              {props.assignedto}
+            </div>
+            <div className="relative w-full">
+              <div className="flex mb-2 items-center justify-between">
+                <div className="text-right w-full">
+                  <span className="text-xs font-semibold inline-block text-white">
+                    {props.progress + "%"}
+                  </span>
+                </div>
+              </div>
               <div
-                style={{ width: props.progress + "%" }}
-                className=" shadow-none rounded-full flex flex-col text-center whitespace-nowrap text-white justify-center bg-white"
-              ></div>
+                className={`overflow-hidden h-2 mb-4 text-xs flex rounded ${
+                  checkDeadline(props.deadline) ? " bg-red-700" : "bg-blue-700"
+                } `}
+              >
+                <div
+                  style={{ width: props.progress + "%" }}
+                  className=" shadow-none rounded-full flex flex-col text-center whitespace-nowrap text-white justify-center bg-white"
+                ></div>
+              </div>
             </div>
           </div>
         </div>
@@ -125,8 +127,10 @@ export default class TeamDashboard extends Component {
       teamid: localStorage.getItem("team"),
       teamdetails: [],
       task: [],
+      isNavOpen: localStorage.getItem("isMenuOpen") !== null ? localStorage.getItem("isMenuOpen") : false,
     };
-
+    console.log(localStorage.getItem("isMenuOpen"),"dashboard");
+    console.log(this.state.isNavOpen,"dashboardnav");
     this.handleTaskDetailOnClick = this.handleTaskDetailOnClick.bind(this);
   }
 
@@ -189,6 +193,7 @@ export default class TeamDashboard extends Component {
   async componentDidMount() {
     this.setState({
       isLoading: true,
+      isNavOpen: localStorage.getItem("isMenuOpen") !== null ? localStorage.getItem("isMenuOpen") : false,
     });
     var p = await verifyToken();
     if (!p) {
@@ -268,6 +273,7 @@ export default class TeamDashboard extends Component {
         isDocs={false}
         teamName={this.state.teamdetails.pname}
         message={this.state.loadingMessage}
+        isOpen={this.state.isNavOpen}
       >
         <div className="w-full h-screen flex flex-col justify-start items-start pt-8 px-8 transform transition duration-150">
           <div className="w-full flex justify-between items-center transform transition duration-200">
@@ -276,18 +282,7 @@ export default class TeamDashboard extends Component {
             </Fade>
             <Fade right>
               <div className="w-full flex justify-end items-center">
-                <div className="w-auto h-auto bg-blue-300 flex rounded-full mr-4 ">
-                  <input
-                    type="text"
-                    className=" hidden bg-blue-300 text-blue-900 py-1 px-3 rounded-full border-none outline-none"
-                  ></input>
-                  <button
-                    className="p-1 text-blue-700 rounded-full flex justify-center items-center shadow-mg px-2 placeholder-blue-600"
-                    placeholder="Search"
-                  >
-                    <SearchOutlinedIcon />
-                  </button>
-                </div>
+                
                 <button
                   onClick={() =>
                     this.props.history.push({

@@ -30,6 +30,10 @@ export default class TeamDocument extends Component {
       newfolder: "",
       snackbarOpen: false,
       codeMessage: "",
+      isNavOpen:
+        localStorage.getItem("isMenuOpen") !== null
+          ? localStorage.getItem("isMenuOpen")
+          : false,
     };
 
     this.handleNewFolderOnChange = this.handleNewFolderOnChange.bind(this);
@@ -135,7 +139,7 @@ export default class TeamDocument extends Component {
 
   render() {
     return (
-      <StartTemplate isLoading={this.state.isLoading} isDocs={true}>
+      <StartTemplate isLoading={this.state.isLoading} isDocs={true} isOpen={this.state.isNavOpen}>
         <Snackbar
           open={this.state.snackbarOpen}
           autoHideDuration={5000}

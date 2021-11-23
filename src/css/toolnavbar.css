@@ -1,0 +1,6 @@
+@layer components{
+  .nav-text{
+    writing-mode: tb-rl;
+    text-orientation: sideways;
+  }
+}

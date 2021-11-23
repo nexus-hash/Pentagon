@@ -9,13 +9,17 @@ export default class DeleteTask extends Component {
       team: {},
       project: {},
       isLoading: false,
+      isNavOpen:
+        localStorage.getItem("isMenuOpen") !== null
+          ? localStorage.getItem("isMenuOpen")
+          : false,
     };
   }
 
   componentDidMount() {}
   render() {
     return(
-      <StartTemplate isLoading={this.state.isLoading} isTask={true}>
+      <StartTemplate isLoading={this.state.isLoading} isTask={true} isOpen={this.state.isNavOpen}>
         <div className="w-full h-full flex flex-col justify-center items-center">
           <h1 className="text-3xl text-blue-800 font-bold mb-4">Delete Task</h1>
           <p className="text-lg text-gray-900 ">Are you sure you want to delete this task?</p>

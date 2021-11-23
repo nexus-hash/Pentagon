@@ -1,0 +1,11 @@
+@layer components{
+  .task-card-red{
+    background-image: linear-gradient(to bottom right, rgba(239,68,68,.5), rgba(220,38,38,.5));
+  }
+  .task-card-blue{
+    background-image: linear-gradient(to bottom right, rgba(59,130,246,.5), rgba(37, 99, 235,.5));
+  }
+  .task-card-green{
+    background-image: linear-gradient(to bottom right, rgba(16, 185, 129,.5), rgba(5, 150, 105,.5));
+  }
+}

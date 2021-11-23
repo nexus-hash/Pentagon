@@ -19,6 +19,10 @@ export default class NewTask extends Component {
       deadline: "",
       teamMembers: [],
       btnState: true,
+      isNavOpen:
+        localStorage.getItem("isMenuOpen") !== null
+          ? localStorage.getItem("isMenuOpen")
+          : false,
     };
     this.handleNewSubTask = this.handleNewSubTask.bind(this);
     this.handleSubTaskChange = this.handleSubTaskChange.bind(this);
@@ -197,7 +201,7 @@ export default class NewTask extends Component {
 
   render() {
     return (
-      <StartTemplate isLoading={this.state.isLoading} isTask={true}>
+      <StartTemplate isLoading={this.state.isLoading} isTask={true} isOpen={this.state.isNavOpen}>
         <div className="w-full h-full p-6 flex flex-col justify-start items-start ">
           <Fade top>
             <div className="w-full flex justify-between items-center">

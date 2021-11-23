@@ -23,12 +23,16 @@ export default class TaskDetails extends Component {
           : this.props.location.state.progress,
       taskDeadLine: "",
       taskAssignedTo: "",
-      userid:"",
+      userid: "",
       materials: "",
       taskName: "",
       isDone: false,
       isGone: false,
       subTasks: [],
+      isNavOpen:
+        localStorage.getItem("isMenuOpen") !== null
+          ? localStorage.getItem("isMenuOpen")
+          : false,
     };
 
     this.handleCheck = this.handleCheck.bind(this);
@@ -144,6 +148,7 @@ export default class TaskDetails extends Component {
         isLoading={this.state.isLoading}
         isTask={true}
         message={this.state.loadingMessage}
+        isOpen = {this.state.isNavOpen}
       >
         <div className="w-full h-full flex flex-col justify-start items-start p-8">
           <Fade top>
