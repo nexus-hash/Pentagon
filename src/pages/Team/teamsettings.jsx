@@ -9,13 +9,20 @@ function UserCard(props) {
   return (
     <Fade bottom>
       <div className="flex w-auto justify-between items-center px-4 py-2 border-2 border-blue-400 rounded-lg mr-4 mb-4">
-        <div className="truncate w-32">{props.name}</div>
+        <div className="truncate w-full max-w-48 ">{props.name}</div>
         <button
           className={`${
             props.isAdmin ? "hidden" : ""
-          } tracking-tight bg-blue-500 w-1/2 text-white text-opacity-70 hover:text-opacity-100 rounded-lg px-1 py-0.5 ml-4 text-sm`}
+          } tracking-tight bg-blue-500 w-1/2 text-white text-opacity-70 hover:text-opacity-100 rounded-lg px-2 py-0.5 ml-4 text-sm`}
         >
           Promote
+        </button>
+        <button
+          className={`${
+            props.isAdmin ? "hidden" : ""
+          } tracking-tight bg-red-500 w-1/2 text-white text-opacity-70 hover:text-opacity-100 rounded-lg px-2 py-0.5 ml-4 text-sm`}
+        >
+          Remove
         </button>
       </div>
     </Fade>

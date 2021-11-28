@@ -11,7 +11,7 @@ function FolderCard(props) {
   return (
     <Fade bottom>
       <button
-        onClick={props.onClick}
+        onDoubleClick={props.onClick}
         className="w-auto hover:bg-blue-50 max-w-xs flex justify-between mr-3 mb-3 items-center h-12 border-2 border-blue-900 border-opacity-40 px-4 rounded-lg"
       >
         <FolderIcon className="text-3xl mr-2 text-yellow-500" />
@@ -30,10 +30,9 @@ export default class TeamDocument extends Component {
       newfolder: "",
       snackbarOpen: false,
       codeMessage: "",
-      isNavOpen:
-        localStorage.getItem("isMenuOpen") !== null
-          ? localStorage.getItem("isMenuOpen")
-          : false,
+      handleErrorSnacbarClose: false,
+      codeErrorMessage: "",
+      snackbarErrorOpen: false,
     };
 
     this.handleNewFolderOnChange = this.handleNewFolderOnChange.bind(this);
@@ -41,20 +40,40 @@ export default class TeamDocument extends Component {
     this.handleNewFolder = this.handleNewFolder.bind(this);
     this.handleSnacbarClose = this.handleSnacbarClose.bind(this);
     this.handleSnacbarOpen = this.handleSnacbarOpen.bind(this);
+    this.handleErrorSnacbarClose = this.handleErrorSnacbarClose.bind(this);
+    this.handleErrorSnacbarOpen = this.handleErrorSnacbarOpen.bind(this);
   }
 
   async componentDidMount() {
-    console.log(localStorage.getItem("team"), "team");
+    this.setState({ isLoading: true });
     if (localStorage.getItem("team") === null) {
       this.props.history.push("/login");
     }
-    var team = JSON.parse(localStorage.getItem("teamdetails"))[0];
-    var folders = team.projectmaterials;
-    this.setState({
-      folders: folders,
-      isLoading: false,
-      
-    });
+    await fetch(process.env.REACT_APP_API + "material", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        teamid: localStorage.getItem("team"),
+      }),
+    })
+    .then((res) => res.json())
+    .then((data) => {
+      if (data.message === "success") {
+        this.setState({
+          folders: data.folders,
+          isLoading: false,
+        });
+      }
+    })
+    .catch((err) => {
+      this.setState({
+        codeErrorMessage: "Error fetching data",
+        isLoading: false,
+        snackbarErrorOpen: true,
+      });
+    })
   }
 
   handleNewFolderOnChange = (e) => {
@@ -68,7 +87,7 @@ export default class TeamDocument extends Component {
         FolderName: FolderName,
         FolderID: FolderID,
         FolderContents: FolderContents,
-      }
+      },
     });
   };
 
@@ -99,37 +118,37 @@ export default class TeamDocument extends Component {
         .catch((err) => {
           this.setState({
             isLoading: false,
-            snackbarOpen: true,
-            codeMessage: "Error creating folder",
           });
+          this.handleErrorSnacbarOpen("Failed to Create a new Folder");
           return;
         });
-        if(fetchdata !== undefined){
-      if (fetchdata.message === "Folder added successfully") {
-        await loadData();
-        var team = JSON.parse(localStorage.getItem("teamdetails"))[0];
-        var folders = team.projectmaterials;
-        this.setState({
-          folders: folders,
-          isLoading: false,
-        });
+      if (fetchdata !== undefined) {
+        if (fetchdata.message === "Folder added successfully") {
+          await loadData();
+          var team = JSON.parse(localStorage.getItem("teamdetails"))[0];
+          var folders = team.projectmaterials;
+          this.setState({
+            folders: folders,
+            isLoading: false,
+          });
+          this.handleSnacbarOpen("Folder Created Successfully");
+        }
+        if (fetchdata.message === "Error creating folder") {
+          this.setState({
+            isLoading: false,
+          });
+          this.handleErrorSnacbarOpen("Failed to Create a new Folder");
+        }
       }
-      if (fetchdata.message === "Error creating folder") {
-        this.setState({
-          isLoading: false,
-          snackbarOpen: true,
-          codeMessage: "Error creating folder",
-        });
-      }
-    }
     }
   };
 
-  handleSnacbarOpen = () =>{
+  handleSnacbarOpen = (message) => {
     this.setState({
       snackbarOpen: true,
+      codeMessage: message,
     });
-  }
+  };
 
   handleSnacbarClose = () => {
     this.setState({
@@ -137,23 +156,52 @@ export default class TeamDocument extends Component {
     });
   };
 
+  handleErrorSnacbarOpen = (message) => {
+    this.setState({
+      snackbarOpen: true,
+      codeErrorMessage: message,
+    });
+  };
+
+  handleErrorSnacbarClose = () => {
+    this.setState({
+      snackbarOpen: false,
+    });
+  };
+
   render() {
     return (
-      <StartTemplate isLoading={this.state.isLoading} isDocs={true} isOpen={this.state.isNavOpen}>
+      <StartTemplate isLoading={this.state.isLoading} isDocs={true}>
         <Snackbar
           open={this.state.snackbarOpen}
           autoHideDuration={5000}
           onClose={this.handleSnacbarClose}
-          anchorOrigin={{ vertical: "top", horizontal: "right" }}
+          anchorOrigin={{ vertical: "top", horizontal: "center" }}
         >
           <Alert
-            style={{ border: "1px solid red" }}
+            style={{ border: "1px solid green" }}
             onClose={this.handleSnacbarClose}
-            severity="error"
+            severity="success"
             sx={{ width: "100%" }}
           >
             {" "}
             {this.state.codeMessage}
+          </Alert>
+        </Snackbar>
+        <Snackbar
+          open={this.state.snackbarErrorOpen}
+          autoHideDuration={5000}
+          onClose={this.handleErrorSnacbarClose}
+          anchorOrigin={{ vertical: "top", horizontal: "center" }}
+        >
+          <Alert
+            style={{ border: "1px solid red" }}
+            onClose={this.state.handleErrorSnacbarClose}
+            severity="error"
+            sx={{ width: "100%" }}
+          >
+            {" "}
+            {this.state.codeErrorMessage}
           </Alert>
         </Snackbar>
         <div className="w-full h-full flex flex-col justify-start items-start p-8">

@@ -148,7 +148,7 @@ export default class TaskDetails extends Component {
         isLoading={this.state.isLoading}
         isTask={true}
         message={this.state.loadingMessage}
-        isOpen = {this.state.isNavOpen}
+        isOpen={this.state.isNavOpen}
       >
         <div className="w-full h-full flex flex-col justify-start items-start p-8">
           <Fade top>
@@ -194,18 +194,18 @@ export default class TaskDetails extends Component {
                 </span>
               </div>
               <div className="flex w-auto justify-end items-center text-gray-500">
-                <div>
-                Due Date
-                </div>
+                <div>Due Date</div>
                 <input
-                type="date"
+                  type="date"
                   className="bg-white ml-4 px-2 py-2 border-none rounded-lg shadow-lg text-blue-700"
                   value={this.state.taskDeadLine}
                   onChange={(e) => {
+                    this.checkRemainingTime(e.target.value) < 0
+                      ? this.setState({ isGone: true })
+                      : this.setState({ isGone: false });
                     this.setState({ taskDeadLine: e.target.value });
                   }}
-                >
-                </input>
+                ></input>
               </div>
             </div>
             <div className="mt-4 w-full flex justify-between items-center">
@@ -218,18 +218,19 @@ export default class TaskDetails extends Component {
                   </div>
                   <div className="text-right w-full">
                     <span className="text-sm font-semibold inline-block text-gray-600">
-                      {this.state.progress + "%"}
+                      {this.state.progress.toFixed(0) + "%"}
                     </span>
                   </div>
                 </div>
                 <div
-                  className={`overflow-hidden h-2 mb-4 text-xs flex rounded ${
-                    this.state.isGone ? "bg-red-700" : "bg-white"
+                  className={`overflow-hidden h-2 mb-4 text-xs flex rounded ${"bg-white"
                   }`}
                 >
                   <div
                     style={{ width: this.state.progress + "%" }}
-                    className=" shadow-none rounded-full flex flex-col text-center whitespace-nowrap text-white justify-center bg-blue-800"
+                    className={`shadow-none rounded-full flex flex-col text-center whitespace-nowrap text-white justify-center ${
+                      this.state.isGone ? "bg-red-700" : "bg-blue-800"
+                    }`}
                   ></div>
                 </div>
               </div>

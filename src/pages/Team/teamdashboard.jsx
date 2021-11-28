@@ -1,5 +1,6 @@
 import { Component } from "react";
 import verifyToken from "../utils/verifytoken";
+import React from "react";
 
 import "../../css/global.css";
 import "../../css/taskcard.css"
@@ -10,6 +11,7 @@ import KeyboardArrowLeftIcon from "@mui/icons-material/KeyboardArrowLeft";
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
 import StartTemplate from "./components/StartTemplate";
 import { useHistory } from "react-router";
+import { FadeLoader } from "react-spinners";
 
 function TaskCard(props) {
   var convertToMonth = (deadline) => {
@@ -38,6 +40,9 @@ function TaskCard(props) {
       deadline.substring(6, 10);
     return dateF;
   };
+
+  var [showDelete, setShowDelete] = React.useState(false);
+  var [loadDelete, setLoadDelete] = React.useState(false);
   var history = useHistory();
 
   const checkDeadline = (deadline) => {
@@ -47,8 +52,67 @@ function TaskCard(props) {
     return d1 < d2;
   }
 
+  const deleteTask = async () => {
+    setLoadDelete(true);
+    await fetch(process.env.REACT_APP_API + "task/delete", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        taskid: props.taskid,
+        teamid: localStorage.getItem("team"),
+      }),
+    })
+    .then((res) => res.json())
+    .then((data) => {
+      if(data.message === "sucess") {
+        props.refreshData();
+        setLoadDelete(false);
+        setShowDelete(false);
+      }else{
+        setLoadDelete(false);
+        setShowDelete(false);
+        alert("Something went wrong");
+      }
+    })
+    .catch((err) => {
+      console.log(err);
+    })
+  }
+
   return (
-    <Fade bottom>
+    <Fade bottom opposite duration={700}>
+      <div
+        onClick={() => setShowDelete(false)}
+        className={`absolute ${
+          showDelete ? "" : "hidden"
+        } top-0 right-0 h-screen w-full z-50 flex flex-col justify-center items-center bg-gray-900 bg-opacity-80 `}
+      >
+        {loadDelete ? (
+          <div className="flex flex-col w-full h-screen justify-center items-center">
+            <FadeLoader color="#2563eb"></FadeLoader>
+            <div className="text-white text-lg">Deleting Task</div>
+          </div>
+        ) : (
+          <div className="flex flex-col justify-center items-center">
+            <div className="text-white text-xl font-semibold">
+              Are you sure you want to delete this Task?
+            </div>
+            <div className="flex items-center mt-8">
+              <button onClick={()=> deleteTask()} className="mr-4 px-2 py-1  bg-gradient-to-br from-red-500 to-red-600 text-white border-2 border-white border-opacity-0 hover:border-opacity-100 rounded-lg shadow-md hover:shadow-lg">
+                Delete
+              </button>
+              <button
+                onClick={() => setShowDelete(false)}
+                className="px-2 py-1 bg-gradient-to-br from-blue-500 to-blue-600 border-2 border-opacity-40 border-white hover:border-opacity-90 text-white shadow hover:shadow-lg rounded-lg"
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        )}
+      </div>
       <div className="relative w-full max-w-xs p-2">
         <div
           className={`w-full max-w-xs p-4 rounded-lg hover:shadow-2xl drop-shadow-lg h-auto transform transition hover:scale-105 bg-gradient-to-br ${
@@ -66,7 +130,7 @@ function TaskCard(props) {
                 {convertToMonth(props.deadline)}
               </span>
               <button
-                onClick={() => history.push("/team/task/delete")}
+                onClick={() => setShowDelete(true)}
                 className={`text-red-300 bg-opacity-90 font-bold p-1 flex justify-center items-center bg-white rounded-lg transform transition hover:scale-110`}
               >
                 <DeleteOutlineOutlinedIcon fontSize="small" />
@@ -96,7 +160,7 @@ function TaskCard(props) {
               <div className="flex mb-2 items-center justify-between">
                 <div className="text-right w-full">
                   <span className="text-xs font-semibold inline-block text-white">
-                    {props.progress + "%"}
+                    {props.progress.toFixed(0) + "%"}
                   </span>
                 </div>
               </div>
@@ -127,7 +191,7 @@ export default class TeamDashboard extends Component {
       teamid: localStorage.getItem("team"),
       teamdetails: [],
       task: [],
-      isNavOpen: localStorage.getItem("isMenuOpen") !== null ? localStorage.getItem("isMenuOpen") : false,
+      showDelete: false,
     };
     console.log(localStorage.getItem("isMenuOpen"),"dashboard");
     console.log(this.state.isNavOpen,"dashboardnav");
@@ -175,7 +239,7 @@ export default class TeamDashboard extends Component {
       var deadline = new Date(task[i].taskdata.deadline);
       deadline.setHours(24, 0, 0, 0);
       var today = new Date();
-      if (deadline <= today) {
+      if (deadline <= today && task[i].progress!==100) {
         sortedTask.push(task[i]);
       }
     }
@@ -202,8 +266,8 @@ export default class TeamDashboard extends Component {
     this.refreshData();
   }
 
-  refreshData = () => {
-    fetch(process.env.REACT_APP_API + "team/getteams", {
+  refreshData = async() => {
+    await fetch(process.env.REACT_APP_API + "team/getteams", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -282,7 +346,6 @@ export default class TeamDashboard extends Component {
             </Fade>
             <Fade right>
               <div className="w-full flex justify-end items-center">
-                
                 <button
                   onClick={() =>
                     this.props.history.push({
@@ -312,7 +375,14 @@ export default class TeamDashboard extends Component {
                   status={task.status}
                   deadline={task.taskdata.deadline}
                   progress={task.progress}
-                  onClick={() => this.handleTaskDetailOnClick(task.taskdata.task_id,task.progress)}
+                  refreshData={this.refreshData}
+                  taskid={task.taskdata.task_id}
+                  onClick={() =>
+                    this.handleTaskDetailOnClick(
+                      task.taskdata.task_id,
+                      task.progress
+                    )
+                  }
                 />
               ))
             )}

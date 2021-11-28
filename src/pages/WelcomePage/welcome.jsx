@@ -116,7 +116,7 @@ class WelcomePage extends Component {
                       className="lg:w-12 w-9 mr-2"
                     />
                     <div className="lg:text-2xl tracking-wide text-white font-sans">
-                      PENTAGON
+                      mpm
                     </div>
                     <div className="w-full"></div>
                     <button
@@ -144,7 +144,7 @@ class WelcomePage extends Component {
                 </navbar-bg>
                 <div className="wel-sec">
                   <div className="wel-sec-div">
-                    <div className="app-title">PENTAGON</div>
+                    <div className="app-title">mpm</div>
                     <div className="app-description">
                       <p>
                         The platform to help you manage all your projects at one

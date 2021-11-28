@@ -11,19 +11,26 @@ import MenuOpenIcon from "@mui/icons-material/MenuOpen";
 
 import "../../../css/toolnavbar.css";
 
+import { createGlobalState } from "react-hooks-global-state";
+import Title from "../../utils/title";
+
+const initialState = { isOpen: false };
+const { useGlobalState } = createGlobalState(initialState);
+
+
 export default function TeamNavbar(props) {
   const history = useHistory();
-  const [isMenuOpen, setIsMenuOpen] = React.useState(props.isOpen);
+  const [isMenuOpen, setIsMenuOpen] = useGlobalState("isOpen");
   const [logoutState, setLogoutState] = React.useState("");
 
   const changeMenuState = () => {
-    localStorage.setItem("isMenuOpen", !isMenuOpen);
     setIsMenuOpen(!isMenuOpen);
-    console.log(localStorage.getItem("isMenuOpen"), "nav");
-    console.log(!isMenuOpen, "navmenu");
   };
 
   const clipText = (text, length) => {
+    if(text === null){
+      return "";
+    }
     if (text.length > length) {
       return text.substring(0, length - 3) + "...";
     }
@@ -42,9 +49,7 @@ export default function TeamNavbar(props) {
   return (
     <div
       className={`navbar ${
-        isMenuOpen
-          ? "w-1/5 "
-          : "w-14 bg-gray-800 rounded-tr-md rounded-br-md"
+        isMenuOpen ? "w-1/5 " : "w-14 bg-gray-800 rounded-tr-md rounded-br-md"
       } transform transition-all duration-500 h-screen  flex flex-col justify-start shadow-2xl items-start`}
     >
       <button
@@ -59,8 +64,18 @@ export default function TeamNavbar(props) {
           <MenuIcon fontSize="large" />
         ) : (
           <div className="w-full flex space-x-3 items-center">
-            <MenuOpenIcon fontSize="large" />
-            <span className="">Collapse Menu</span>
+            <div className="w-full">
+            <Title
+              width="1.5rem"
+              fontColor=""
+              isTeamNav={true}
+              className="px-2"
+            ></Title>
+            </div>
+            <MenuOpenIcon
+              fontSize="large"
+              className="hover:shadow-lg p-1 shadow-md rounded-lg bg-gray-700 text-gray-200 hover:text-white"
+            />
           </div>
         )}
       </button>
@@ -68,7 +83,7 @@ export default function TeamNavbar(props) {
         to="/dashboard"
         className={`flex justify-start w-full ${
           isMenuOpen ? "px-4" : "px-2"
-        }  py-2 mb-2 items-center`}
+        }  py-2 mb-2 items-center rounded-lg hover:shadow-md`}
       >
         <div
           className={`p-1 border-2 ${

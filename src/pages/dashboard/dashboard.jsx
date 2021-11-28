@@ -156,7 +156,7 @@ class Dashboard extends Component {
         <Fade top>
           <header
             style={{ height: "7%" }}
-            className="w-full rounded-b-md flex justify-between bg-gradient-to-r from-indigo-400 text-gray-100 to-blue-500  sticky z-50 shadow-xl top-0  items-center lg:px-12 px-4"
+            className="w-full rounded-b-md flex justify-between bg-gradient-to-r from-blue-500 text-gray-100 to-indigo-400  sticky z-50 shadow-xl top-0  items-center lg:px-12 px-4"
           >
             <div className="flex items-center py-3 space-x-3">
               <button className="flex lg:hidden">

@@ -5,7 +5,7 @@ import '../../../css/global.css';
 export default function Footer(props) {
   return (
     <div class="custom-shape-divider-bottom-1637175221">
-      <Marquee speed={700}>
+      <Marquee speed={20}>
         <svg
           data-name="Layer 1"
           xmlns="http://www.w3.org/2000/svg"
