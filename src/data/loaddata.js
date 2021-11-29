@@ -1,5 +1,3 @@
-import React from "react";
-
 export default async function loadData(){
   await fetch(process.env.REACT_APP_API + "team/getteams", {
     method: "POST",

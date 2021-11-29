@@ -1,16 +1,51 @@
 import { Component } from "react";
+import React from "react";
 
 import StartTemplate from "./components/StartTemplate";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import Fade from "react-reveal";
+import { FadeLoader } from "react-spinners";
 
 function UserCard(props) {
+
+  const [loadDialogue, setLoadDialogue] = React.useState(false);
+  const [loading, setLoading] = React.useState(false);
+
   return (
     <Fade bottom>
-      <div className="flex w-auto justify-between items-center px-4 py-2 border-2 border-blue-400 rounded-lg mr-4 mb-4">
+      <div className="flex justify-between items-center px-4 py-2 border-2 border-blue-400 rounded-lg mr-4 mb-4">
+        <div
+        onClick={() => setLoadDialogue(false)}
+        className={`absolute ${
+          loadDialogue ? "" : "hidden"
+        } top-0 right-0 h-screen w-screen flex flex-col justify-center items-center bg-gray-900 bg-opacity-80 `}
+      >
+        {loading ? (<div className="w-full flex justify-center items-center">
+          <FadeLoader></FadeLoader>
+        </div>):(
+          <div className="flex flex-col justify-center items-center">
+            <div className="text-white text-xl font-semibold">
+              Are you sure you want to remove {props.name}?
+            </div>
+            <div className="flex items-center mt-8">
+              <button className="mr-4 px-2 py-1  bg-gradient-to-br from-red-500 to-red-600 text-white border-2 border-white border-opacity-0 hover:border-opacity-100 rounded-lg shadow-md hover:shadow-lg">
+                Delete
+              </button>
+              <button
+                onClick={() => setLoadDialogue(false)}
+                className="px-2 py-1 bg-gradient-to-br from-blue-500 to-blue-600 border-2 border-opacity-40 border-white hover:border-opacity-90 text-white shadow hover:shadow-lg rounded-lg"
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        )}
+        </div>
         <div className="truncate w-full max-w-48 ">{props.name}</div>
-        <button
+        {props.isuserAdmin ? (
+          <div className="flex items-center justify-center text-white">
+            <button
           className={`${
             props.isAdmin ? "hidden" : ""
           } tracking-tight bg-blue-500 w-1/2 text-white text-opacity-70 hover:text-opacity-100 rounded-lg px-2 py-0.5 ml-4 text-sm`}
@@ -18,12 +53,15 @@ function UserCard(props) {
           Promote
         </button>
         <button
+          onClick={() => setLoadDialogue(true)}
           className={`${
             props.isAdmin ? "hidden" : ""
           } tracking-tight bg-red-500 w-1/2 text-white text-opacity-70 hover:text-opacity-100 rounded-lg px-2 py-0.5 ml-4 text-sm`}
         >
           Remove
         </button>
+            </div>
+        ):null}        
       </div>
     </Fade>
   );
@@ -39,6 +77,7 @@ export default class TeamSettings extends Component {
       admins: [],
       members: [],
       goal: "",
+      isAdmin: false,
     };
   }
   async componentDidMount() {
@@ -51,6 +90,7 @@ export default class TeamSettings extends Component {
     var admins = [];
     var members = [];
     var membersdetails = team[0].projectmembers;
+    var userAsMember = membersdetails.filter( (member) => member.userid === localStorage.getItem("uid"));
     console.log(membersdetails, "membersdetails");
     for(var i=0;i<membersdetails.length;i++){
       if(membersdetails[i].isAdmin){
@@ -66,6 +106,7 @@ export default class TeamSettings extends Component {
       goal: team[0].pdesc,
       joinCode: team[0].joinId,
       isLoading: false,
+      isAdmin: userAsMember[0].isAdmin
     });
   }
   render() {
@@ -115,7 +156,7 @@ export default class TeamSettings extends Component {
             <div className="text-lg font-bold tracking-wide">Members</div>
             <div className="w-full mt-2 overflow-y-scroll flex flex-wrap justify-start items-center">
               {this.state.members.map((member, index) => (
-                <UserCard name={member.username} isAdmin={false} />
+                <UserCard name={member.username} isuserAdmin={this.state.isAdmin} isAdmin={false} />
               ))}
             </div>
             </Fade>

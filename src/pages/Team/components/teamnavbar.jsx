@@ -57,14 +57,14 @@ export default function TeamNavbar(props) {
           isMenuOpen
             ? "ml-2"
             : "text-gray-400 hover:text-white hover:scale-105 "
-        } transform transition-all px-2 pt-4 py-2`}
+        } transform transition-all w-full mr-2 px-2 pt-4 py-2`}
         onClick={changeMenuState}
       >
         {!isMenuOpen ? (
           <MenuIcon fontSize="large" />
         ) : (
-          <div className="w-full flex space-x-3 items-center">
-            <div className="w-full">
+          <div className="w-full flex space-x-3 justify-between items-center">
+            <div className="w-full ">
             <Title
               width="1.5rem"
               fontColor=""

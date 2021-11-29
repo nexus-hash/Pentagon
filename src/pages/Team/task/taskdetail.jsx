@@ -29,6 +29,7 @@ export default class TaskDetails extends Component {
       isDone: false,
       isGone: false,
       subTasks: [],
+      isAdmin: false,
       isNavOpen:
         localStorage.getItem("isMenuOpen") !== null
           ? localStorage.getItem("isMenuOpen")
@@ -46,9 +47,17 @@ export default class TaskDetails extends Component {
     if (this.props.location.state === undefined) {
       this.props.history.push("/team");
     } else {
-      var task = JSON.parse(localStorage.getItem("teamList")).filter(
+      var team = JSON.parse(localStorage.getItem("teamList")).filter(
         (team) => team._id === localStorage.getItem("team")
-      )[0].projecttasks;
+      )[0];
+      var task = team.projecttasks;
+      var members = team.projectmembers;
+      var userAsMember = members.filter(
+        (member) => member.userid === localStorage.getItem("uid")
+      );
+      this.setState({
+        isAdmin: userAsMember[0].isAdmin,
+      })
       var taskdetails =
         task[
           task.findIndex((task) => task.taskdata.task_id === this.state.taskid)
@@ -159,7 +168,9 @@ export default class TaskDetails extends Component {
               </div>
               <button
                 onClick={this.doUpdate}
-                className="w-auto btn-bg-color hover:shadow-lg hover:border-opacity-100 border-2 border-red-800 transform transition hover:scale-105 border-opacity-0 text-white rounded-xl py-1 px-4"
+                className={`w-auto btn-bg-color ${
+                  this.checkRemainingTime(this.state.taskDeadLine) < 0 ? this.state.isAdmin? "":"hidden" : ""
+                } hover:shadow-lg hover:border-opacity-100 border-2 border-red-800 transform transition hover:scale-105 border-opacity-0 text-white rounded-xl py-1 px-4`}
               >
                 <span>Update</span>
               </button>
@@ -195,7 +206,7 @@ export default class TaskDetails extends Component {
               </div>
               <div className="flex w-auto justify-end items-center text-gray-500">
                 <div>Due Date</div>
-                <input
+                {this.state.isAdmin?<input
                   type="date"
                   className="bg-white ml-4 px-2 py-2 border-none rounded-lg shadow-lg text-blue-700"
                   value={this.state.taskDeadLine}
@@ -205,7 +216,8 @@ export default class TaskDetails extends Component {
                       : this.setState({ isGone: false });
                     this.setState({ taskDeadLine: e.target.value });
                   }}
-                ></input>
+                ></input>:<div className="text-blue-700 rounded-lg p-2 bg-white ml-2 shadow-lg">{this.state.taskDeadLine}</div>}
+                
               </div>
             </div>
             <div className="mt-4 w-full flex justify-between items-center">

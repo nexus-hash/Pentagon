@@ -10,7 +10,6 @@ import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 import KeyboardArrowLeftIcon from "@mui/icons-material/KeyboardArrowLeft";
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
 import StartTemplate from "./components/StartTemplate";
-import { useHistory } from "react-router";
 import { FadeLoader } from "react-spinners";
 
 function TaskCard(props) {
@@ -43,7 +42,6 @@ function TaskCard(props) {
 
   var [showDelete, setShowDelete] = React.useState(false);
   var [loadDelete, setLoadDelete] = React.useState(false);
-  var history = useHistory();
 
   const checkDeadline = (deadline) => {
     var d1 = new Date(deadline);
@@ -131,7 +129,7 @@ function TaskCard(props) {
               </span>
               <button
                 onClick={() => setShowDelete(true)}
-                className={`text-red-300 bg-opacity-90 font-bold p-1 flex justify-center items-center bg-white rounded-lg transform transition hover:scale-110`}
+                className={`text-red-300 ${props.isAdmin?"":"hidden"} bg-opacity-90 font-bold p-1 flex justify-center items-center bg-white rounded-lg transform transition hover:scale-110`}
               >
                 <DeleteOutlineOutlinedIcon fontSize="small" />
               </button>
@@ -192,6 +190,7 @@ export default class TeamDashboard extends Component {
       teamdetails: [],
       task: [],
       showDelete: false,
+      teamisAdmin: false,
     };
     console.log(localStorage.getItem("isMenuOpen"),"dashboard");
     console.log(this.state.isNavOpen,"dashboardnav");
@@ -208,6 +207,12 @@ export default class TeamDashboard extends Component {
     var teamdetails = team.filter((team) => team._id === teamid);
     localStorage.setItem("teamdetails", JSON.stringify(teamdetails));
     localStorage.setItem("teamname", teamdetails[0].pname);
+    var members = teamdetails[0].projectmembers;
+    var userAsMember = members.filter((member) => member.userid === localStorage.getItem("uid"));
+    localStorage.setItem("isAdmin", false);
+    this.setState({
+      teamisAdmin: userAsMember[0].isAdmin,
+    })
     var task = teamdetails[0].projecttasks;
     for (var i = 0; i < task.length; i++) {
       var progress = 0;
@@ -226,7 +231,7 @@ export default class TeamDashboard extends Component {
       }
     }
     var sortedTask = [];
-    for (var i = 0; i < task.length; i++) {
+    for (i = 0; i < task.length; i++) {
       var deadline = new Date(task[i].taskdata.deadline);
       deadline.setHours(24, 0, 0, 0);
       var today = new Date();
@@ -235,15 +240,15 @@ export default class TeamDashboard extends Component {
         sortedTask.push(task[i]);
       }
     }
-    for (var i = 0; i < task.length; i++) {
-      var deadline = new Date(task[i].taskdata.deadline);
+    for (i = 0; i < task.length; i++) {
+      deadline = new Date(task[i].taskdata.deadline);
       deadline.setHours(24, 0, 0, 0);
-      var today = new Date();
+      today = new Date();
       if (deadline <= today && task[i].progress!==100) {
         sortedTask.push(task[i]);
       }
     }
-    for (var i = 0; i < task.length; i++) {
+    for (i = 0; i < task.length; i++) {
       if (task[i].progress === 100) {
         sortedTask.push(task[i]);
       }
@@ -377,6 +382,7 @@ export default class TeamDashboard extends Component {
                   progress={task.progress}
                   refreshData={this.refreshData}
                   taskid={task.taskdata.task_id}
+                  isAdmin={this.state.teamisAdmin}
                   onClick={() =>
                     this.handleTaskDetailOnClick(
                       task.taskdata.task_id,

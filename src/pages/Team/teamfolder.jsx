@@ -37,6 +37,7 @@ export default class MaterialFolder extends Component {
           : this.props.location.state.FolderName,
       url: this.props.location.state === undefined ? [] : this.props.location.state.FolderContents,
       FolderID: this.props.location.state === undefined ? "" : this.props.location.state.FolderID,
+      isAdmin: localStorage.getItem("isAdmin") !== null? false : localStorage.getItem("isAdmin"),
       newUrl: "",
       showDelete: false,
       dialogueLoader: false,
@@ -48,6 +49,8 @@ export default class MaterialFolder extends Component {
     this.handleDelete = this.handleDelete.bind(this);
   }
   componentDidMount() {
+    console.log(localStorage.getItem("isAdmin"));
+    console.log(this.state.isAdmin,"Admin");
     if (this.props.location.state === undefined) {
       this.props.history.push("/login");
     }
@@ -170,7 +173,9 @@ export default class MaterialFolder extends Component {
                 onClick={() => {
                   this.setState({ showDelete: true });
                 }}
-                className="px-4 py-2 btn-bg-color text-white hover:bg-red-700 rounded-lg hover:shadow-md"
+                className={`px-4 py-2 btn-bg-color ${
+                  this.state.isAdmin ? "" : "hidden"
+                } text-white hover:bg-red-700 rounded-lg hover:shadow-md`}
               >
                 Delete
               </button>
